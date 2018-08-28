@@ -1,0 +1,12 @@
+apm_phase5/catkin_ws/build/
+apm_phase5/catkin_ws/devel/
+.DS_Store
+apm_phase5/catkin_ws/.catkin_tools/
+
+*~
+Software/
+Arduino/
+.nvidia-settings-rc
+
+apm_phase5/opencv_contrib/
+apm_phase5/ENet/

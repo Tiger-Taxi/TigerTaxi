@@ -15,7 +15,7 @@ add_definitions(${PCL_DEFINITIONS})
 
 # ROS Packages 
 find_package(catkin REQUIRED roscpp std_msgs sensor_msgs message_generation)
-find_package(catkin REQUIRED COMPONENTS pcl_ros pcl_conversions)
+find_package(catkin REQUIRED COMPONENTS pcl_ros pcl_conversions image_transport cv_bridge)
 
 # ROS Messages
 generate_messages(

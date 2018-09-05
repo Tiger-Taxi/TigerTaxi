@@ -8,6 +8,8 @@
 // ROS Includes
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
 #include <std_msgs/Float32.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl_ros/point_cloud.h>
@@ -57,6 +59,10 @@ pthread_mutex_t colored_enet_locker;
 pthread_mutex_t ipm_locker;
 pthread_mutex_t preview_locker;
 
+
+// Publisher to publish camera data
+image_transport::Publisher image_pub;
+
 // pthread_barrier_t camera_done;
 // pthread_barrier_t enet_done;
 // pthread_barrier_t ipm_done;
@@ -87,6 +93,10 @@ void *cameraThread(void *arg)
 
     // Resize new frame
     cv::resize(new_frame, new_frame, cv::Size(frameWidth, frameHeight));
+
+    // Create the ROS message to broadcast images
+    sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", new_frame).toImageMsg();
+    image_pub.publish(msg);
 
     // Copy new frame to shared resource
     pthread_mutex_lock(&frame_locker);
@@ -307,6 +317,10 @@ int main(int argc, char** argv)
   ros::Publisher safe_pub = n.advertise<PointCloudT>("safezone_pc", 1);
   ros::Publisher unsafe_pub = n.advertise<PointCloudT>("unsafezone_pc", 1);
   ros::Subscriber mode_sub = n.subscribe("apm_safemode", 1, modeCallback);
+
+  // ROS nodes for image publish
+  image_transport::ImageTransport it(n);
+  image_pub = it.advertise("camera/image",1);
 
   // Initialize frame mutexes
   pthread_mutex_init(&frame_locker, NULL);

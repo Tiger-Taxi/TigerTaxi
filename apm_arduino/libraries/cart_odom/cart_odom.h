@@ -4,6 +4,7 @@
 #include "Arduino.h"
 #include "rosdue.h"
 #include "steering.h"
+#include "pwm_lib.h"
 
 #define PIN_VTACH 6
 

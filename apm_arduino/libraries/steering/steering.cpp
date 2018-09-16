@@ -1,9 +1,14 @@
 #include "steering.h"
 
+// Setup 333hz pwm on pin 8
+arduino_due::pwm_lib::pwm<arduino_due::pwm_lib::pwm_pin::PWML5_PC22> pwm_pin8;
+
 // Setup function for the steering
 void setup_steering () {
     analogReadResolution(12);
     analogWriteResolution(12);
+    // Set Talon SR PWM pin to 333 Hz with 50% duty cycle
+    pwm_pin8.start(TALON_PERIOD * TALON_PERIOD_SCALING, TALON_CENTER * TALON_PERIOD_SCALING);
     setup_PID();
 }
 
@@ -17,7 +22,8 @@ int get_position_steering () {
 
 // Sets up the PID system
 void setup_PID () {
-    steering_PID.SetOutputLimits(-STEERING_CORRECTION_MAX, STEERING_CORRECTION_MAX);
+    // steering_PID.SetOutputLimits(-STEERING_CORRECTION_MAX, STEERING_CORRECTION_MAX);
+    steering_PID.SetOutputLimits(-TALON_CORRECTION_MAX, TALON_CORRECTION_MAX);
     steering_PID.SetSampleTime(STEERING_PID_SAMPLE_TIME);
     steering_PID.SetMode(AUTOMATIC);
 }
@@ -41,7 +47,10 @@ void set_steering_pot_value(double pot_val) {
     steering_PID.Compute();
 
     // Take the output of the PID (correction) and write to the DAC
-    analogWrite(PIN_STEERING_OUT, (STEER_CENTER - steering_pid_output));
+    // analogWrite(PIN_STEERING_OUT, (STEER_CENTER - steering_pid_output));
+
+    // Take the output of the PID (correction) and send a PWM to the Talon SR
+    pwm_pin8.set_duty((TALON_CENTER + steering_pid_output) * TALON_PERIOD_SCALING);
 }
 
 // Set the desired steering angle

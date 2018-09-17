@@ -1,3 +1,6 @@
 [submodule "apm_phase5/catkin_ws/src/velodyne"]
 	path = apm_phase5/catkin_ws/src/velodyne
 	url = https://github.com/ros-drivers/velodyne.git
+[submodule "apm_arduino/libraries/pwm_lib"]
+	path = apm_arduino/libraries/pwm_lib
+	url = https://github.com/antodom/pwm_lib.git

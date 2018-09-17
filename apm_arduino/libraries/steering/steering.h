@@ -5,10 +5,12 @@
 #include "RunningAverage.h"
 #include "PID_v1.h"
 #include "cart_odom.h"
+#include "pwm_lib.h"
 
 /* Pin config */
 #define PIN_STEERING_POT A0
 #define PIN_STEERING_OUT DAC0
+#define PIN_TALON_OUT    8 		// Using the superior Talon SR
 
 /* Min and Max values for the potentiometer */
 #define STEERING_POT_MIN 1580 // Full Left
@@ -21,6 +23,18 @@
 /* Values to write to the DAC */
 #define STEER_CENTER 2075            // 'Center' (Vdiff = 0) value for the differential output Old: 2117
 #define STEERING_CORRECTION_MAX 1500 // Max value we can add or subtract to center
+
+
+/* Values to write to the Talon SR Motor Controller */
+#define TALON_PERIOD			3000 // 3 ms period, 333 Hz pwm
+#define TALON_PERIOD_SCALING    100
+#define TALON_CENTER 			TALON_PERIOD / 2	// 50% duty cycle
+#define TALON_CORRECTION_MAX	TALON_PERIOD * 0.15  // Max value we can add or subtract to center
+
+// using namespace arduino_due::pwm_lib;
+
+
+
 
 #define STEERING_PID_SAMPLE_TIME 1 // Sample time in ms that the PID is evaluated at
 

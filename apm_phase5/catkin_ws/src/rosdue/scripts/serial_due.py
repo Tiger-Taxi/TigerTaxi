@@ -108,7 +108,6 @@ def main():
                         publishers[topic].publish(float(data))
 
                 else:
-                    print(input_vals)
                     rospy.loginfo('ROSdue: Invalid message sent over serial (length wrong)')
 
             else:
@@ -118,7 +117,6 @@ def main():
                     rospy.loginfo('ROSdue: Invalid message sent over serial: ' + str(input_string))
 
         except UnicodeDecodeError:
-            print(input_vals)
             rospy.loginfo('ROSdue: Invalid message sent over serial (not unicode)')
 
 if __name__ == '__main__':

@@ -54,7 +54,6 @@ static bool stop_zone_clear = true;
 /* The current RC command */
 RC_commands current_command;
 void setup() {
-    Serial.print("Setup started");
 
     // Subsystems
     setup_throttle();
@@ -64,7 +63,6 @@ void setup() {
     setup_remote();
     setup_autonomous();
     //ROSdue
-    Serial.print("Setup niddled");
 
     ros.setup();
     ros.addSubscriber(subscriber_controlmode);
@@ -81,7 +79,6 @@ void setup() {
     setup_cart_odom(ros);
     // Error Indication
     setup_error_indication();
-    Serial.print("Setup Completed");
 }
 // Run an iteration of controls in manual mode
 void run_manual () {
@@ -100,18 +97,11 @@ void setup_remote () {
 // Run an iteration of controls in remote mode
 void run_remote () {
     if (stop_zone_clear){
-      Serial.print("Stop_zone_clear:True\r\n");
-      Serial.print(current_command.steering);
-      Serial.print("\r\n");
-      Serial.print(current_command.brake);
-      Serial.print("\r\n");
-
       set_throttle(current_command.throttle);
       set_brake(current_command.brake);
       set_steering_percentage(current_command.steering);
       
     } else {
-      Serial.print("Stop_zone_clear:False\r\n");
       set_throttle(0);
       set_brake(100);
       stop_steering();
@@ -147,16 +137,9 @@ void run_autonomous () {
     
 }
 void loop() {
-    Serial.print("loop started\r\n");  
-    Serial.print("current_command.estop");
-    Serial.print(current_command.estop);
-    Serial.print("\r\ncurrent_mode");
-    Serial.print(current_mode);
-    Serial.print("\r\n");
     loopTimer = millis();
     // Get subscriptions from ROS
     ros.spinOnce();
-    Serial.print("post spinOnce\r\n");
     // Updates the cart odom
     cart_odom_spin();
     // Check for remote e-stop
@@ -177,7 +160,6 @@ void loop() {
     throttle_value = throttle_value/20;  
   
     if(throttle_value>20 && current_mode != STOCK) {
-      Serial.print("Resetting to STOCK");
       current_mode = STOCK;
       if(loopTimer-manualTimer>1000 ){
         //ros.publish(publisher_revert_manual, String(current_mode));
@@ -206,17 +188,14 @@ void loop() {
         switch (current_mode) {
       
             case STOCK:
-                Serial.print("STOCK\r\n");
                 run_manual();
             break;
       
             case REMOTE:
-                Serial.print("REMOTE\r\n");
                 run_remote();
             break;
       
             case AUTONOMOUS:
-                Serial.print("AUTONOMOUS\r\n");
                 run_autonomous();
             break;
       

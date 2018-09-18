@@ -33,14 +33,14 @@ def initialisation():
     # run simultaneously.
     rospy.init_node('plotGpsDataOnMap')
 
-    rospy.Subscriber("fix", NavSatFix, callback)
+    rospy.Subscriber("/vectornav/GPS", NavSatFix, callback)
 
     #adjust these values based on your location and map, lat and long are in decimal degrees
     TRX = -77.666539          #top right longitude
     TRY = 43.087982            #top right latitude
     BLX = -77.685089          #bottom left longitude
     BLY = 43.080295             #bottom left latitude
-    mapFile = 'rit.png'
+    mapFile = 'rit2.png'
     imgMap = 0
     #now plot the data on a graph
     plt.xlabel('Longitude')

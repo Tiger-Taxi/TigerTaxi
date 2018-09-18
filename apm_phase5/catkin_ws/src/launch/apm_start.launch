@@ -12,7 +12,7 @@
         <param name="port" value="/dev/ttyACM1"/>
     </node> -->
 
-    <include file="$(find apm_tf)/launch/apm_tf.launch" />
+    <include file="$(find launch)/apm_tf.launch" />
     
     <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch" />
 

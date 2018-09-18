@@ -9,7 +9,6 @@ project(apm_2dnav)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   #apm_odom
-  apm_tf
   move_base
   #velodyne
 )
@@ -106,7 +105,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES apm_2dnav
-   CATKIN_DEPENDS apm_odom apm_tf move_base #velodyne
+   CATKIN_DEPENDS move_base #velodyne
 #  DEPENDS system_lib
 )
 

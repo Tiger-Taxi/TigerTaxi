@@ -3,7 +3,7 @@ gnome-terminal \
 --tab -e 'bash -c "echo -ne \"\033]0;roscore\007\"; roscore; exec bash"' \
 --tab -e 'bash -c "echo -ne \"\033]0;rosdue0\007\"; sleep 2; rosrun rosdue serial_due.py /dev/ttyACM0; exec bash"' \
 --tab -e 'bash -c "echo -ne \"\033]0;rosdue1\007\"; sleep 2; rosrun rosdue serial_due.py /dev/ttyACM1; exec bash"' \
---tab -e 'bash -c "echo -ne \"\033]0;roslaunch\007\"; sleep 2; roslaunch apm_start apm_start.launch; exec bash"' \
+--tab -e 'bash -c "echo -ne \"\033]0;roslaunch\007\"; sleep 2; roslaunch launch apm_start.launch; exec bash"' \
 --tab -e 'bash -c "echo -ne \"\033]0;roslaunch\007\"; sleep 2; rosrun safezone safezone; exec bash"' \
 --tab -e 'bash -c "echo -ne \"\033]0;apf_navigation\"; sleep 2; python ~/apm/apm_phase5/apf_navigation.py; exec bash"' \
 #--tab -e 'bash -c "echo -ne \"\033]0;velodyne_tracking\"; sleep 2; cd ~/media/rosmaster/Elements/bagfiles; rm *.active; rosbag record /velodyne_points /camera/image; exec bash"'\

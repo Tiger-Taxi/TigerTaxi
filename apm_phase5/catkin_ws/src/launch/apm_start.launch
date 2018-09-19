@@ -16,7 +16,7 @@
     
     <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch" />
 
-    <include file="$(find urg_node)/launch/urg_lidar.launch" /> 
+    <include file="$(find launch)/urg_lidar.launch" /> 
     
     <include file="$(find pointcloud_to_laserscan)/launch/p2l_2.launch"/> 
     
@@ -44,12 +44,6 @@
     <!-- <include file="$(find apm_2dnav)/launch/move_base.launch" /> -->
 
     <node name="height_map" pkg = "velodyne_height_map" type="heightmap_node" args="_height_threshold:=0.05 _full_clouds:=True _grid_dimensions:=250 _cell_size:=0.08" />
-
-    <node pkg="heightmap_tf" type="frame_tf_broadcaster"
-          name="broadcaster_frame" />
-
-    <node pkg="vel_tf" type="vel_tf_broadcaster"
-          name="vel_broadcaster_frame" />
 
     <node pkg="rviz" type="rviz" name="rviz" output="screen"/>
 

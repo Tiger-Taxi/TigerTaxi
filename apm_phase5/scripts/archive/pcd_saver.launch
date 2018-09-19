@@ -1,0 +1,9 @@
+<launch>
+	<noce pkg="image_view" type="extract_images" name="image_saver" cwd="ROS_HOME">
+		<remap from="image" to="usb_cam/image_raw" />
+	</node>
+
+	<node pkg="pcl_ros" type="pointcloud_to_pcd" name="pointcloud_saver" cwd="ROS_HOME">
+		<remap from="input" to="/velodyne_points" />
+	</node>
+</launch>

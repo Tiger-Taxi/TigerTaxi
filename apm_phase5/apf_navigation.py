@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 
 import time
 import cv2
+import os
 
 # resolution = 0.35	# size of each costmap cell in meters, same as in local_costmap_params.yaml
 # costmap_y_start = 34	# 34 for 0.35 resolution
@@ -153,7 +154,7 @@ def updateCommands():
 	# full_costmap[26:30, 26:34] = 255	# resolution = 0.35
 	# full_costmap[92:106, 94:120] = 255
 	# full_costmap[23:33, 30:39] = 50	
-	cv2.imwrite("costmap.png", numpy.flip(numpy.rot90(full_costmap, 1), 1))
+	cv2.imwrite(os.path.join("img", "costmap.png"), numpy.flip(numpy.rot90(full_costmap, 1), 1))
 
 	msg_steer = Float32()
 	msg_throttle = Float32()

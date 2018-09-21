@@ -7,6 +7,7 @@ apm_phase5/catkin_ws/.catkin_tools/
 Software/
 Arduino/
 .nvidia-settings-rc
+opencv/
 
 apm_phase5/opencv_contrib/
 apm_phase5/ENet/

@@ -79,5 +79,6 @@ void steer_right() {
 }
 
 void stop_steering() {
-    analogWrite(PIN_STEERING_OUT, STEER_CENTER);
+    // analogWrite(PIN_STEERING_OUT, STEER_CENTER);
+    pwm_pin8.set_duty(0);
 }

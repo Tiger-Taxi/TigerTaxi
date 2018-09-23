@@ -3,6 +3,8 @@ apm_phase5/catkin_ws/devel/
 .DS_Store
 apm_phase5/catkin_ws/.catkin_tools/
 
+gpu_testing/build/
+
 *~
 Software/
 Arduino/

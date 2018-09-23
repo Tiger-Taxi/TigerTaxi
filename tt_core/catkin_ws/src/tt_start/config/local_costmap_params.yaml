@@ -1,9 +1,9 @@
 footprint: [[1.9384, -0.6096], [1.9384, 0.6096], [-0.5, 0.6096], [-0.5, -0.6096]]
 
 plugins:
-  # - {name: static_layer,     type: "costmap_2d::StaticLayer"}
-  - {name: inflation_layer,  type: "costmap_2d::InflationLayer"}
-  - {name: obstacle_layer,   type: "costmap_2d::ObstacleLayer"}
+# - {name: static_layer,     type: "costmap_2d::StaticLayer"}
+- {name: inflation_layer,  type: "costmap_2d::InflationLayer"}
+- {name: obstacle_layer,   type: "costmap_2d::ObstacleLayer"}
 
 global_frame: base_link
 # robot_base_frame: base_link
@@ -34,7 +34,7 @@ inflation_layer:
 
 obstacle_layer:
   enabled: true
-  observation_sources: unsafe_zone safe_zone velodyne_obstacles velodyne_clear laser_scan_sensor 
+  observation_sources: unsafe_zone safe_zone velodyne_obstacles velodyne_clear laser_scan_sensor
   unsafe_zone: {sensor_frame: camera, data_type: PointCloud2, topic: unsafezone_pc, marking: true, clearing: true}
   safe_zone: {sensor_frame: camera, data_type: PointCloud2, topic: safezone_pc, marking: false, clearing: true}
   velodyne_obstacles: {sensor_frame: heightmap, data_type: PointCloud2, topic: velodyne_obstacles, marking: true, clearing: true}
@@ -45,5 +45,25 @@ obstacle_layer:
   footprint_clearing_enabled: true
   raytrace_range: 10.0
   obstacle_range: 8.0
-#     inflation_radius:     1.0  # max. distance from an obstacle at which costs are incurred for planning paths.
-#     cost_scaling_factor:  0.1  # exponential rate at which the obstacle cost drops off (default: 10)
+
+#local_costmap:
+#  #We'll publish the voxel grid used by this costmap
+#  publish_voxel_map: true
+#
+#  #Set the global and robot frames for the costmap
+#  global_frame: odom
+#  robot_base_frame: base_link
+#
+#  #Set the update and publish frequency of the costmap
+#  update_frequency: 5.0
+#  publish_frequency: 2.0
+#
+#  #We'll configure this costmap to be a rolling window... meaning it is always
+#  #centered at the robot
+#  static_map: false
+#  rolling_window: true
+#  width: 6.0
+#  height: 6.0
+#  resolution: 0.025
+#  origin_x: 0.0
+#  origin_y: 0.0

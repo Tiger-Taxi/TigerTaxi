@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
   Classifier classifier(model_file, trained_file);
   ipm mapper;
 
-  string LUT_file = "/home/apm/tt_core/safezone.png";
+  string LUT_file = "/home/apm/tt_core/safezone_lut/safezone.png";
 
   // Video capture initialization
   // cv::VideoCapture cap("/home/apm/Videos/Webcam/2018-04-02-171452.webm");

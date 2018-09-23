@@ -99,7 +99,7 @@ void *enetThread(void *arg)
   // ENet initialization
   string model_file   = "/home/apm/tt_core/ENet/final_model_weights/bn_conv_merged_model.prototxt";
   string trained_file = "/home/apm/tt_core/ENet/final_model_weights/bn_conv_merged_weights.caffemodel";
-  string LUT_file = "/home/apm/tt_core/safezone.png";
+  string LUT_file = "/home/apm/tt_core/safezone_lut/safezone.png";
   Classifier classifier(model_file, trained_file);
 
   while(true)

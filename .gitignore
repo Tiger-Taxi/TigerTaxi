@@ -17,10 +17,11 @@ bagfiles/
 *.bag
 *.bag.active
 
-tt_core/img/costmap.png
+costmap.png
 
 tt_core/catkin_ws/src/loam_velodyne/
 
+.idea/
 # Python stuff
 # Byte-compiled / optimized / DLL files
 __pycache__/

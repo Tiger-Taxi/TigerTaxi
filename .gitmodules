@@ -1,6 +1,6 @@
-[submodule "apm_arduino/libraries/pwm_lib"]
-	path = apm_arduino/libraries/pwm_lib
+[submodule "tt_arduino/libraries/pwm_lib"]
+	path = tt_arduino/libraries/pwm_lib
 	url = https://github.com/antodom/pwm_lib.git
-[submodule "apm_phase5/catkin_ws/src/vectornav"]
-	path = apm_phase5/catkin_ws/src/vectornav
+[submodule "tt_core/catkin_ws/src/vectornav"]
+	path = tt_core/catkin_ws/src/vectornav
 	url = https://github.com/dawonn/vectornav.git

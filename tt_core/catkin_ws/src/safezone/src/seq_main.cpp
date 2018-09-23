@@ -45,13 +45,13 @@ int main(int argc, char** argv) {
   ros::Subscriber mode_sub = n.subscribe("apm_safemode", 1, modeCallback);
 
   // ENet initialization
-  string model_file   = "/home/apm/apm_phase5/ENet/final_model_weights/bn_conv_merged_model.prototxt";
-  string trained_file = "/home/apm/apm_phase5/ENet/final_model_weights/bn_conv_merged_weights.caffemodel"; //for visualization
+  string model_file   = "/home/apm/tt_core/ENet/final_model_weights/bn_conv_merged_model.prototxt";
+  string trained_file = "/home/apm/tt_core/ENet/final_model_weights/bn_conv_merged_weights.caffemodel"; //for visualization
 
   Classifier classifier(model_file, trained_file);
   ipm mapper;
 
-  string LUT_file = "/home/apm/apm_phase5/safezone.png";
+  string LUT_file = "/home/apm/tt_core/safezone.png";
 
   // Video capture initialization
   // cv::VideoCapture cap("/home/apm/Videos/Webcam/2018-04-02-171452.webm");
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
   // }
 
   while (ros::ok())
-  {  
+  {
 
     struct timeval time;
     gettimeofday(&time, NULL); // Start Time
@@ -88,9 +88,8 @@ int main(int argc, char** argv) {
 
 
     enet_frame = classifier.Predict(img, LUT_file);
-    
+
     cv::resize(enet_frame, enet_frame, cv::Size(frameWidth, frameHeight));
-    
 
     // Remove lens distortion
     cv::resize(enet_frame, output_frame, cv::Size(1920, 1080));

@@ -122,9 +122,9 @@ void *cameraThread(void *arg)
 void *enetThread(void *arg)
 {
   // ENet initialization
-  std::string model_file   = "/home/rosmaster/apm/apm_phase5/ENet/final_model_weights/bn_conv_merged_model.prototxt";
-  std::string trained_file = "/home/rosmaster/apm/apm_phase5/ENet/final_model_weights/bn_conv_merged_weights.caffemodel";
-  std::string LUT_file = "/home/rosmaster/apm/apm_phase5/safezone.png";
+  std::string model_file   = "/home/rosmaster/apm/tt_core/ENet/final_model_weights/bn_conv_merged_model.prototxt";
+  std::string trained_file = "/home/rosmaster/apm/tt_core/ENet/final_model_weights/bn_conv_merged_weights.caffemodel";
+  std::string LUT_file = "/home/rosmaster/apm/tt_core/safezone.png";
 
   Classifier classifier(model_file, trained_file, LUT_file);
 
@@ -407,7 +407,7 @@ int main(int argc, char** argv)
     unsafe_mask.convertTo(unsafe_mask, CV_8U);
     unsafe_mask = unsafe_mask(roi);
 
-    // cv::imwrite("/home/apm/apm_phase5/unsafe_mask.png", unsafe_mask);
+    // cv::imwrite("/home/apm/tt_core/unsafe_mask.png", unsafe_mask);
 
 /*
     cv::Mat cloud_frame_b, cloud_frame_g, cloud_frame_r;

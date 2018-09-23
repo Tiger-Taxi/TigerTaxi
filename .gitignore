@@ -1,7 +1,7 @@
-apm_phase5/catkin_ws/build/
-apm_phase5/catkin_ws/devel/
+tt_core/catkin_ws/build/
+tt_core/catkin_ws/devel/
 .DS_Store
-apm_phase5/catkin_ws/.catkin_tools/
+tt_core/catkin_ws/.catkin_tools/
 
 gpu_testing/build/
 
@@ -11,15 +11,15 @@ Arduino/
 .nvidia-settings-rc
 opencv/
 
-apm_phase5/opencv_contrib/
-apm_phase5/ENet/
+tt_core/opencv_contrib/
+tt_core/ENet/
 bagfiles/
 *.bag
 *.bag.active
 
-apm_phase5/img/costmap.png
+tt_core/img/costmap.png
 
-apm_phase5/catkin_ws/src/loam_velodyne/
+tt_core/catkin_ws/src/loam_velodyne/
 
 # Python stuff
 # Byte-compiled / optimized / DLL files

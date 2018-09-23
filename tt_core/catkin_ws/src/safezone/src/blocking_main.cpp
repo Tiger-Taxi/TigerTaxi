@@ -97,9 +97,9 @@ void *cameraThread(void *arg)
 void *enetThread(void *arg)
 {
   // ENet initialization
-  string model_file   = "/home/apm/apm_phase5/ENet/final_model_weights/bn_conv_merged_model.prototxt";
-  string trained_file = "/home/apm/apm_phase5/ENet/final_model_weights/bn_conv_merged_weights.caffemodel";
-  string LUT_file = "/home/apm/apm_phase5/safezone.png";
+  string model_file   = "/home/apm/tt_core/ENet/final_model_weights/bn_conv_merged_model.prototxt";
+  string trained_file = "/home/apm/tt_core/ENet/final_model_weights/bn_conv_merged_weights.caffemodel";
+  string LUT_file = "/home/apm/tt_core/safezone.png";
   Classifier classifier(model_file, trained_file);
 
   while(true)

@@ -10,6 +10,7 @@ TrajectoryPlannerROS:
 
   holonomic_robot: false
 
+# This stuff is from example config (navigation_stage)
 #TrajectoryPlannerROS:
 #  #Set the acceleration limits of the robot
 #  acc_lim_th: 3.2

@@ -41,7 +41,7 @@
         <param name="TebLocalPlannerROS/odom_topic" value="$(arg odom_topic)"/>
         <!-- Planners -->
         <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS"/>
-        <param name="base_global_planner" type="string" value="navfn/NavfnROS"/>
+        <!-- <param name="base_global_planner" type="string" value="navfn/NavfnROS"/> -->
 
         <!-- MOVE_BASE YAML PARAMETERS -->
         <rosparam file="$(find tt_start)/config/costmap_common_params.yaml" command="load" ns="global_costmap"/>

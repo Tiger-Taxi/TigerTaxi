@@ -5,7 +5,7 @@ global_costmap:
   update_frequency:  5.0
   publish_frequency: 0.0
 
-  #  footprint_padding: 0.02
+#  footprint_padding: 0.02
 
   # Use SLAM map
   static_map: true

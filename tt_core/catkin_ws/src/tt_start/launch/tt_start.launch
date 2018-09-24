@@ -33,6 +33,8 @@
     <include file="$(find tt_start)/launch/move_base.launch"/>
     <include file="$(find tt_start)/launch/slam_gmapping.launch"/>
 
+    <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py" name="cmd_vel_converter" output="screen"/>
+
     <!-- This node was for testing only  -->
     <!-- <node pkg="sicktoolbox_wrapper" type="sicklms" name="sicklms" output="screen">
         <arg name="port" value="/dev/ttyUSB2"/>
@@ -47,8 +49,6 @@
     <!-- <node name="map_server" pkg="map_server" type="map_server" args="/home/apm/operating_maps/unity_may_25000_2.yaml" /> -->
 
     <!-- <include file="$(find amcl)/examples/amcl_diff.launch" /> -->
-
-    <!-- <node pkg="teb_local_planner_tutorials" type="cmd_vel_to_ackermann_drive.py" name="cmd_vel_converter" output="screen"/> -->
 
     <!-- <include file="$(find apm_2dnav)/launch/move_base.launch" /> -->
 

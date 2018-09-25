@@ -10,6 +10,7 @@ Software/
 Arduino/
 .nvidia-settings-rc
 opencv/
+apm_phase5/
 
 tt_core/opencv_contrib/
 tt_core/ENet/

@@ -18,7 +18,6 @@
 
     <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
     <include file="$(find tt_start)/launch/p2l_2.launch"/>
-    <!-- <include file="$(find pointcloud_to_laserscan)/launch/p2l_2.launch"/> -->
 
     <node pkg="rviz" type="rviz" name="rviz" output="screen"/>
     <node pkg="rqt_gui" type='rqt_gui' name='rqt'/>
@@ -36,21 +35,8 @@
 
     <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py" name="cmd_vel_converter" output="screen"/>
 
-    <!-- This node was for testing only  -->
-    <!-- <node pkg="sicktoolbox_wrapper" type="sicklms" name="sicklms" output="screen">
-        <arg name="port" value="/dev/ttyUSB2"/>
-        <arg name="buad" value="38400"/>
-    </node> -->
-
-    <!-- Temporarily commented to remove imu from the robotlocalization ekf  -->
-    <!-- <include file="$(find razor_imu_9dof)/launch/razor-pub.launch" />     -->
-
-    <!-- <include file="$(find apm_odom)/launch/apm_odom.launch" /> -->
-
     <!-- <node name="map_server" pkg="map_server" type="map_server" args="/home/apm/operating_maps/unity_may_25000_2.yaml" /> -->
 
     <!-- <include file="$(find amcl)/examples/amcl_diff.launch" /> -->
-
-    <!-- <include file="$(find apm_2dnav)/launch/move_base.launch" /> -->
 
 </launch>

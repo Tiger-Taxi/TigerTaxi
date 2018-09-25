@@ -122,9 +122,9 @@ void *cameraThread(void *arg)
 void *enetThread(void *arg)
 {
   // ENet initialization
-  std::string model_file   = "/home/rosmaster/apm/tt_core/ENet/final_model_weights/bn_conv_merged_model.prototxt";
-  std::string trained_file = "/home/rosmaster/apm/tt_core/ENet/final_model_weights/bn_conv_merged_weights.caffemodel";
-  std::string LUT_file = "/home/rosmaster/apm/tt_core/safezone_lut/safezone.png";
+  std::string model_file   = "/home/rosmaster/TigerTaxi/tt_core/ENet/final_model_weights/bn_conv_merged_model.prototxt";
+  std::string trained_file = "/home/rosmaster/TigerTaxi/tt_core/ENet/final_model_weights/bn_conv_merged_weights.caffemodel";
+  std::string LUT_file = "/home/rosmaster/TigerTaxi/tt_core/safezone_lut/safezone.png";
 
   Classifier classifier(model_file, trained_file, LUT_file);
 
@@ -269,51 +269,36 @@ void *previewThread(void *arg)
     cv::Mat top_preview, bottom_preview, preview;
 
     // Overlay segmentation mask onto original image
-    std::cout << "I have gotten here" << std::endl;
-    std::cout << "Width : " << latest_frame.cols << std::endl;
-    std::cout << "Height: " << latest_frame.rows << std::endl;
-    std::cout << "Width : " << latest_enet.cols << std::endl;
-    std::cout << "Height: " << latest_enet.rows << std::endl;
-    std::cout << "Width : " << overlay.cols << std::endl;
-    std::cout << "Height: " << overlay.rows << std::endl;
+    //std::cout << "Width : " << latest_frame.cols << std::endl;
+    //std::cout << "Height: " << latest_frame.rows << std::endl;
+    //std::cout << "Width : " << latest_enet.cols << std::endl;
+    //std::cout << "Height: " << latest_enet.rows << std::endl;
+    //std::cout << "Width : " << overlay.cols << std::endl;
+    //std::cout << "Height: " << overlay.rows << std::endl;
     cv::addWeighted(latest_frame, 1, latest_enet, 0.7, 0, overlay); // This is where things break
-    std::cout << "killme3" << std::endl;
     
     cv::copyMakeBorder( latest_frame, latest_frame, 0, 5, 0, 5, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0) );
-    std::cout << "killme4" << std::endl;
     cv::copyMakeBorder( latest_enet, latest_enet, 0, 5, 5, 0, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0) );
-    std::cout << "killme5" << std::endl;
     cv::copyMakeBorder( overlay, overlay, 5, 0, 0, 5, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0) );
-    std::cout << "killme6" << std::endl;
     cv::copyMakeBorder( latest_ipm, latest_ipm, 5, 0, 5, 0, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0) );
-    std::cout << "killme7" << std::endl;
 
     cv::putText(latest_frame, "Camera Feed", cvPoint(30,30), 
     cv::FONT_HERSHEY_COMPLEX_SMALL, 1, cvScalar(0,0,0), 1, CV_AA);
-    std::cout << "killme8" << std::endl;
     cv::putText(latest_enet, "Road/Sidewalk Detection", cvPoint(30,30), 
     cv::FONT_HERSHEY_COMPLEX_SMALL, 1, cvScalar(0,0,0), 1, CV_AA);
-    std::cout << "killme9" << std::endl;
     cv::putText(latest_ipm, "Bird's-eye-view", cvPoint(30,30), 
     cv::FONT_HERSHEY_COMPLEX_SMALL, 1, cvScalar(0,0,0), 1, CV_AA);
-    std::cout << "killme10" << std::endl;
     cv::putText(overlay, "Overlay", cvPoint(30,30), 
     cv::FONT_HERSHEY_COMPLEX_SMALL, 1, cvScalar(0,0,0), 1, CV_AA);
-    std::cout << "killme11" << std::endl;
 
 
     cv::hconcat(latest_frame, latest_enet, top_preview);
-    std::cout << "killme12" << std::endl;
     cv::hconcat(overlay, latest_ipm, bottom_preview);
-    std::cout << "killme13" << std::endl;
     cv::vconcat(top_preview, bottom_preview, preview);
-    std::cout << "killme14" << std::endl;
 
     // cv::imshow("top_preview", top_preview);
     cv::resize(preview, preview, cv::Size(), 0.80, 0.80);
-    std::cout << "killme15" << std::endl;
     cv::imshow("preview", preview);
-    std::cout << "killme16" << std::endl;
 
 
     // cv::imshow("Original Frame", img);

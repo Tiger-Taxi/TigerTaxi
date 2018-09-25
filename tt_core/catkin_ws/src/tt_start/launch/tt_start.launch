@@ -17,7 +17,8 @@
     <include file="$(find tt_start)/launch/ekf.launch"/>
 
     <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
-    <include file="$(find pointcloud_to_laserscan)/launch/p2l_2.launch"/>
+    <include file="$(find tt_start)/launch/p2l_2.launch"/>
+    <!-- <include file="$(find pointcloud_to_laserscan)/launch/p2l_2.launch"/> -->
 
     <node pkg="rviz" type="rviz" name="rviz" output="screen"/>
     <node pkg="rqt_gui" type='rqt_gui' name='rqt'/>

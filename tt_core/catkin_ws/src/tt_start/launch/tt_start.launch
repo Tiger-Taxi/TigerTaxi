@@ -26,17 +26,17 @@
           args="_height_threshold:=0.05 _full_clouds:=True _grid_dimensions:=250 _cell_size:=0.08"/>
 
     <!-- NORMALLY THIS IS HOW COSTMAP IS USED: -->
-    <!--<node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node">-->
-        <!--<rosparam file="$(find tt_start)/config/local_costmap_params.yaml" command="load" ns="costmap"/>-->
-    <!--</node>-->
+    <node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node">
+        <rosparam file="$(find tt_start)/config/old_params.yaml" command="load" ns="costmap"/>
+    </node>
     <!-- INSTEAD WE ARE TRYING OUT MOVE_BASE (AND SLAM): -->
-    <include file="$(find tt_start)/launch/move_base.launch"/>
-    <include file="$(find tt_start)/launch/slam_gmapping.launch"/>
+    <!-- <include file="$(find tt_start)/launch/move_base.launch"/> -->
+    <!-- <include file="$(find tt_start)/launch/slam_gmapping.launch"/> -->
 
-    <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py" name="cmd_vel_converter" output="screen"/>
+    <!-- <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py" name="cmd_vel_converter" output="screen"/> -->
 
     <!-- <node name="map_server" pkg="map_server" type="map_server" args="/home/apm/operating_maps/unity_may_25000_2.yaml" /> -->
 
-    <!-- <include file="$(find amcl)/examples/amcl_diff.launch" /> -->
+    <!-- <include file="$(find tt_start)/launch/amcl.launch" /> -->
 
 </launch>

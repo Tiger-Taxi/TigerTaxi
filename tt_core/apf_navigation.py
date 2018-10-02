@@ -322,6 +322,8 @@ def showStopzone(occupied):
 
 if __name__ == '__main__': 
   try:
+    if not os.path.isdir('img'):
+        os.mkdir('img')
     rospy.init_node('apf_navigation')
     rospy.Subscriber("/costmap_node/costmap/costmap", OccupancyGrid, og_callback)
     rospy.Subscriber("/costmap_node/costmap/costmap_updates", OccupancyGridUpdate, og_update_callback)

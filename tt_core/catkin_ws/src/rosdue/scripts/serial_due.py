@@ -87,8 +87,7 @@ def main():
                 topic = input_vals[0];
                 data = input_vals[1];
                 msg_length = input_vals[2];
-                if msg_length is None:
-                    rospy.loginfo('This was the issue')
+                if not msg_length:
                     continue
 
                 if(len(topic) + 1 + len(data) == int(msg_length)):

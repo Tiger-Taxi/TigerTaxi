@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- DUE's were removed from the start up script due to odd interactions that caused them to crash and the cart to run away.  Addeding the to the start script requires code changes in the rosdue node  -->
+
+    <!-- DUE1 and DUE2 may swap depending on which one connects to the PC first -->
+    <!-- <node pkg="rosdue" type="serial_due.py" name="due1" output="screen">
+        <param name="port" value="/dev/ttyACM0"/>
+    </node>
+
+    <node pkg="rosdue" type="serial_due.py" name="due2" output="screen">
+        <param name="port" value="/dev/ttyACM1"/>
+    </node> -->
+
+    <include file="$(find tt_start)/launch/tt_tf.launch"/>
+    <include file="$(find tt_start)/launch/urg_lidar.launch"/>
+    <include file="$(find tt_start)/launch/scan_matcher.launch"/>
+    <include file="$(find tt_start)/launch/ekf.launch"/>
+
+    <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
+    <include file="$(find tt_start)/launch/p2l_2.launch"/>
+
+    <node pkg="rviz" type="rviz" name="rviz" output="screen"/>
+    <node pkg="rqt_gui" type='rqt_gui' name='rqt'/>
+
+    <node name="height_map" pkg="velodyne_height_map" type="heightmap_node"
+          args="_height_threshold:=0.05 _full_clouds:=True _grid_dimensions:=250 _cell_size:=0.08"/>
+
+    <!-- NORMALLY THIS IS HOW COSTMAP IS USED: -->
+    <node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node">
+        <rosparam file="$(find tt_start)/config/old_params.yaml" command="load" ns="costmap"/>
+    </node>
+    <!-- INSTEAD WE ARE TRYING OUT MOVE_BASE (AND SLAM): -->
+    <!-- <include file="$(find tt_start)/launch/move_base.launch"/> -->
+    <!-- <include file="$(find tt_start)/launch/slam_gmapping.launch"/> -->
+
+    <!-- <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py" name="cmd_vel_converter" output="screen"/> -->
+
+    <!-- <node name="map_server" pkg="map_server" type="map_server" args="/home/apm/operating_maps/unity_may_25000_2.yaml" /> -->
+
+    <!-- <include file="$(find tt_start)/launch/amcl.launch" /> -->
+
+</launch>

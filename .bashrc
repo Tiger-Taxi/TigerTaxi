@@ -117,5 +117,6 @@ if ! shopt -oq posix; then
 fi
 
 source /opt/ros/kinetic/setup.bash
+source /home/rosmaster/TigerTaxi/tt_core/catkin_ws/devel/setup.bash
 alias tt_start='~/TigerTaxi/tt_start.sh'
 export TT_ROOT='/home/rosmaster/TigerTaxi'

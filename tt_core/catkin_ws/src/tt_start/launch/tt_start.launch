@@ -2,13 +2,13 @@
 <launch>
 
     <arg name="simulate" default="false"/>  <!-- TODO: arg for future sim env -->
+    <arg name="collect_map" default="false"/>
     <arg name="use_static_map" default="false"/>
     <arg name="slam_pkg" default="gmapping"/>
-    <arg name="collect_map" default="false"/>
-
+    
     <!-- GUI Nodes -->
-    <node pkg="rviz" type="rviz" name="rviz" output="screen"/>
-    <node pkg="rqt_gui" type='rqt_gui' name='rqt'/>
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find tt_start)/map_costmaps_and_plans.rviz" output="screen"/>
+    <node pkg="rqt_gui" type="rqt_gui" name="rqt"/>
 
     <!-- TFs, odom used in all operation -->
     <include file="$(find tt_start)/launch/tt_tf.launch"/>
@@ -63,7 +63,6 @@
         <!-- Navigation within a live/persistent map -->
         <group unless="$(arg use_static_map)">
             <group if="$(eval slam_pkg == 'gmapping')">
-                <include file="$(find tt_start)/launch/amcl.launch"/>
                 <include file="$(find tt_start)/launch/slam_gmapping.launch"/>
             </group>
             <group if="$(eval slam_pkg == 'loam')">
@@ -73,4 +72,3 @@
     </group>
 
 </launch>
-

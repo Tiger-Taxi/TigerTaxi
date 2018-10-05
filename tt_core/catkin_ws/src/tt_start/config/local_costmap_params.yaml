@@ -4,7 +4,7 @@ local_costmap:
 
   #Set the global and robot frames for the costmap
   # TODO: These could lead to issues (see old params commented out below)
-  global_frame:     odom
+  global_frame:     /odom
   robot_base_frame: base_link
 
   #Set the update and publish frequency of the costmap

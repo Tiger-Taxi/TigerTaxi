@@ -4,6 +4,7 @@ tt_core/catkin_ws/devel/
 tt_core/catkin_ws/.catkin_tools/
 
 gpu_testing/build/
+maps/
 
 *~
 Software/

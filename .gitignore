@@ -14,7 +14,6 @@ opencv/
 apm_phase5/
 
 tt_core/opencv_contrib/
-tt_core/ENet/
 bagfiles/
 *.bag
 *.bag.active

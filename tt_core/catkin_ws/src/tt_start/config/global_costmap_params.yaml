@@ -12,7 +12,7 @@ global_costmap:
   # static_map: true
   # rolling_window: false
   # = OPTION 2: Live SLAM map  =
-  static_map: False
+  static_map: true
   origin_x:   0.0
   origin_y:   0.0
   width:      40.0

@@ -29,8 +29,8 @@ inflation_layer:
 obstacle_layer:
   enabled:             True
   observation_sources: unsafe_zone safe_zone velodyne_obstacles velodyne_clear laser_scan_sensor
-  unsafe_zone:         {sensor_frame: camera, data_type: PointCloud2, topic: unsafezone_pc, marking: True, clearing: True}
-  safe_zone:           {sensor_frame: camera, data_type: PointCloud2, topic: safezone_pc, marking: False, clearing: True}
+  #unsafe_zone:         {sensor_frame: camera, data_type: PointCloud2, topic: unsafezone_pc, marking: True, clearing: True}
+  #safe_zone:           {sensor_frame: camera, data_type: PointCloud2, topic: safezone_pc, marking: False, clearing: True}
   velodyne_obstacles:  {sensor_frame: heightmap, data_type: PointCloud2, topic: velodyne_obstacles, marking: True, clearing: True}
   velodyne_clear:      {sensor_frame: heightmap, data_type: PointCloud2, topic: velodyne_clear, marking: False, clearing: True}
   laser_scan_sensor:   {sensor_frame: laser, data_type: LaserScan, topic: scan, marking: True, clearing: True}

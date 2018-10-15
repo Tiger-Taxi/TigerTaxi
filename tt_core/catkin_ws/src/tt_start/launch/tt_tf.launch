@@ -7,20 +7,20 @@
     <!-- Camera -->
     <!-- <node pkg="tf" type="static_transform_publisher" name="camera_broadcaster" args="1.4605 0 1.7016 0 0.5585 0 base_link camera 100"/> -->
     <!-- Camera at ground level -->
-    <node pkg="tf" type="static_transform_publisher" name="camera_broadcaster"
-          args="3.92 0 0 3.14 0 0 base_link camera 100"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="camera_broadcaster"
+          args="3.92 0 0 3.14 0 0 base_link camera"/>
 
     <!-- LiDAR - Front - No Tilt -->
-    <node pkg="tf" type="static_transform_publisher" name="velodyne_broadcaster"
-          args="1.4859 0 0.965 0 0 0 base_link velodyne 100"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="velodyne_broadcaster"
+          args="1.4859 0 0.965 0 0 0 base_link velodyne"/>
 
     <!-- Velodyne Heightmap -->
-    <node pkg="tf" type="static_transform_publisher" name="hm_broadcaster"
-          args="1.4859 0 0 0 0 0 base_link heightmap 100"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="hm_broadcaster"
+          args="1.4859 0 0 0 0 0 base_link heightmap"/>
 
     <!-- Single Channel Hokuyo LiDAR -->
-    <node pkg="tf" type="static_transform_publisher" name="laser_broadcaster"
-          args="1.7272 0.0047625 0.235 0 0 0 base_link laser 100"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="laser_broadcaster"
+          args="1.7272 0.0047625 0.235 0 0 0 base_link laser"/>
 
     <!-- IMU  -->
     <!-- <node pkg="tf" type="static_transform_publisher" name="baselink_imu_broadcaster"

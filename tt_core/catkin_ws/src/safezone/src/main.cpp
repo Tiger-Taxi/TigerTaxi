@@ -131,8 +131,6 @@ void *cameraThread(void *arg) {
         // Create the ROS message to broadcast images
         sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", new_frame).toImageMsg();
         image_pub.publish(msg);
-#else
-        // Take from ROS topic
 #endif
 
         // Copy new frame to shared resource
@@ -166,8 +164,6 @@ void *enetThread(void *arg) {
     Classifier classifier(model_file, trained_file, LUT_file);
 
     while (ros::ok()) {
-
-
         // Grab latest frame
         pthread_mutex_lock(&frame_locker);
         cv::Mat latest_frame = frame.clone();

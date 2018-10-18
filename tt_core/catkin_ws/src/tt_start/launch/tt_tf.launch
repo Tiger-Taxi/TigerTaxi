@@ -22,6 +22,10 @@
     <node pkg="tf2_ros" type="static_transform_publisher" name="laser_broadcaster"
           args="1.7272 0.0047625 0.235 0 0 0 base_link laser"/>
 
+    <!-- Vectornav IMU -->
+    <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="imu_broadcaster"
+          args="-0.1651 -0.1143 0.3683 3.14 0 0 base_link imu_link"/> -->
+
     <!-- IMU  -->
     <!-- <node pkg="tf" type="static_transform_publisher" name="baselink_imu_broadcaster"
           args="1.2 0 1.8288 3.14159 0 0 base_link base_imu_link 100" /> -->

@@ -85,7 +85,7 @@ ekf_se_odom:
 ekf_se_gps:
   frequency: 30
   sensor_timeout: 0.1
-  two_d_mode: false #LOAM input and output must be 3D, otherwise the strange rotation of LOAM won't be supported
+  two_d_mode: true #LOAM input and output must be 3D, otherwise the strange rotation of LOAM won't be supported
   transform_time_offset: 0.0
   transform_timeout: 0.0
   print_diagnostics: true

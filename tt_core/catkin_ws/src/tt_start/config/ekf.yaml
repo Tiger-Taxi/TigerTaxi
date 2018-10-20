@@ -37,11 +37,11 @@ ekf_se_odom:
  ##pose0_relative: false
 
  imu0: /imu/data
- imu0_config: [false, false, false,
-               true, true, false,
+ imu0_config: [true, true, true,
                false, false, false,
-               true, true, true,
-               true, true, true]
+               false, false, false,
+               false, false, false,
+               false, false, false,]
  imu0_nodelay: false
  imu0_differential: false
  imu0_relative: false
@@ -156,11 +156,11 @@ ekf_se_gps:
 
 
   imu0: /imu/data
-  imu0_config: [false, false, false,
-                false,  false,  false, #No yaw, since it's unreliable
-                false, false, false,
-                true,  true,  true,
-                true,  true,  false]
+  imu0_config: [true, true, true,
+               false, false, false,
+               false, false, false,
+               false, false, false,
+               false, false, false,]
   imu0_queue_size: 10
   imu0_nodelay: true
   imu0_differential: false

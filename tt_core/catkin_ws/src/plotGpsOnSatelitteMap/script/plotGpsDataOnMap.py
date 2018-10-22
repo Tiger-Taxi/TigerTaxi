@@ -40,7 +40,7 @@ def initialisation():
     TRY = 43.087982            #top right latitude
     BLX = -77.685089          #bottom left longitude
     BLY = 43.080295             #bottom left latitude
-    mapFile = 'rit2.png'
+    mapFile = '/home/rosmaster/TigerTaxi/tt_core/catkin_ws/src/plotGpsOnSatelitteMap/script/rit.png'
     imgMap = 0
     #now plot the data on a graph
     plt.xlabel('Longitude')

@@ -221,7 +221,7 @@ ekf_se_gps:
 navsat_transform:
   frequency: 30
   delay: 3.0
-  magnetic_declination_radians: 0.1995
+  magnetic_declination_radians: 0.1919875
   yaw_offset: 0
   zero_altitude: true
   broadcast_utm_transform: false

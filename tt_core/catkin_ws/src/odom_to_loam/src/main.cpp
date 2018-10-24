@@ -10,7 +10,6 @@ using namespace std;
 
 geometry_msgs::TransformStamped map_to_loam_init;
 geometry_msgs::TransformStamped quatRot;
-nav_msgs::Odometry _convertedLoam;
 ros::Publisher loamPub;
 
 void OdomCallback(const nav_msgs::Odometry::ConstPtr &msg);
@@ -21,10 +20,10 @@ int main(int argc, char *argv[])
 	ros::init(argc, argv, "odom_to_loam");
 	ros::NodeHandle n;
 
-    auto odomSub = n.subscribe<nav_msgs::Odometry>("/integrated_to_init", 2, OdomCallback);
+    auto odomSub = n.subscribe<nav_msgs::Odometry>("/ekf/odom_gps_corrected", 2, OdomCallback);
     //auto poseSubTest = n.subscribe<geometry_msgs::PoseWithCovarianceStamped>("/laser_odom_map", 2, PoseCallback);
-    loamPub = n.advertise<nav_msgs::Odometry>("/integrated_to_init_corrected", 5);
-    /*
+    loamPub = n.advertise<geometry_msgs::PoseWithCovarianceStamped>("/ekf/loam_converted_odom_gps_corrected", 5);
+
     tf2_ros::Buffer tfBuffer;
     tf2_ros::TransformListener tf2_listener(tfBuffer);
     ROS_INFO_STREAM("OTL: Waiting for TF");
@@ -39,7 +38,6 @@ int main(int argc, char *argv[])
     quatRot.transform.rotation.y = q.y();
     quatRot.transform.rotation.z = q.z();
     quatRot.transform.rotation.w = q.w();
-    */
 
     ros::spin();
     return 0;
@@ -48,7 +46,6 @@ int main(int argc, char *argv[])
 //Converts from ROS frame back to LOAM frame
 void OdomCallback(const nav_msgs::Odometry::ConstPtr &msg)
 {
-    /*
     geometry_msgs::PoseStamped msgTransformTemp, msgQuaternionTemp;
     msgQuaternionTemp.pose.orientation = msg->pose.pose.orientation;
     tf2::doTransform(msgQuaternionTemp, msgQuaternionTemp, quatRot);
@@ -64,19 +61,6 @@ void OdomCallback(const nav_msgs::Odometry::ConstPtr &msg)
     loamMsg.pose.pose.position = msgTransformTemp.pose.position;
     loamMsg.pose.pose.orientation = msgTransformTemp.pose.orientation;
     loamPub.publish(loamMsg);
-    */
-    // publish odometry tranformations
-
-    _convertedLoam.header.stamp = msg->header.stamp;
-    _convertedLoam.pose.pose.orientation.x = -msg->pose.pose.orientation.y;
-    _convertedLoam.pose.pose.orientation.y = -msg->pose.pose.orientation.z;
-    _convertedLoam.pose.pose.orientation.z = msg->pose.pose.orientation.x;
-    _convertedLoam.pose.pose.orientation.w = msg->pose.pose.orientation.w;
-    _convertedLoam.pose.pose.position.x = -msg->pose.pose.position.y;
-    _convertedLoam.pose.pose.position.y = -msg->pose.pose.position.z;
-    _convertedLoam.pose.pose.position.z = msg->pose.pose.position.x;
-    loamPub.publish(_convertedLoam);
-
 }
 
 /*void PoseCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msg)
@@ -85,12 +69,9 @@ void OdomCallback(const nav_msgs::Odometry::ConstPtr &msg)
     geometry_msgs::PoseStamped msgTransformTemp, msgQuaternionTemp;
     msgQuaternionTemp.pose.orientation = msg->pose.pose.orientation;
     tf2::doTransform(msgQuaternionTemp, msgQuaternionTemp, quatRot);
-
     msgTransformTemp.pose.orientation = msgQuaternionTemp.pose.orientation;
     msgTransformTemp.pose.position = msg->pose.pose.position;
-
     tf2::doTransform(msgTransformTemp, msgTransformTemp, map_to_loam_init); //Internally, LOAM has data in loam_init frame. Therefore, we need to transform it to map frame.
-
     geometry_msgs::PoseWithCovarianceStamped loamMsg;
     loamMsg.header = msg->header;
     loamMsg.header.frame_id = "loam_init";

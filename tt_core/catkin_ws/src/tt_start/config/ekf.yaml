@@ -1,5 +1,5 @@
 ekf_se_odom:
- frequency: 1
+ frequency: 10
  sensor_timeout: 0.2
  two_d_mode: true ## TODO - We're not working in a planar enviornemt, probably want to set to false
  transform_time_offset: 0.0
@@ -41,9 +41,10 @@ ekf_se_odom:
  imu0_differential: false
  imu0_relative: false
  imu0_queue_size: 10
- imu0_remove_gravitational_acceleration: true
+ imu0_remove_gravitational_acceleration: false
 
  use_control: false
+
 
                             #x     y     z     r     p     y     vx     vy     vz    vr    vp    vy    ax    ay    az
  process_noise_covariance:  [1e-3, 0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
@@ -86,6 +87,7 @@ ekf_se_gps:
   transform_timeout: 0.0
   print_diagnostics: true
   smooth_lagged_data: true
+  dynamic_process_noise_covariance: true
   debug: false
   debug_out_file: /home/roby/Desktop/gps_debug.txt
 
@@ -193,7 +195,7 @@ ekf_se_gps:
 navsat_transform:
   frequency: 30
   delay: 3.0
-  magnetic_declination_radians: 0.1995
+  magnetic_declination_radians: 0.1919875
   yaw_offset: 0
   zero_altitude: true
   broadcast_utm_transform: false

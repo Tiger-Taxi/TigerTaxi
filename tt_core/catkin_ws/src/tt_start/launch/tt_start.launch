@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
 
-    <arg name="simulate" default="false"/>  <!-- arg for sim env -->
+    <arg name="simulate" default="true"/>  <!-- arg for sim env -->
     <arg name="collect_map" default="true"/>
     <arg name="use_static_map" default="false"/>
     <arg name="slam_pkg" default="none"/>
@@ -15,7 +15,7 @@
     <!-- TFs, odom used in all operation -->
     <include file="$(find tt_start)/launch/tt_tf.launch"/>
     <include file="$(find tt_start)/launch/scan_matcher.launch"/>
-    <!--<include file="$(find tt_start)/launch/ekf.launch"/>-->
+    <include file="$(find tt_start)/launch/ekf.launch"/>
     <include file="$(find tt_start)/launch/p2l_2.launch"/>
     <node name="height_map" pkg="velodyne_height_map" type="heightmap_node"
           args="_height_threshold:=0.05 _full_clouds:=True _grid_dimensions:=250 _cell_size:=0.08"/>

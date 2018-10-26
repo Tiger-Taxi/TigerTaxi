@@ -126,3 +126,5 @@ ENV/
 # mypy
 .mypy_cache/
 
+# Now, whitelisting somethings I want
+!tt_core/catkin_ws/src/loam_velodyne/src/lib/

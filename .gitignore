@@ -21,7 +21,8 @@ bagfiles/
 *.bag.active
 
 costmap.png
-
+*.gv
+*.pdf
 tt_core/catkin_ws/src/loam_velodyne/
 
 .idea/

@@ -35,6 +35,7 @@
     <group unless="$(arg simulate)">
         <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
         <include file="$(find tt_start)/launch/urg_lidar.launch"/>
+        <include file="$(find vectornav)/launch/vectornav.launch"/>
         <!-- Camera -->
         <include file="$(find video_stream_opencv)/launch/camera.launch">
             <!-- Topic name -->
@@ -76,6 +77,15 @@
 
     <!-- If we are collecting a map (manual driving) -->
     <group if="$(arg collect_map)">
+        <include file="$(find tt_start)/launch/move_base.launch"/>
+        <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py" name="cmd_vel_converter" output="screen"/>
+        <!-- NORMALLY THIS IS HOW COSTMAP IS USED: -->
+        <group if="$(arg old_nav)">
+            <node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node">
+                <rosparam file="$(find tt_start)/config/old_params.yaml" command="load" ns="costmap"/>
+            </node>
+        </group>
+
         <group if="$(eval slam_pkg == 'gmapping')">
             <include file="$(find tt_start)/launch/slam_gmapping.launch"/>
         </group>
@@ -101,7 +111,7 @@
                 <!-- Use AMCL for all SLAM packages -->
                 <include file="$(find tt_start)/launch/amcl.launch"/>
                 <group if="$(eval slam_pkg == 'gmapping')">
-                    <!-- <node name="map_server" pkg="map_server" type="map_server" args="gmapping_map.yaml"/> -->
+                    <node name="map_server" pkg="map_server" type="map_server" args="/home/rosmaster/TigerTaxi/maps/thisiscrap.yaml"/>
                 </group>
                 <group if="$(eval slam_pkg == 'loam')">
                     <!-- <node name="map_server" pkg="map_server" type="map_server" args="loam_map.yaml"/> -->

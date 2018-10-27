@@ -1,9 +1,8 @@
 local_costmap:
-  #We'll publish the voxel grid used by this costmap
+  #We'll publish the voxel grid used by this costmap - how about no
 #  publish_voxel_map: true
 
   #Set the global and robot frames for the costmap
-  # TODO: These could lead to issues (see old params commented out below)
   global_frame:     /odom
   robot_base_frame: base_link
 
@@ -13,20 +12,23 @@ local_costmap:
 
   #We'll configure this costmap to be a rolling window... meaning it is always
   #centered at the robot
-  static_map: false
-  rolling_window: true
+  static_map:     False
+  rolling_window: True
   width:  30.0
   height: 20.0
+  # NOTE: Changing resolution impacts safezone (search for the string "0.35" (or "35") in code)
   # resolution: 0.35
   resolution: 0.1
   origin_x: 0.0
   origin_y: 0.0
+  # TODO
+#  origin_x: -15.0
+#  origin_y: -10.0
 
 # === EVERYTHING past thing point is the old config (before Zach moved things around...) ===
 ## TODO this footprint is redundant with costmap_common_params footprint
 ##footprint: [[1.9384, -0.6096], [1.9384, 0.6096], [-0.5, 0.6096], [-0.5, -0.6096]]
 #
-## TODO: Do we need to have the .cfg files for these plugins?
 #plugins:
 ## - {name: static_layer,         type: "costmap_2d::StaticLayer"}
 #- {name: inflation_layer,    type: "costmap_2d::InflationLayer"}
@@ -54,7 +56,6 @@ local_costmap:
 ## static_layer:
 ##     enabled: true
 #
-## TODO: Should these be moved to costmap_common_params? What is inflation_layer?
 #inflation_layer:
 #    enabled: false
 #    cost_scaling_factor:    0.1    # exponential rate at which the obstacle cost drops off (default: 10)

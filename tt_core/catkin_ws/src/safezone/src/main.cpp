@@ -73,16 +73,27 @@ image_transport::Publisher image_pub;
 
 cv::Mat new_frame;
 std::condition_variable cond_var;
-sensor_msgs::ImageConstPtr new_image;
+//sensor_msgs::ImageConstPtr new_image = nullptr;
+bool new_image = false;
 std::mutex m;
 
 // Function for reading from topic
-void handleImage(const sensor_msgs::ImageConstPtr &img_msg,
-                 const sensor_msgs::CameraInfoConstPtr &info_msg) {
-    cv_bridge::CvImageConstPtr cv_image = cv_bridge::toCvCopy(img_msg);
-    new_frame = cv_image->image.clone();
-    new_image = img_msg;
-    cond_var.notify_one();
+//void handleImage(const sensor_msgs::ImageConstPtr &img_msg,
+//                 const sensor_msgs::CameraInfoConstPtr &info_msg) {
+void handleImage(const sensor_msgs::ImageConstPtr &img_msg) {
+    try {
+        new_image = (img_msg != nullptr);
+        cv_bridge::CvImageConstPtr cv_image = cv_bridge::toCvCopy(img_msg);
+//        new_frame = cv_image->image.clone();
+        cv::resize(cv_image->image, new_frame, cv::Size(1920, 1080));
+        if (new_frame.empty())
+            new_image = false;
+        else
+            cond_var.notify_one();
+    } catch (cv_bridge::Exception &e) {
+        new_image = false;
+        ROS_ERROR("Unable to convert %s image to bgr8", img_msg->encoding.c_str());
+    }
 }
 
 #endif
@@ -103,11 +114,6 @@ void *cameraThread(void *arg) {
     cap.set(CV_CAP_PROP_FRAME_WIDTH, 1920);
     cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1080);
     cap.set(CV_CAP_PROP_FOURCC, CV_FOURCC('M', 'J', 'P', 'G'));
-#else
-    // Take from ROS frame
-    image_transport::ImageTransport it(*static_cast<ros::NodeHandle *>(arg));
-    image_transport::CameraSubscriber it_sub;
-    it_sub = it.subscribeCamera("/camera/image", 1, &handleImage);
 #endif
 
     while (ros::ok()) {
@@ -116,29 +122,32 @@ void *cameraThread(void *arg) {
         long totalTime = (time.tv_sec * 1000) + (time.tv_usec / 1000);
 
         // Grab new frame
+        cv::Mat new_frame_local;
 #ifndef CAMERA_VIA_ROS
-        cv::Mat new_frame;
-        cap >> new_frame;
+        cap >> new_frame_local;
 #else
         std::unique_lock <std::mutex> lk(m);
-        cond_var.wait(lk, [] { return new_image != nullptr; });
+//        cond_var.wait(lk, [] { return new_image != nullptr; });
+        cond_var.wait(lk, [] { return new_image; });
 #endif
-
         // Resize new frame
-        cv::resize(new_frame, new_frame, cv::Size(frameWidth, frameHeight));
+//        std::cout << "Resize1: " << new_frame.total() << std::endl;
+        if (!new_frame.size().height || !new_frame.size().width)
+            std::cout << new_frame.size().height << ',' << new_frame.size().width << std::endl;
+        cv::resize(new_frame, new_frame_local, cv::Size(frameWidth, frameHeight));
 
 #ifndef CAMERA_VIA_ROS
         // Create the ROS message to broadcast images
-        sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", new_frame).toImageMsg();
+        sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", new_frame_local).toImageMsg();
         image_pub.publish(msg);
 #endif
 
         // Copy new frame to shared resource
         pthread_mutex_lock(&frame_locker);
-        frame = new_frame.clone();
+        frame = new_frame_local.clone();
         pthread_mutex_unlock(&frame_locker);
 
-        // cv::imshow("Preview", new_frame);
+        // cv::imshow("Preview", new_frame_local);
         // cv::waitKey(1);
 
         gettimeofday(&time, NULL);  //END-TIME
@@ -232,8 +241,10 @@ void *ipmThread(void *arg) {
         // Resize for distortion removal
         // TODO: calibrate camera at lower res?
         //       - Not a whole lot of perf to gain with faster IPM... (~10ms)
+//        std::cout << "Resize2: " << latest_enet.total() << std::endl;
         cv::resize(latest_enet, latest_enet, cv::Size(frameWidth, frameHeight));
         // Remove lens distortion
+//        std::cout << "Resize3: " << latest_enet.total() << std::endl;
         cv::resize(latest_enet, latest_enet, cv::Size(1920, 1080));
         latest_enet = mapper.removeDistortion(latest_enet);
         // Apply IPM
@@ -259,8 +270,8 @@ void *ipmThread(void *arg) {
 void *previewThread(void *arg) {
     cv::Mat latest_frame, latest_enet, latest_ipm, overlay;
 
-    for (;;) {
-        // Aqcuire latest frames
+    while (ros::ok()) {
+        // Acquire latest frames
         pthread_mutex_lock(&frame_locker);
         latest_frame = frame.clone();
         pthread_mutex_unlock(&frame_locker);
@@ -320,6 +331,7 @@ void *previewThread(void *arg) {
         cv::vconcat(top_preview, bottom_preview, preview);
 
         // cv::imshow("top_preview", top_preview);
+//        std::cout << "Resize4: " << preview.total() << std::endl;
         cv::resize(preview, preview, cv::Size(), 0.80, 0.80);
         cv::imshow("preview", preview);
 
@@ -349,6 +361,11 @@ int main(int argc, char **argv) {
     // ROS nodes for image publish
     image_transport::ImageTransport it(n);
     image_pub = it.advertise("camera/image", 1);
+#else
+    image_transport::ImageTransport it(n);
+//    image_transport::CameraSubscriber it_sub;
+//    it_sub = it.subscribeCamera("/camera/image", 1, handleImage);
+    image_transport::Subscriber it_sub = it.subscribe("camera/image", 1, &handleImage);
 #endif
 
     // Initialize frame mutexes
@@ -370,11 +387,7 @@ int main(int argc, char **argv) {
     pthread_t vis_t;
 
     // Create threads
-#ifndef CAMERA_VIA_ROS
     pthread_create(&frame_t, NULL, cameraThread, NULL);
-#else
-    pthread_create(&frame_t, NULL, cameraThread, &n);
-#endif
     pthread_create(&enet_t, NULL, enetThread, NULL);
     pthread_create(&ipm_t, NULL, ipmThread, NULL);
     pthread_create(&vis_t, NULL, previewThread, NULL);
@@ -382,6 +395,7 @@ int main(int argc, char **argv) {
     // Publish latest ipm_frame as a PointCloud
     // TODO: Should be in its own thread
     while (ros::ok()) {
+        ros::spinOnce();  // I swear to god if putting this at the top of this loop fixes my issue I will jump off Gleason
         // Measure time differences between pointcloud publishes
         struct timeval time;
         gettimeofday(&time, NULL); // Start Time
@@ -407,6 +421,7 @@ int main(int argc, char **argv) {
 
         // Edge Detection
         cv::Mat cloud_frame;
+//        std::cout << "Resize5: " << latest_ipm.total() << std::endl;
         cv::resize(latest_ipm, cloud_frame, cv::Size(pcwidth, pcheight));
 
         // Pad Bottom
@@ -609,7 +624,7 @@ int main(int argc, char **argv) {
         // std::cout << "PC time = " << pcTime << " ms" << std::endl;
         // std::cout << "Publish time = " << publishTime << " ms" << std::endl;
 
-        ros::spinOnce(); // TODO: Make new thread?
+        // ros::spinOnce(); // TODO: Make new thread?
         // pthread_barrier_wait(&pc_done);
     }
     pthread_exit(NULL);

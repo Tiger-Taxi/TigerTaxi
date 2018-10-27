@@ -3,6 +3,9 @@ project(safezone)
 
 set(CMAKE_CXX_STANDARD 11)
 
+# Uncomment to debug safezone:
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -gdwarf-2")
+
 # External Packages
 find_package(OpenCV REQUIRED)
 find_package(Caffe REQUIRED)

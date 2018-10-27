@@ -34,7 +34,7 @@
           args="0 0 0.965 0 0.17453 0 base_link velodyne 100" />
     -->
 
-    <!-- LiDAR - Front - 7.5 degree Tilt Foward-->
+    <!-- LiDAR - Front - 7.5 degree Tilt Forward-->
     <!-- <node pkg="tf" type="static_transform_publisher" name="velodyne_broadcaster"
           args="0 0 0.965 0 0.1309 0 base_link velodyne 100" />
     -->

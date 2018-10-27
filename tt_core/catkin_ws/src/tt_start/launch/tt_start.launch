@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <launch>
 
+    <!-- Note: TT_ROOT env variable must be set to TigerTaxi root directory -->
+
     <arg name="simulate" default="true"/>
     <arg name="collect_map" default="false"/>
     <arg name="use_static_map" default="false"/>
@@ -13,7 +15,9 @@
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --keep-alive --rate=0.25 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>
+              args="--clock --keep-alive --rate=0.25 $(env TT_ROOT)/Post_callibration_driving_around.bag"/>
+        <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
+              <!--args="&#45;&#45;clock &#45;&#45;keep-alive &#45;&#45;rate=0.25 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>
 
     <!-- GUI Nodes -->
@@ -111,7 +115,7 @@
                 <!-- Use AMCL for all SLAM packages -->
                 <include file="$(find tt_start)/launch/amcl.launch"/>
                 <group if="$(eval slam_pkg == 'gmapping')">
-                    <node name="map_server" pkg="map_server" type="map_server" args="/home/rosmaster/TigerTaxi/maps/thisiscrap.yaml"/>
+                    <node name="map_server" pkg="map_server" type="map_server" args="$(env TT_ROOT)/maps/thisiscrap.yaml"/>
                 </group>
                 <group if="$(eval slam_pkg == 'loam')">
                     <!-- <node name="map_server" pkg="map_server" type="map_server" args="loam_map.yaml"/> -->

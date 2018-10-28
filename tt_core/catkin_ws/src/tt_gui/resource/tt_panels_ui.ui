@@ -3,14 +3,14 @@
 <class>tt_panels_ui</class>
 <widget class="QWidget" name="tt_panels_ui">
 
-    <widget class="QWidget" name="tab_widget">
+    <widget class="QFrame" name="tab_frame">
         <widget class="QWidget" name="nav_widget"></widget>
         <widget class="QWidget" name="mode_widget"></widget>
         <widget class="QWidget" name="camera_widget"></widget>
         <widget class="QWidget" name="systems_widget"></widget>
     </widget>
 
-    <widget class="QWidget" name="tab_widget">
+    <widget class="QFrame" name="tab_frame">
         <widget class="QPushButton" name="button_nav">
             <property name="text"><string>Navigation</string></property>
         </widget>

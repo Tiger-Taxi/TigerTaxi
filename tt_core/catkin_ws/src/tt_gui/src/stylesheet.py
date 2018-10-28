@@ -7,11 +7,14 @@ START_Y = desktop.y()
 TOTAL_W = desktop.width()
 TOTAL_H = desktop.height()
 
+NO_STYLE      = ''
 BUTTON_NORMAL = 'color:black; font-size: 26px; background-color: rgb(200,200,200)'
 BUTTON_ACTIVE = 'color:green; font-size: 26px; background-color: rgb(200,200,200)'
+BUTTON_OFF    = 'color:black; font-size: 26px; background-color: rgb(230,230,230)'
 
 FRAME_STYLE = 'margin:0px; border:1px solid rgb(0, 0, 0);'
 LABEL_STYLE = 'margin:0px; border:1px solid rgb(0, 0, 0); color: black; font-size: 26px;'
+SUB_L_STYLE = 'margin:0px; border:1px solid rgb(0, 0, 0); color: black; font-size: 20px;'
 
 MAP_WEIGHT = 7
 PAN_WEIGHT = 3

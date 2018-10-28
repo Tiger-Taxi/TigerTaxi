@@ -23,7 +23,7 @@ class tt_panels_ui(QWidget):
         ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_panels_ui.ui'
         loadUi(ui_file, self)
 
-        self.tab_widget = QWidget(parent = self)
+        self.tab_frame = QFrame(parent = self)
 
         self.nav_widget = tt_panel_nav_ui(parent = self)
         self.mode_widget = tt_panel_mode_ui(parent = self)
@@ -35,9 +35,9 @@ class tt_panels_ui(QWidget):
         self.tab_layout.addWidget(self.mode_widget)
         self.tab_layout.addWidget(self.camera_widget)
         self.tab_layout.addWidget(self.systems_widget)
-        self.tab_widget.setLayout(self.tab_layout)
+        self.tab_frame.setLayout(self.tab_layout)
 
-        self.button_widget = QWidget(parent = self)
+        self.button_frame = QFrame(parent = self)
 
         self.button_nav.clicked.connect(self.nav_button_pressed)
         self.button_mode.clicked.connect(self.mode_button_pressed)
@@ -49,13 +49,16 @@ class tt_panels_ui(QWidget):
         self.button_layout.addWidget(self.button_mode)
         self.button_layout.addWidget(self.button_camera)
         self.button_layout.addWidget(self.button_systems)
-        self.button_widget.setLayout(self.button_layout)
+        self.button_frame.setLayout(self.button_layout)
 
         self.layout = QVBoxLayout()
-        self.layout.addWidget(self.tab_widget, PAN_DIAG_WEIGHT)
+        self.layout.addWidget(self.tab_frame, PAN_DIAG_WEIGHT)
         self.layout.addStretch()
-        self.layout.addWidget(self.button_widget, PAN_SWITCH_WEIGHT)
+        self.layout.addWidget(self.button_frame, PAN_SWITCH_WEIGHT)
         self.setLayout(self.layout)
+
+        self.tab_frame.setStyleSheet(FRAME_STYLE)
+        self.button_frame.setStyleSheet(FRAME_STYLE)
 
         self.selection = 0
         self._update_button_state()

@@ -21,28 +21,30 @@ plugins:
 - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
 - {name: obstacle_layer,  type: "costmap_2d::ObstacleLayer"}
 
+# TODO remove this?
 inflation_layer:
   enabled:             False
   cost_scaling_factor: 0.1    # exponential rate at which the obstacle cost drops off (default: 10)
   inflation_radius:    0.5    # max. distance from an obstacle at which costs are incurred for planning paths.
 
-obstacle_layer:
-  enabled:             True
-  observation_sources: unsafe_zone safe_zone velodyne_obstacles velodyne_clear laser_scan_sensor
-  unsafe_zone:         {sensor_frame: camera,    data_type: PointCloud2, topic: unsafezone_pc,      marking: True,  clearing: True}
-  safe_zone:           {sensor_frame: camera,    data_type: PointCloud2, topic: safezone_pc,        marking: False, clearing: True}
-  velodyne_obstacles:  {sensor_frame: heightmap, data_type: PointCloud2, topic: velodyne_obstacles, marking: True,  clearing: True}
-  velodyne_clear:      {sensor_frame: heightmap, data_type: PointCloud2, topic: velodyne_clear,     marking: False, clearing: True}
-  laser_scan_sensor:   {sensor_frame: laser,     data_type: LaserScan,   topic: scan,               marking: True,  clearing: True}
-#  observation_sources: velodyne_obstacles velodyne_clear laser_scan_sensor
+# **NOTE: These have been moved to obstacle_layer_common_[no_]safezone.yaml with a switch in move_base.launch
+#obstacle_layer:
+#  enabled:             True
+#  observation_sources: unsafe_zone safe_zone velodyne_obstacles velodyne_clear laser_scan_sensor
+#  unsafe_zone:         {sensor_frame: camera,    data_type: PointCloud2, topic: unsafezone_pc,      marking: True,  clearing: True}
+#  safe_zone:           {sensor_frame: camera,    data_type: PointCloud2, topic: safezone_pc,        marking: False, clearing: True}
 #  velodyne_obstacles:  {sensor_frame: heightmap, data_type: PointCloud2, topic: velodyne_obstacles, marking: True,  clearing: True}
 #  velodyne_clear:      {sensor_frame: heightmap, data_type: PointCloud2, topic: velodyne_clear,     marking: False, clearing: True}
 #  laser_scan_sensor:   {sensor_frame: laser,     data_type: LaserScan,   topic: scan,               marking: True,  clearing: True}
-
-  combination_method:         1
-  footprint_clearing_enabled: True # Don't mark things as obstacles if they're in footprint range
-  raytrace_range:             10.0
-  obstacle_range:             8.0
+##  observation_sources: velodyne_obstacles velodyne_clear laser_scan_sensor
+##  velodyne_obstacles:  {sensor_frame: heightmap, data_type: PointCloud2, topic: velodyne_obstacles, marking: True,  clearing: True}
+##  velodyne_clear:      {sensor_frame: heightmap, data_type: PointCloud2, topic: velodyne_clear,     marking: False, clearing: True}
+##  laser_scan_sensor:   {sensor_frame: laser,     data_type: LaserScan,   topic: scan,               marking: True,  clearing: True}
+#
+#  combination_method:         1
+#  footprint_clearing_enabled: True # Don't mark things as obstacles if they're in footprint range
+#  raytrace_range:             10.0
+#  obstacle_range:             8.0
 
 #observation_sources: scan point_cloud_sensor
 #scan: {data_type: LaserScan, expected_update_rate: 0.4,

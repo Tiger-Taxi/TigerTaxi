@@ -192,6 +192,7 @@ private:
 
   pcl::PointCloud<pcl::PointXYZI>::Ptr _laserCloudSurround;
   pcl::PointCloud<pcl::PointXYZI>::Ptr _laserCloudSurroundDS;     ///< down sampled
+  pcl::PointCloud<pcl::PointXYZI>::Ptr _laserCloudSurroundLocalDS;     ///< down sampled
   pcl::PointCloud<pcl::PointXYZI>::Ptr _laserCloudCornerFromMap;
   pcl::PointCloud<pcl::PointXYZI>::Ptr _laserCloudSurfFromMap;
 

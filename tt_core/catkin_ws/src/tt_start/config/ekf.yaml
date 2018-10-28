@@ -56,7 +56,6 @@ ekf_se_odom:
 # imu0_queue_size: 10
 # imu0_remove_gravitational_acceleration: false
 
-
                             #x     y     z     r     p     y     vx     vy     vz    vr    vp    vy    ax    ay    az
  process_noise_covariance:  [1e-3, 0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
                              0,    1e-3, 0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,

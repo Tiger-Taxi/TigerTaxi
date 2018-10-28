@@ -76,9 +76,9 @@ LaserOdometry::LaserOdometry(const float& scanPeriod,
 
   tf2_ros::Buffer tfBuffer;
   tf2_ros::TransformListener tf2_listener(tfBuffer);
-  ROS_INFO_STREAM("Waiting for TF: Odom");
-  loam_init_to_map = tfBuffer.lookupTransform("map", "loam_init", ros::Time(0), ros::Duration(10.0));
-  ROS_INFO_STREAM("TF received");
+  //ROS_INFO_STREAM("Waiting for TF: Odom");
+  //loam_init_to_map = tfBuffer.lookupTransform("map", "loam_init", ros::Time(0), ros::Duration(10.0));
+  //ROS_INFO_STREAM("TF received");
 }
 
 
@@ -902,6 +902,7 @@ void LaserOdometry::publishResult()
   _laserOdometryMsg.header.frame_id = "loam_init";
   _pubLaserOdometry.publish(_laserOdometryMsg);
 
+  /*
   geometry_msgs::PoseStamped msgTransformTemp;
   msgTransformTemp.header = _laserOdometryMsg.header;
   msgTransformTemp.pose.orientation = _laserOdometryMsg.pose.pose.orientation;
@@ -927,7 +928,7 @@ void LaserOdometry::publishResult()
   _laserOdometryMsg.pose.pose.position = msgTransformTemp.pose.position;
   _laserOdometryMsg.pose.pose.orientation = msgQuaternionTemp.pose.orientation;
   _pubLaserOdometryMap.publish(_laserOdometryMsg);
-
+   */
   _laserOdometryTrans.stamp_ = _timeSurfPointsLessFlat;
   _laserOdometryTrans.setRotation(tf::Quaternion(-geoQuat.y, -geoQuat.z, geoQuat.x, geoQuat.w));
   _laserOdometryTrans.setOrigin(tf::Vector3( _transformSum.pos.x(), _transformSum.pos.y(), _transformSum.pos.z()) );

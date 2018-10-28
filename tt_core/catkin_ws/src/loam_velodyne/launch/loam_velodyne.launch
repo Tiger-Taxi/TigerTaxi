@@ -17,11 +17,11 @@
 
   <node pkg="loam_velodyne" type="laserMapping" name="laserMapping" output="screen">
     <param name="scanPeriod" value="$(arg scanPeriod)" />
-    <remap from="laser_odom_to_init" to="ekf/loam_converted_odom_gps_corrected"/>
+    <!--<remap from="laser_odom_to_init" to="ekf/loam_converted_odom_gps_corrected"/>-->
   </node>
 
   <node pkg="loam_velodyne" type="transformMaintenance" name="transformMaintenance" output="screen">
-    <remap from="laser_odom_to_init" to="ekf/loam_converted_odom_gps_corrected"/>
+    <!--<remap from="laser_odom_to_init" to="ekf/loam_converted_odom_gps_corrected"/>-->
   </node>
 
   <group if="$(arg rviz)">

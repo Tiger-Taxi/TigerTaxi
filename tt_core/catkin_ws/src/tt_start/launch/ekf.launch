@@ -4,19 +4,19 @@
     
     <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se_odom" clear_params="true">
       <remap from="odometry/filtered" to="ekf/odom"/>
-      <remap from="pose_with_covariance" to="/pose_with_covariance"/>
+      <!--<remap from="pose_with_covariance_stamped" to="pose_with_covariance"/>-->
       <remap from="/imu/data" to="/vectornav/IMU"/>
     </node>
 
     <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se_gps" clear_params="true">
       <remap from="odometry/filtered" to="ekf/odom_gps_corrected"/>
-      <remap from="pose_with_covariance" to="pose_with_covariance"/>
+      <!--<remap from="pose_with_covariance_stamped" to="pose_with_covariance"/>-->
       <remap from="/imu/data" to="/vectornav/IMU"/>
     </node>
 
-    <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" clear_params="true" >
-      <remap from="odometry/filtered" to="ekf/odom_gps_corrected"/>
-      <remap from="/gps/fix" to="/vectornav/GPS"/>
-      <remap from="/imu/data" to="/vectornav/IMU"/>
-    </node>
+    <!--<node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" clear_params="true" >-->
+      <!--<remap from="odometry/filtered" to="ekf/odom_gps_corrected"/>-->
+      <!--<remap from="/gps/fix" to="/vectornav/GPS"/>-->
+      <!--<remap from="/imu/data" to="/vectornav/IMU"/>-->
+    <!--</node>-->
 </launch>

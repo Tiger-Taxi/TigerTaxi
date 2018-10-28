@@ -50,7 +50,7 @@ TransformMaintenance::TransformMaintenance()
   tf2_ros::Buffer tfBuffer;
   tf2_ros::TransformListener tf2_listener(tfBuffer);
   ROS_INFO_STREAM("Waiting for TF: Integrated");
-  loam_init_to_map = tfBuffer.lookupTransform("map", "loam_init", ros::Time(0), ros::Duration(10.0));
+  loam_init_to_map = tfBuffer.lookupTransform("odom", "loam_init", ros::Time(0), ros::Duration(10.0));
   ROS_INFO_STREAM("TF received");
 
 
@@ -240,7 +240,7 @@ void TransformMaintenance::laserOdometryHandler(const geometry_msgs::PoseWithCov
   msgQuaternionTemp.pose.orientation.w = msgTransformTemp.pose.orientation.w;
   tf2::doTransform(msgQuaternionTemp, msgQuaternionTemp, quatRot);
 
-  _laserOdometry2.header.frame_id = "map";
+  _laserOdometry2.header.frame_id = "odom";
   _laserOdometry2.pose.pose.position.x = msgTransformTemp.pose.position.x;
   _laserOdometry2.pose.pose.position.y = msgTransformTemp.pose.position.y;
   _laserOdometry2.pose.pose.position.z = msgTransformTemp.pose.position.z;

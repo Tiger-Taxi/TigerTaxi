@@ -6,7 +6,7 @@
     <arg name="simulate" default="true"/>
     <arg name="collect_map" default="false"/>
     <arg name="use_static_map" default="false"/>
-    <arg name="slam_pkg" default="gmapping"/>
+    <arg name="slam_pkg" default="loam"/>
     <arg name="old_nav" default="false"/>
     <arg name="use_safezone" default="false"/>
 
@@ -16,7 +16,7 @@
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --keep-alive --rate=0.25 $(env TT_ROOT)/Post_callibration_driving_around.bag"/>
+              args="--clock --start=25 --rate=1 $(env TT_ROOT)/Post_callibration_driving_around.bag"/>
         <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
               <!--args="&#45;&#45;clock &#45;&#45;keep-alive &#45;&#45;rate=0.25 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>
@@ -33,7 +33,7 @@
     <!-- TFs, odom used in all operation -->
     <include file="$(find tt_start)/launch/tt_tf.launch"/>
     <include file="$(find tt_start)/launch/ekf.launch"/>
-    <!-- <include file="$(find tt_start)/launch/scan_matcher.launch"/> TODO do we need this RIGHT NOW -->
+    <include file="$(find tt_start)/launch/scan_matcher.launch"/> <!--TODO do we need this RIGHT NOW -->
     <include file="$(find tt_start)/launch/p2l_2.launch"/>
     <node name="height_map" pkg="velodyne_height_map" type="heightmap_node"
           args="_height_threshold:=0.05 _full_clouds:=True _grid_dimensions:=250 _cell_size:=0.08"/>
@@ -98,7 +98,7 @@
         </group>
         <group if="$(eval slam_pkg == 'loam')">
             <include file="$(find loam_velodyne)/launch/loam_velodyne.launch"/>
-            <include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/> <!-- TODO REMOVE ME -->
+            <!--<include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/> -->o<!-- TODO REMOVE ME -->
         </group>
     </group>
     <!-- Unless we are collecting a map (any driving mode) -->
@@ -133,7 +133,7 @@
                 <group if="$(eval slam_pkg == 'loam')">
                     <!-- TODO This is where we are currently putting things for LOAM [ACTIVE] -->
                     <include file="$(find loam_velodyne)/launch/loam_velodyne.launch"/>
-                    <include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/> <!-- TODO REMOVE ME -->
+                    <!--<include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/> --><!-- TODO REMOVE ME -->
                 </group>
             </group>
         </group>

@@ -13,7 +13,7 @@ geometry_msgs::TransformStamped quatRot;
 ros::Publisher loamPub;
 
 void OdomCallback(const nav_msgs::Odometry::ConstPtr &msg);
-void PoseCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msg); //Used to test transformation when EKF is disabled
+//void PoseCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msg); //Used to test transformation when EKF is disabled
 
 int main(int argc, char *argv[])
 {

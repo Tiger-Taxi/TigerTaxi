@@ -24,7 +24,7 @@
     <group unless="$(arg simulate)">
         <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
         <include file="$(find tt_start)/launch/urg_lidar.launch"/>
-	<include file="$(find vectornav)/launch/vectornav.launch"/>
+	<include file="$(find tt_start)/launch/vectornav.launch"/>
         <!-- DUE's were removed from the start up script due to odd interactions that caused them to crash and the cart to run away.  Addeding the to the start script requires code changes in the rosdue node  -->
         <!-- DUE1 and DUE2 may swap depending on which one connects to the PC first -->
         <!-- <node pkg="rosdue" type="serial_due.py" name="due1" output="screen">

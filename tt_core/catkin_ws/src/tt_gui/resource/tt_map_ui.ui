@@ -3,8 +3,8 @@
 <class>tt_map_ui</class>
 <widget class="QWidget" name="tt_map_ui">
 
-    <widget class="QPushButton" name="button_test">
-        <property name="text"><string>TEST</string></property>
+    <widget class="QLabel" name="coming_soon">
+        <property name="text"><string>Coming soon...</string></property>
     </widget>
 
 </widget>

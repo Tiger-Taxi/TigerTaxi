@@ -21,13 +21,4 @@ class tt_map_ui(QWidget):
         ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_map_ui.ui'
         loadUi(ui_file, self)
 
-        self.message = 'The test worked!'
-        self.button_test.setStyleSheet(BUTTON_NORMAL)
-        self.button_test.clicked.connect(self.button_test_pressed)
-        self.publisher_greetings = rospy.Publisher('gui_test', String, queue_size = 1)
-
-    def button_test_pressed(self):
-        self._publish_mode(None)
-
-    def _publish_mode(self, event):
-        self.publisher_greetings.publish(String(self.message))
+        self.coming_soon.setStyleSheet(SUB_L_STYLE)

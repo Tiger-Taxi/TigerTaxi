@@ -29,5 +29,11 @@ PAN_WEIGHT = 3
 PAN_DIAG_WEIGHT = 9
 PAN_SWITCH_WEIGHT = 1
 
+STATUS_LABELS = ['Degraded', 'Running', 'Disabled']
+TOGGLE_LABELS = ['Live Feed', 'Pause']
+CONTROL_LABELS = ['Disable', 'Enable']
+
+TRACK_SYSTEM_STATUS = 1
+
 HZ_CALC_SIZE = 10
 FREQ_CUTOFF  = 1

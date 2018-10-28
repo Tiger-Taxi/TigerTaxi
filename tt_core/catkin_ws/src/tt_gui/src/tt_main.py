@@ -15,6 +15,9 @@ import os
 from tt_map import tt_map_ui
 from tt_panels import tt_panels_ui
 
+# Define styles for buttons
+style_normal = """color: black;font-size: 26px;"""
+style_active = """color: green;font-size: 26px;"""
 
 # Class definition for the overarching GUI module
 class tt_main_ui(Plugin):
@@ -34,6 +37,7 @@ class tt_main_ui(Plugin):
 
         # Create QWidget for the overarching GUI module
         self.main_widget = QWidget()
+
         # Get path to UI file which should be in the "resource" folder of this package
         # TODO - hardcoded tt references
         ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_main_ui.ui'
@@ -42,12 +46,10 @@ class tt_main_ui(Plugin):
         # Add widget to the user interface
         context.add_widget(self.main_widget)
 
+        self.map_widget = tt_map_ui()
+        self.panels_widget = tt_panels_ui()
+
         self.layout = QHBoxLayout()
-
-        self.map_widget = tt_map_ui(parent = self.main_widget)
-        self.panels_widget = tt_panels_ui(parent = self.main_widget)
-
-        #self.layout.addWidget(self.map_widget)
+        self.layout.addWidget(self.map_widget)
         self.layout.addWidget(self.panels_widget)
-
         self.main_widget.setLayout(self.layout)

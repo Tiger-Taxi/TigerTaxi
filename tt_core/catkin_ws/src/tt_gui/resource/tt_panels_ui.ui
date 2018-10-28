@@ -1,146 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-<class>PanelContainer</class>
-<widget class="QWidget" name="PanelContainer">
+<class>tt_panels_ui</class>
+<widget class="QWidget" name="tt_panels_ui">
 
-    <!-- <property name="windowTitle">
-        <string>Tiger Taxi Navigation and Diagnosis</string>
-    </property> Not doing anything -->
+    <!--<layout class="QVBoxLayout" name="panel_layout">
+        <item> -->
+            <widget class="QStackedWidget" name="tabs_widget">
 
-    <!-- <property name="geometry">
-        <rect>
-            <x>600</x>
-            <y>0</y>
-            <width>600</width>
-            <height>400</height>
-        </rect>
-    </property> -->
+                <widget class="QWidget" name="nav_widget">
+                </widget>
 
-    <widget class="QStackedWidget" name="tabs_widget">
-        <!-- <property name="geometry">
-            <rect>
-                <x>600</x>
-                <y>0</y>
-                <width>600</width>
-                <height>300</height>
-            </rect>
-        </property> -->
+                <widget class="QWidget" name="mode_widget">
+                </widget>
 
-        <widget class="QWidget" name="nav_widget">
-            <!-- <property name="geometry">
-                <rect>
-                    <x>600</x>
-                    <y>0</y>
-                    <width>600</width>
-                    <height>300</height>
-                </rect>
-            </property> -->
-        </widget>
+                <widget class="QWidget" name="camera_widget">
+                </widget>
 
-        <widget class="QWidget" name="mode_widget">
-            <!-- <property name="geometry">
-                <rect>
-                    <x>600</x>
-                    <y>0</y>
-                    <width>600</width>
-                    <height>300</height>
-                </rect>
-            </property> -->
-        </widget>
+                <widget class="QWidget" name="systems_widget">
+                </widget>
+            </widget>
+        <!-- /item>
 
-        <widget class="QWidget" name="camera_widget">
-            <!-- <property name="geometry">
-                <rect>
-                    <x>600</x>
-                    <y>0</y>
-                    <width>600</width>
-                    <height>300</height>
-                </rect>
-            </property> -->
-        </widget>
+        <item> -->
+            <layout class="QHBoxLayout" name="panel_button_layout">
+                <item>
+                    <widget class="QPushButton" name="button_nav">
+                        <property name="text">
+                            <string>Navigation</string>
+                        </property>
+                    </widget>
+                </item>
 
-        <widget class="QWidget" name="systems_widget">
-            <!-- <property name="geometry">
-                <rect>
-                    <x>600</x>
-                    <y>0</y>
-                    <width>600</width>
-                    <height>300</height>
-                </rect>
-            </property> -->
-        </widget>
-    </widget>
+                <item>
+                    <widget class="QPushButton" name="button_mode">
+                        <property name="text">
+                            <string>Control</string>
+                        </property>
+                    </widget>
+                </item>
 
-    <widget class="QWidget" name="button_widget">
-        <!-- <property name="geometry">
-            <rect>
-                <x>600</x>
-                <y>300</y>
-                <width>600</width>
-                <height>100</height>
-            </rect>
-        </property> -->
+                <item>
+                    <widget class="QPushButton" name="button_camera">
+                        <property name="text">
+                            <string>Camera</string>
+                        </property>
+                    </widget>
+                </item>
 
-        <widget class="QPushButton" name="button_nav">
-            <property name="text">
-                <string>Navigation</string>
-            </property>
-
-            <!-- <property name="geometry">
-                <rect>
-                    <x>700</x>
-                    <y>300</y>
-                    <width>100</width>
-                    <height>100</height>
-                </rect>
-            </property> -->
-        </widget>
-
-        <widget class="QPushButton" name="button_mode">
-            <property name="text">
-                <string>Control</string>
-            </property>
-
-            <!-- <property name="geometry">
-                <rect>
-                    <x>700</x>
-                    <y>300</y>
-                    <width>100</width>
-                    <height>100</height>
-                </rect>
-            </property> -->
-        </widget>
-
-        <widget class="QPushButton" name="button_camera">
-            <property name="text">
-                <string>Camera</string>
-            </property>
-
-            <!-- <property name="geometry">
-                <rect>
-                    <x>700</x>
-                    <y>300</y>
-                    <width>100</width>
-                    <height>100</height>
-                </rect>
-            </property> -->
-        </widget>
-
-        <widget class="QPushButton" name="button_systems">
-            <property name="text">
-                <string>Subsystems</string>
-            </property>
-
-            <!-- <property name="geometry">
-                <rect>
-                    <x>700</x>
-                    <y>300</y>
-                    <width>100</width>
-                    <height>100</height>
-                </rect>
-            </property> -->
-        </widget>
-    </widget>
+                <item>
+                    <widget class="QPushButton" name="button_systems">
+                        <property name="text">
+                            <string>Subsystems</string>
+                        </property>
+                    </widget>
+                </item>
+            </layout>
+        <!-- </item>
+    </layout> -->
 
 </widget>
 <resources/>

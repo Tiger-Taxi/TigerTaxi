@@ -1,53 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-<class>CoreContainer</class>
-<widget class="QWidget" name="CoreContainer">
+<class>tt_main_ui</class>
+<widget class="QWidget" name="tt_main_ui">
 
     <!-- X is right, Y is down -->
 
-    <!-- <property name="windowTitle">
-        <string>Tiger Taxi Navigation and Diagnosis</string>
-    </property> -->
+    <property name="windowTitle">
+        <string>Tiger Taxi Navigation and Diagnostics GUI</string>
+    </property>
 
-    <property name="geometry">
+    <!-- <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
             <width>1200</width>
             <height>400</height>
         </rect>
-    </property>
+    </property> -->
 
     <widget class="QWidget" name="main_widget">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>1200</width>
-                <height>400</height>
-            </rect>
-        </property>
+        <!-- <layout class="QHBoxLayout" name="main_layout">
+            <item>
+                <widget class="QWidget" name="map_widget">
+                    <property name="geometry">
+                        <rect>
+                            <x>0</x>
+                            <y>0</y>
+                            <width>600</width>
+                            <height>400</height>
+                        </rect>
+                    </property>
+                </widget>
+            </item> -->
 
-        <!-- <widget class="QWidget" name="map_widget">
-            <property name="geometry">
+            <!-- <item>
+                <widget class="QWidget" name="panels_widget">
+                </widget>
+            </item> -->
+        <!-- </layout> -->
+        <widget class="QWidget" name="map_widget">
+            <!-- <property name="geometry">
                 <rect>
                     <x>0</x>
                     <y>0</y>
                     <width>600</width>
                     <height>400</height>
                 </rect>
-            </property>
-        </widget> -->
+            </property> -->
+        </widget>
 
         <widget class="QWidget" name="panels_widget">
-            <property name="geometry">
+            <!-- <property name="geometry">
                 <rect>
-                    <x>600</x>
+                    <x>0</x>
                     <y>0</y>
                     <width>600</width>
                     <height>400</height>
                 </rect>
-            </property>
+            </property> -->
         </widget>
     </widget>
 

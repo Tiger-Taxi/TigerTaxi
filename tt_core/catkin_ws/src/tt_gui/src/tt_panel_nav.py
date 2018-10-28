@@ -1,4 +1,4 @@
-from python_qt_binding.QtWidgets import QWidget
+from python_qt_binding.QtWidgets import QWidget, QPushButton
 from python_qt_binding import loadUi
 from qt_gui.plugin import Plugin
 from PyQt5.QtGui import *
@@ -19,9 +19,8 @@ style_active = """color: green;font-size: 26px;"""
 # Class definition for the overarching GUI module
 class tt_panel_nav_ui(QWidget):
     # Initiliazation sequence for all GUI components, their respective connections and publisher/subscriber relationships
-    def __init__(self, parent):
+    def __init__(self):
         super(tt_panel_nav_ui, self).__init__()
-        self.setParent(parent)
         # Get path to UI file which should be in the "resource" folder of this package
         # TODO - hardcoded tt references
         ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_panel_nav_ui.ui'
@@ -32,7 +31,8 @@ class tt_panel_nav_ui(QWidget):
         self.message = 'Wow map works!!'
 
         # Initialize buttons with the styles defined above the class definition
-        self.button_test.setStyleSheet(style_normal)
+        #self.button_test.setStyleSheet(style_normal)
+        self.button_test = QPushButton()
 
         # Connect buttons to functions
         self.button_test.clicked.connect(self.button_test_pressed)

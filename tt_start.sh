@@ -1,4 +1,8 @@
 #!/bin/bash
+if [ -f /home/rosmaster/.config/ros.org/rqt_gui.ini ]; then
+    rm -f /home/rosmaster/.config/ros.org/rqt_gui.ini;
+    echo "File rqt_gui.ini does not exist";
+fi
 dbus-launch gnome-terminal \
 --tab -e 'bash -c "echo -ne \"\033]0;roscore\007\"; roscore; exec bash"' \
 --tab -e 'bash -c "echo -ne \"\033]0;roslaunch\007\"; sleep 2; roslaunch tt_start tt_start.launch; exec bash"'

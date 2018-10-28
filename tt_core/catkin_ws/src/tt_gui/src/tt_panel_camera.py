@@ -31,7 +31,7 @@ class tt_panel_camera_ui(QWidget):
         self.message = 'Dank memes'
 
         # Initialize buttons with the styles defined above the class definition
-        self.button_test.setStyleSheet(style_normal)
+        self.button_test.setStyleSheet(BUTTON_NORMAL)
         #self.button_test = QPushButton()
 
         # Connect buttons to functions

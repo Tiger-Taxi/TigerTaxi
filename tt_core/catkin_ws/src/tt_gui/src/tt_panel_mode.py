@@ -1,4 +1,4 @@
-from python_qt_binding.QtWidgets import QWidget, QPushButton
+from python_qt_binding.QtWidgets import *
 from python_qt_binding import loadUi
 from qt_gui.plugin import Plugin
 from PyQt5.QtGui import *
@@ -6,7 +6,6 @@ from PyQt5.QtGui import *
 from argparse import ArgumentParser
 
 from std_msgs.msg import Float32
-from std_msgs.msg import String
 
 import rospkg
 import rospy
@@ -14,35 +13,92 @@ import os
 
 from stylesheet import *
 
-# Class definition for the overarching GUI module
 class tt_panel_mode_ui(QWidget):
-    # Initiliazation sequence for all GUI components, their respective connections and publisher/subscriber relationships
     def __init__(self, parent):
         super(tt_panel_mode_ui, self).__init__()
         self.setParent(parent)
         self.setObjectName('tt_panel_mode_ui')
-        # Get path to UI file which should be in the "resource" folder of this package
-        # TODO - hardcoded tt references
         ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_panel_mode_ui.ui'
-        # Extend the widget with all attributes and children from UI file
         loadUi(ui_file, self)
 
-        # Initialize internal mode [0 - hi | 1 - bye]
-        self.message = 'Mode: On ...'
+        self.mode_control_frame.setStyleSheet(FRAME_STYLE)
+        self.mode_control_label.setStyleSheet(LABEL_STYLE)
 
-        # Initialize buttons with the styles defined above the class definition
-        self.button_test.setStyleSheet(style_normal)
-        #self.button_test = QPushButton()
+        self.button_man.setStyleSheet(BUTTON_NORMAL)
+        self.button_rem.setStyleSheet(BUTTON_NORMAL)
+        self.button_aut.setStyleSheet(BUTTON_NORMAL)
 
-        # Connect buttons to functions
-        self.button_test.clicked.connect(self.button_test_pressed)
+        self.mode_control_layout = QVBoxLayout()
+        self.mode_control_layout.addWidget(self.mode_control_label)
+        self.mode_control_layout.addWidget(self.button_man)
+        self.mode_control_layout.addWidget(self.button_rem)
+        self.mode_control_layout.addWidget(self.button_aut)
+        self.mode_control_frame.setLayout(self.mode_control_layout)
 
-        # Initialize publisher with topic, message type
-        self.publisher_greetings = rospy.Publisher('gui_test', String, queue_size = 1)
+        self.sound_control_frame.setStyleSheet(FRAME_STYLE)
+        self.sound_control_label.setStyleSheet(LABEL_STYLE)
 
-    # Function called when the "hi" button is pressed
-    def button_test_pressed(self):
+        self.button_sound1.setStyleSheet(BUTTON_NORMAL)
+        self.button_sound2.setStyleSheet(BUTTON_NORMAL)
+
+        self.button_man.clicked.connect(self.button_man_pressed)
+        self.button_rem.clicked.connect(self.button_rem_pressed)
+        self.button_aut.clicked.connect(self.button_aut_pressed)
+
+        self.sound_control_layout = QVBoxLayout()
+        self.sound_control_layout.addWidget(self.sound_control_label)
+        self.sound_control_layout.addWidget(self.button_sound1)
+        self.sound_control_layout.addWidget(self.button_sound2)
+        self.sound_control_frame.setLayout(self.sound_control_layout)
+
+        self.button_sound1.clicked.connect(self.button_sound1_pressed)
+        self.button_sound2.clicked.connect(self.button_sound2_pressed)
+
+        self.layout = QVBoxLayout()
+        self.layout.addStretch()
+        self.layout.addWidget(self.mode_control_frame)
+        self.layout.addStretch()
+        self.layout.addWidget(self.sound_control_frame)
+        self.layout.addStretch()
+        self.setLayout(self.layout)
+
+        self.publisher_controlmode = rospy.Publisher('apm_controlmode', Float32, queue_size = 1)
+
+        self.controlmode = 0
+        self._update_button_state()
+
+    def button_man_pressed(self):
+        self.controlmode = 0
+        self._update_button_state()
         self._publish_mode(None)
 
+    def button_rem_pressed(self):
+        self.controlmode = 1
+        self._update_button_state()
+        self._publish_mode(None)
+
+    def button_aut_pressed(self):
+        self.controlmode = 2
+        self._update_button_state()
+        self._publish_mode(None)
+
+    def button_sound1_pressed(self):
+        # TODO - Kenny add in the functonality here and let know if you want more
+        #        make the path to the sounds a global variable in stylesheet.py
+        pass
+
+    def button_sound2_pressed(self):
+        # TODO - Kenny add in the functonality here and let know if you want more
+        #        make the path to the sounds a global variable in stylesheet.py
+        pass
+
+    def _update_button_state(self):
+        styles = [BUTTON_NORMAL] * 3
+        styles[self.controlmode] = BUTTON_ACTIVE
+
+        self.button_man.setStyleSheet(styles[0])
+        self.button_rem.setStyleSheet(styles[1])
+        self.button_aut.setStyleSheet(styles[2])
+
     def _publish_mode(self, event):
-        self.publisher_greetings.publish(String(self.message))
+        self.publisher_controlmode.publish(Float32(self.controlmode))

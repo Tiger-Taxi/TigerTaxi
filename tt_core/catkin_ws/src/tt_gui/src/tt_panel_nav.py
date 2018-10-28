@@ -31,7 +31,7 @@ class tt_panel_nav_ui(QWidget):
         self.message = 'Wow map works!!'
 
         # Initialize buttons with the styles defined above the class definition
-        self.button_test.setStyleSheet(style_normal)
+        self.button_test.setStyleSheet(BUTTON_NORMAL)
         #self.button_test = QPushButton()
 
         # Connect buttons to functions

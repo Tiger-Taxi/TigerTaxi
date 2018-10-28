@@ -3,11 +3,48 @@
 <class>tt_panel_systems_ui</class>
 <widget class="QWidget" name="tt_panel_systems_ui">
 
-    <widget class="QPushButton" name="button_test">
-        <property name="text">
-            <string>SystemsTEST</string>
-        </property>
-    </widget>
+	<widget class="QFrame" name="imu_frame">
+		<widget class="QLabel" name="imu_label">
+	        <property name="text"><string>IMU</string></property>
+	    </widget>
+
+		<widget class="QWidget" name="imu_status_widget">
+			<widget class="QLabel" name="imu_status_label">
+		        <property name="text"><string>Status:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="imu_status_value">
+		        <property name="text"><string>Degraded</string></property>
+		    </widget>
+		</widget>
+		<widget class="QWidget" name="imu_rate_widget">
+			<widget class="QLabel" name="imu_rate_label">
+		        <property name="text"><string>Frequency:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="imu_rate_value">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+		<widget class="QWidget" name="imu_message_widget">
+			<widget class="QLabel" name="imu_message_label">
+		        <property name="text"><string>Last Message:</string></property>
+		    </widget>
+			<widget class="QWidget" name="imu_yaw_widget">
+				<widget class="QLabel" name="imu_yaw_label">
+			        <property name="text"><string>Yaw:</string></property>
+			    </widget>
+			    <widget class="QLabel" name="imu_yaw_value">
+			        <property name="text"><string>N/A</string></property>
+			    </widget>
+			    <!-- TODO - Add the other fields here -->
+			</widget>
+			<widget class="QPushButton" name="imu_message_button">
+		        <property name="text"><string>Pause Feed</string></property>
+		    </widget>
+		</widget>
+		<widget class="QPushButton" name="imu_control_button">
+	        <property name="text"><string>Disable</string></property>
+	    </widget>
+	</widget>
 
 </widget>
 <resources/>

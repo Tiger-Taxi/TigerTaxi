@@ -2,35 +2,53 @@
 <ui version="4.0">
 <class>CoreContainer</class>
 <widget class="QWidget" name="CoreContainer">
+
+    <!-- X is right, Y is down -->
+
+    <!-- <property name="windowTitle">
+        <string>Tiger Taxi Navigation and Diagnosis</string>
+    </property> -->
+
     <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>800</width>
+            <width>1200</width>
             <height>400</height>
         </rect>
     </property>
 
-    <widget class="QWidget" name="maps_widget">
+    <widget class="QWidget" name="main_widget">
         <property name="geometry">
             <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>400</width>
+                <width>1200</width>
                 <height>400</height>
             </rect>
         </property>
-    </widget>
 
-    <widget class="QWidget" name="panels_widget">
-        <property name="geometry">
-            <rect>
-                <x>400</x>
-                <y>0</y>
-                <width>400</width>
-                <height>400</height>
-            </rect>
-        </property>
+        <!-- <widget class="QWidget" name="map_widget">
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>600</width>
+                    <height>400</height>
+                </rect>
+            </property>
+        </widget> -->
+
+        <widget class="QWidget" name="panels_widget">
+            <property name="geometry">
+                <rect>
+                    <x>600</x>
+                    <y>0</y>
+                    <width>600</width>
+                    <height>400</height>
+                </rect>
+            </property>
+        </widget>
     </widget>
 
 </widget>

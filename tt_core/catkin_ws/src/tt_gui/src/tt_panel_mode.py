@@ -17,22 +17,22 @@ style_normal = """color: black;font-size: 26px;"""
 style_active = """color: green;font-size: 26px;"""
 
 # Class definition for the overarching GUI module
-class tt_map_ui(QWidget):
+class tt_panel_mode_ui(QWidget):
     # Initiliazation sequence for all GUI components, their respective connections and publisher/subscriber relationships
     def __init__(self, parent):
-        super(tt_map_ui, self).__init__()
+        super(tt_panel_mode_ui, self).__init__()
         self.setParent(parent)
         # Get path to UI file which should be in the "resource" folder of this package
         # TODO - hardcoded tt references
-        ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_map_ui.ui'
+        ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_panel_mode_ui.ui'
         # Extend the widget with all attributes and children from UI file
         loadUi(ui_file, self)
 
         # Initialize internal mode [0 - hi | 1 - bye]
-        self.message = 'The test worked!'
+        self.message = 'Mode: On ...'
 
         # Initialize buttons with the styles defined above the class definition
-       	self.button_test.setStyleSheet(style_normal)
+        self.button_test.setStyleSheet(style_normal)
 
         # Connect buttons to functions
         self.button_test.clicked.connect(self.button_test_pressed)
@@ -40,7 +40,7 @@ class tt_map_ui(QWidget):
         # Initialize publisher with topic, message type
         self.publisher_greetings = rospy.Publisher('gui_test', String, queue_size = 1)
 
-    # Function called when the "button" button is pressed
+    # Function called when the "hi" button is pressed
     def button_test_pressed(self):
         self._publish_mode(None)
 

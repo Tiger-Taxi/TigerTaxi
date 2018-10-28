@@ -44,10 +44,10 @@ class tt_main_ui(Plugin):
 
         self.layout = QHBoxLayout()
 
-        self.map_widget = tt_map_ui()
-        self.panels_widget = tt_panels_ui()
+        self.map_widget = tt_map_ui(parent = self.main_widget)
+        self.panels_widget = tt_panels_ui(parent = self.main_widget)
 
-        self.layout.addWidget(self.map_widget)
+        #self.layout.addWidget(self.map_widget)
         self.layout.addWidget(self.panels_widget)
 
         self.main_widget.setLayout(self.layout)

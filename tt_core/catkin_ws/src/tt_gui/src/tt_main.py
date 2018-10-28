@@ -12,9 +12,8 @@ import rospkg
 import rospy
 import os
 
-# Define styles for buttons
-style_normal = """color: black;font-size: 26px;"""
-style_active = """color: green;font-size: 26px;"""
+from tt_map import tt_map_ui
+from tt_panels import tt_panels_ui
 
 # Class definition for the overarching GUI module
 class tt_main_ui(Plugin):
@@ -37,49 +36,14 @@ class tt_main_ui(Plugin):
         # Get path to UI file which should be in the "resource" folder of this package
         # TODO - hardcoded tt references
         ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_main_ui.ui'
-        rospy.loginfo('UI file %s specified for display' % ui_file)
         # Extend the widget with all attributes and children from UI file
         loadUi(ui_file, self.main_widget)
+        rospy.loginfo(str(context))
         # Add widget to the user interface
         context.add_widget(self.main_widget)
 
-        # Initialize internal mode [0 - hi | 1 - bye]
-        self.mode = 1
+        self.map_widget = tt_map_ui(context)
+        self.panels_widget = tt_panels_ui(context)
 
-        # Initialize buttons with the styles defined above the class definition
-       	self.main_widget.button_hi.setStyleSheet(style_normal)
-        self.main_widget.button_bye.setStyleSheet(style_active)
-
-        # Connect buttons to functions
-        self.main_widget.button_hi.clicked.connect(self.button_hi_pressed)
-        self.main_widget.button_bye.clicked.connect(self.button_bye_pressed)
-
-        # Call the update function of the button for state updates
-        self._update_button_state()
-
-        # Initialize publisher with topic, message type
-        self.publisher_greetings = rospy.Publisher('tt_greetings', Float32, queue_size = 1)
-
-    # Function called when the "hi" button is pressed
-    def button_hi_pressed(self):
-        self.mode = 0
-        self._update_button_state()
-        self._publish_mode(None)
-
-    # Function called when the "bye" button is pressed
-    def button_bye_pressed(self):
-        self.mode = 1
-        self._update_button_state()
-        self._publish_mode(None)
-
-    # Updates the state of the "hi" and "bye" buttons to reflect the internal state
-    def _update_button_state(self):
-        if self.mode == 0:
-            self.main_widget.button_hi.setStyleSheet(style_normal)
-            self.main_widget.button_bye.setStyleSheet(style_active)
-        else:
-            self.main_widget.button_hi.setStyleSheet(style_active)
-            self.main_widget.button_bye.setStyleSheet(style_normal)
-
-    def _publish_mode(self, event):
-        self.publisher_greetings.publish(Float32(self.mode))
+#        self.main_layout.addWidget(self.map_widget)
+#        self.main_layout.addWidget(self.panels_widget)

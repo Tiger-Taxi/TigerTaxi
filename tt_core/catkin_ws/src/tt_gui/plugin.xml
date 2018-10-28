@@ -9,7 +9,7 @@
         <icon type="theme">folder</icon>
         <statustip>Plugins related to the Tiger Taxi.</statustip>
       </group>
-      <label>Hi Bye</label>
+      <label>GUI Core</label>
       <icon type="theme">applications-other</icon>
       <statustip>A Python GUI plugin for showing the UI</statustip>
     </qtgui>

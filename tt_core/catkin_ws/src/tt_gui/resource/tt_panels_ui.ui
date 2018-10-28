@@ -3,60 +3,53 @@
 <class>tt_panels_ui</class>
 <widget class="QWidget" name="tt_panels_ui">
 
-    <!--<layout class="QVBoxLayout" name="panel_layout">
-        <item> -->
-            <widget class="QStackedWidget" name="tabs_widget">
+    <widget class="QWidget" name="tab_widget">
+        <widget class="QWidget" name="nav_widget">
+        </widget>
 
-                <widget class="QWidget" name="nav_widget">
-                </widget>
+        <widget class="QWidget" name="mode_widget">
+        </widget>
 
-                <widget class="QWidget" name="mode_widget">
-                </widget>
+        <widget class="QWidget" name="camera_widget">
+        </widget>
 
-                <widget class="QWidget" name="camera_widget">
-                </widget>
+        <widget class="QWidget" name="systems_widget">
+        </widget>
+    </widget>
 
-                <widget class="QWidget" name="systems_widget">
-                </widget>
+    <layout class="QHBoxLayout" name="panel_button_layout">
+        <item>
+            <widget class="QPushButton" name="button_nav">
+                <property name="text">
+                    <string>Navigation</string>
+                </property>
             </widget>
-        <!-- /item>
+        </item>
 
-        <item> -->
-            <layout class="QHBoxLayout" name="panel_button_layout">
-                <item>
-                    <widget class="QPushButton" name="button_nav">
-                        <property name="text">
-                            <string>Navigation</string>
-                        </property>
-                    </widget>
-                </item>
+        <item>
+            <widget class="QPushButton" name="button_mode">
+                <property name="text">
+                    <string>Control</string>
+                </property>
+            </widget>
+        </item>
 
-                <item>
-                    <widget class="QPushButton" name="button_mode">
-                        <property name="text">
-                            <string>Control</string>
-                        </property>
-                    </widget>
-                </item>
+        <item>
+            <widget class="QPushButton" name="button_camera">
+                <property name="text">
+                    <string>Camera</string>
+                </property>
+            </widget>
+        </item>
 
-                <item>
-                    <widget class="QPushButton" name="button_camera">
-                        <property name="text">
-                            <string>Camera</string>
-                        </property>
-                    </widget>
-                </item>
-
-                <item>
-                    <widget class="QPushButton" name="button_systems">
-                        <property name="text">
-                            <string>Subsystems</string>
-                        </property>
-                    </widget>
-                </item>
-            </layout>
-        <!-- </item>
-    </layout> -->
+        <item>
+            <widget class="QPushButton" name="button_systems">
+                <property name="text">
+                    <string>Subsystems</string>
+                </property>
+            </widget>
+        </item>
+    </layout>
 
 </widget>
 <resources/>

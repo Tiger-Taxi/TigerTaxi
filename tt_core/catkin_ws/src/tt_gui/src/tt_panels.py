@@ -1,4 +1,4 @@
-from python_qt_binding.QtWidgets import QStackedWidget, QWidget, QHBoxLayout, QVBoxLayout, QPushButton
+from python_qt_binding.QtWidgets import QStackedLayout, QWidget, QHBoxLayout, QVBoxLayout, QPushButton
 from python_qt_binding import loadUi
 from qt_gui.plugin import Plugin
 from PyQt5.QtGui import *
@@ -32,19 +32,29 @@ class tt_panels_ui(QWidget):
         # Extend the widget with all attributes and children from UI file
         loadUi(ui_file, self)
 
-        self.tabs_widget = QStackedWidget()
+        self.tab_widget = QWidget(parent = self)
 
-        self.nav_widget = tt_panel_nav_ui()
-        self.mode_widget = tt_panel_mode_ui()
-        self.camera_widget = tt_panel_camera_ui()
-        self.systems_widget = tt_panel_systems_ui()
+        self.nav_widget = tt_panel_nav_ui(parent = self)
+        self.mode_widget = tt_panel_mode_ui(parent = self)
+        self.camera_widget = tt_panel_camera_ui(parent = self)
+        self.systems_widget = tt_panel_systems_ui(parent = self)
 
-        self.tabs_widget.addWidget(self.nav_widget)
-        self.tabs_widget.addWidget(self.mode_widget)
-        self.tabs_widget.addWidget(self.camera_widget)
-        self.tabs_widget.addWidget(self.systems_widget)
+        """
+        self.tab_widget.addWidget(self.nav_widget)
+        self.tab_widget.addWidget(self.mode_widget)
+        self.tab_widget.addWidget(self.camera_widget)
+        self.tab_widget.addWidget(self.systems_widget)
+        """
+
+        self.tab_layout = QStackedLayout()
+        self.tab_layout.addWidget(self.nav_widget)
+        self.tab_layout.addWidget(self.mode_widget)
+        self.tab_layout.addWidget(self.camera_widget)
+        self.tab_layout.addWidget(self.systems_widget)
+        self.tab_widget.setLayout(self.tab_layout)
 
         self.selection = 0
+        self.tab_layout.setCurrentIndex(self.selection)
 
         """
         self.button_nav.setStyleSheet(style_active)
@@ -66,13 +76,6 @@ class tt_panels_ui(QWidget):
 
         self._update_button_state()
 
-        """self.layout = QHBoxLayout()
-        self.layout.addWidget(self.button_nav)
-        self.layout.addWidget(self.button_mode)
-        self.layout.addWidget(self.button_camera)
-        self.layout.addWidget(self.button_nav)
-        self.main_widget.setLayout(self.layout)"""
-
     def nav_button_pressed(self):
         self.selection = 0
         self._update_button_state()
@@ -90,7 +93,8 @@ class tt_panels_ui(QWidget):
         self._update_button_state()
 
     def _update_button_state(self):
-        self.tabs_widget.setCurrentIndex(self.selection)
+        self.tab_layout.setCurrentIndex(self.selection)
+        """
         if self.selection == 0:
             self.button_nav.setStyleSheet(style_active)
             self.button_mode.setStyleSheet(style_normal)
@@ -111,3 +115,4 @@ class tt_panels_ui(QWidget):
             self.button_mode.setStyleSheet(style_normal)
             self.button_camera.setStyleSheet(style_normal)
             self.button_systems.setStyleSheet(style_active)
+        """

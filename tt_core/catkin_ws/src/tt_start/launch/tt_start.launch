@@ -28,7 +28,7 @@
         <node pkg="rviz" type="rviz" name="rviz" args="-d $(find tt_start)/map_costmaps_and_plans.rviz" output="screen"/>
     </group>
     <group if="$(arg rqt)">
-        <node pkg="rqt_gui" type="rqt_gui" name="rqt"/>
+        <node pkg="rqt_gui" type="rqt_gui" name="" args="--standalone tt_gui --lock-perspective --hide-title --clear-config"/>
     </group>
 
     <!-- Safezone-related -->

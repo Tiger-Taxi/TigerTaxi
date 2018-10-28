@@ -19,7 +19,7 @@ style_active = """color: green;font-size: 26px;"""
 # Class definition for the overarching GUI module
 class tt_map_ui(QWidget):
     # Initiliazation sequence for all GUI components, their respective connections and publisher/subscriber relationships
-    def __init__(self, context):
+    def __init__(self):
         super(tt_map_ui, self).__init__()
         # Get path to UI file which should be in the "resource" folder of this package
         # TODO - hardcoded tt references
@@ -38,9 +38,6 @@ class tt_map_ui(QWidget):
 
         # Initialize publisher with topic, message type
         self.publisher_greetings = rospy.Publisher('gui_test', String, queue_size = 1)
-
-        # Add widget to the user interface
-        context.add_widget(self)
 
     # Function called when the "hi" button is pressed
     def button_test_pressed(self):

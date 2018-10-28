@@ -1,4 +1,4 @@
-from python_qt_binding.QtWidgets import QWidget
+from python_qt_binding.QtWidgets import QWidget, QHBoxLayout
 from python_qt_binding import loadUi
 from qt_gui.plugin import Plugin
 from PyQt5.QtGui import *
@@ -14,6 +14,7 @@ import os
 
 from tt_map import tt_map_ui
 from tt_panels import tt_panels_ui
+
 
 # Class definition for the overarching GUI module
 class tt_main_ui(Plugin):
@@ -38,12 +39,15 @@ class tt_main_ui(Plugin):
         ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_main_ui.ui'
         # Extend the widget with all attributes and children from UI file
         loadUi(ui_file, self.main_widget)
-        rospy.loginfo(str(context))
         # Add widget to the user interface
         context.add_widget(self.main_widget)
 
-        self.map_widget = tt_map_ui(context)
-        self.panels_widget = tt_panels_ui(context)
+        self.layout = QHBoxLayout()
 
-#        self.main_layout.addWidget(self.map_widget)
-#        self.main_layout.addWidget(self.panels_widget)
+        self.map_widget = tt_map_ui()
+        self.panels_widget = tt_panels_ui()
+
+        self.layout.addWidget(self.map_widget)
+        self.layout.addWidget(self.panels_widget)
+
+        self.main_widget.setLayout(self.layout)

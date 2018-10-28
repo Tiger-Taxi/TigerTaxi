@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+<class>MainContainer</class>
+<widget class="QWidget" name="MainContainer">
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>800</width>
+            <height>800</height>
+        </rect>
+    </property>
+
+    <property name="windowTitle">
+        <string>Hi/Bye GUI</string>
+    </property>
+
+    <widget class="QPushButton" name="button_hi">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>300</width>
+                <height>40</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Hi</string>
+        </property>
+    </widget>
+
+    <widget class="QPushButton" name="button_bye">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>50</y>
+                <width>300</width>
+                <height>40</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Bye</string>
+        </property>
+    </widget>
+
+</widget>
+<resources/>
+<connections/>
+</ui>

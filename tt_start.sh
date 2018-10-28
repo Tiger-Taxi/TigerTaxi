@@ -8,6 +8,7 @@ gnome-terminal \
 #--tab -e 'bash -c "echo -ne \"\033]0;velodyne_tracking\"; sleep 2; cd /media/rosmaster/Elements/bagfiles; rm *.active; rosbag record /velodyne_points /camera/image /vectornav/IMU /vectornav/GPS /scan; exec bash"'
 #--tab -e 'bash -c "echo -ne \"\033]0;rosdue1\007\"; sleep 2; rosrun rosdue serial_due.py /dev/ttyACM1; exec bash"' \
 
+
 # Specify <name> and <cmd> for each terminal
 # Example: --tab -e 'bash -c "echo -ne \"\033]0;<name>\007\"; <cmd>"' \
 # Previous conventions were changed due to update and reorganization, but the old script commands are left commented.

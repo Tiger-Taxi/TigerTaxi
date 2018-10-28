@@ -12,15 +12,14 @@ import rospkg
 import rospy
 import os
 
-# Define styles for buttons
-style_normal = """color: black;font-size: 26px;"""
-style_active = """color: green;font-size: 26px;"""
+from stylesheet import *
 
 # Class definition for the overarching GUI module
 class tt_map_ui(QWidget):
     # Initiliazation sequence for all GUI components, their respective connections and publisher/subscriber relationships
     def __init__(self):
         super(tt_map_ui, self).__init__()
+        self.setObjectName('tt_map_ui')
         # Get path to UI file which should be in the "resource" folder of this package
         # TODO - hardcoded tt references
         ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_map_ui.ui'
@@ -31,7 +30,8 @@ class tt_map_ui(QWidget):
         self.message = 'The test worked!'
 
         # Initialize buttons with the styles defined above the class definition
-       	self.button_test = QPushButton()
+        self.button_test.setStyleSheet(style_normal)
+        #self.button_test = QPushButton()
 
         # Connect buttons to functions
         self.button_test.clicked.connect(self.button_test_pressed)

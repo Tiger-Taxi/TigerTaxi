@@ -17,15 +17,14 @@ from tt_panel_mode import tt_panel_mode_ui
 from tt_panel_camera import tt_panel_camera_ui
 from tt_panel_systems import tt_panel_systems_ui
 
-# Define styles for buttons
-style_normal = """color: black;font-size: 26px;"""
-style_active = """color: green;font-size: 26px;"""
+from stylesheet import *
 
 # Class definition for the overarching GUI module
 class tt_panels_ui(QWidget):
     # Initiliazation sequence for all GUI components, their respective connections and publisher/subscriber relationships
     def __init__(self):
         super(tt_panels_ui, self).__init__()
+        self.setObjectName('tt_panels_ui')
         # Get path to UI file which should be in the "resource" folder of this package
         # TODO - hardcoded tt references
         ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_panels_ui.ui'
@@ -56,17 +55,17 @@ class tt_panels_ui(QWidget):
         self.selection = 0
         self.tab_layout.setCurrentIndex(self.selection)
 
-        """
         self.button_nav.setStyleSheet(style_active)
         self.button_mode.setStyleSheet(style_normal)
         self.button_camera.setStyleSheet(style_normal)
         self.button_systems.setStyleSheet(style_normal)
-        """
 
+        """
         self.button_nav = QPushButton()
         self.button_mode = QPushButton()
         self.button_camera = QPushButton()
         self.button_systems = QPushButton()
+        """
 
         # Connect buttons to functions
         self.button_nav.clicked.connect(self.nav_button_pressed)
@@ -93,8 +92,8 @@ class tt_panels_ui(QWidget):
         self._update_button_state()
 
     def _update_button_state(self):
+        print('Selection %d' % self.selection)
         self.tab_layout.setCurrentIndex(self.selection)
-        """
         if self.selection == 0:
             self.button_nav.setStyleSheet(style_active)
             self.button_mode.setStyleSheet(style_normal)
@@ -115,4 +114,3 @@ class tt_panels_ui(QWidget):
             self.button_mode.setStyleSheet(style_normal)
             self.button_camera.setStyleSheet(style_normal)
             self.button_systems.setStyleSheet(style_active)
-        """

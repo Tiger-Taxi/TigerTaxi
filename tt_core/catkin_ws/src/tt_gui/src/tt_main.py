@@ -15,9 +15,7 @@ import os
 from tt_map import tt_map_ui
 from tt_panels import tt_panels_ui
 
-# Define styles for buttons
-style_normal = """color: black;font-size: 26px;"""
-style_active = """color: green;font-size: 26px;"""
+from stylesheet import *
 
 # Class definition for the overarching GUI module
 class tt_main_ui(Plugin):

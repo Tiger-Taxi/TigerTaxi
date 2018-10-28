@@ -3,7 +3,7 @@
 <class>tt_panel_nav_ui</class>
 <widget class="QWidget" name="tt_panel_nav_ui">
 
-    <widget class="QPushButton" name="button1_test">
+    <widget class="QPushButton" name="button_test">
         <property name="text">
             <string>NavTEST</string>
         </property>

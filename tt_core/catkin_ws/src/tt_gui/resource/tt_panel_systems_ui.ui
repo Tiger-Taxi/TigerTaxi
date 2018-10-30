@@ -97,6 +97,84 @@
 	    </widget>
 	</widget>
 
+	<widget class="QFrame" name="cam_frame">
+		<widget class="QLabel" name="cam_label">
+	        <property name="text"><string>Camera</string></property>
+	    </widget>
+
+		<widget class="QWidget" name="cam_status_widget">
+			<widget class="QLabel" name="cam_status_label">
+		        <property name="text"><string>Status:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="cam_status_value">
+		        <property name="text"><string>Degraded</string></property>
+		    </widget>
+		</widget>
+		<widget class="QWidget" name="cam_rate_widget">
+			<widget class="QLabel" name="cam_rate_label">
+		        <property name="text"><string>Frequency:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="cam_rate_value">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+		<widget class="QPushButton" name="cam_control_button">
+	        <property name="text"><string>Disable</string></property>
+	    </widget>
+	</widget>
+
+	<widget class="QFrame" name="vel_frame">
+		<widget class="QLabel" name="vel_label">
+	        <property name="text"><string>Velodyne 16-C</string></property>
+	    </widget>
+
+		<widget class="QWidget" name="vel_status_widget">
+			<widget class="QLabel" name="vel_status_label">
+		        <property name="text"><string>Status:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="vel_status_value">
+		        <property name="text"><string>Degraded</string></property>
+		    </widget>
+		</widget>
+		<widget class="QWidget" name="vel_rate_widget">
+			<widget class="QLabel" name="vel_rate_label">
+		        <property name="text"><string>Frequency:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="vel_rate_value">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+		<widget class="QPushButton" name="vel_control_button">
+	        <property name="text"><string>Disable</string></property>
+	    </widget>
+	</widget>
+
+	<widget class="QFrame" name="hok_frame">
+		<widget class="QLabel" name="hok_label">
+	        <property name="text"><string>Hokuyo 1-C</string></property>
+	    </widget>
+
+		<widget class="QWidget" name="hok_status_widget">
+			<widget class="QLabel" name="hok_status_label">
+		        <property name="text"><string>Status:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="hok_status_value">
+		        <property name="text"><string>Degraded</string></property>
+		    </widget>
+		</widget>
+		<widget class="QWidget" name="hok_rate_widget">
+			<widget class="QLabel" name="hok_rate_label">
+		        <property name="text"><string>Frequency:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="hok_rate_value">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+		<widget class="QPushButton" name="hok_control_button">
+	        <property name="text"><string>Disable</string></property>
+	    </widget>
+	</widget>
+
 </widget>
 <resources/>
 <connections/>

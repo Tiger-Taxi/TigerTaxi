@@ -28,7 +28,7 @@ class tt_panel_systems_ui(QWidget):
         self.initGPS()
         self.initCam()
         self.initVel()
-        self.initHoy()
+        self.initHok()
 
         self.layout = QVBoxLayout()
         self.layout.addStretch()
@@ -36,6 +36,12 @@ class tt_panel_systems_ui(QWidget):
         self.layout.addStretch()
         self.layout.addWidget(self.gps_frame)
         self.layout.addStretch()
+        self.layout.addWidget(self.cam_frame)
+        self.layout.addStretch()
+        #self.layout.addWidget(self.vel_frame)
+        #self.layout.addStretch()
+        #self.layout.addWidget(self.hok_frame)
+        #self.layout.addStretch()
         self.setLayout(self.layout)
 
     def initIMU(self):
@@ -173,13 +179,118 @@ class tt_panel_systems_ui(QWidget):
             self.subscriber_GPS = rospy.Subscriber('vectornav/GPS', NavSatFix, self.gps_callback, queue_size=100)
 
     def initCam(self):
-        pass
+        self.cam_frame.setStyleSheet(FRAME_STYLE)
+        self.cam_label.setStyleSheet(SUB_L_STYLE)
+
+        self.cam_status_layout = QHBoxLayout()
+        self.cam_status_layout.addWidget(self.cam_status_label)
+        self.cam_status_layout.addWidget(self.cam_status_value)
+        self.cam_status_widget.setLayout(self.cam_status_layout)
+
+        self.cam_rate_layout = QHBoxLayout()
+        self.cam_rate_layout.addWidget(self.cam_rate_label)
+        self.cam_rate_layout.addWidget(self.cam_rate_value)
+        self.cam_rate_widget.setLayout(self.cam_rate_layout)
+
+        self.cam_frame_layout = QVBoxLayout()
+        self.cam_frame_layout.addWidget(self.cam_label)
+        self.cam_frame_layout.addWidget(self.cam_status_widget)
+        self.cam_frame_layout.addWidget(self.cam_rate_widget)
+        self.cam_frame_layout.addWidget(self.cam_control_button)
+        self.cam_frame.setLayout(self.cam_frame_layout)
+
+        self.cam_status_label.setStyleSheet(MES_L_STYLE)
+        self.cam_status_value.setStyleSheet(MES_L_STYLE)
+        self.cam_rate_label.setStyleSheet(MES_L_STYLE)
+        self.cam_rate_value.setStyleSheet(MES_L_STYLE)
+
+        self.cam_control_button.setStyleSheet(SMALL_BUTTON_NORMAL)
+
+        self.cam_control_button.clicked.connect(self.cam_control)
+
+        # Degraded | Running | Disabled
+        self.cam_status = 0
+        # Enabled | Disabled
+        self.cam_control = 0
+        self.cam_times = np.zeros(HZ_CALC_SIZE)
+
+        self.cam_update()
 
     def initVel(self):
-        pass
+        self.vel_frame.setStyleSheet(FRAME_STYLE)
+        self.vel_label.setStyleSheet(SUB_L_STYLE)
 
-    def initHoy(self):
-        pass
+        self.vel_status_layout = QHBoxLayout()
+        self.vel_status_layout.addWidget(self.vel_status_label)
+        self.vel_status_layout.addWidget(self.vel_status_value)
+        self.vel_status_widget.setLayout(self.vel_status_layout)
+
+        self.vel_rate_layout = QHBoxLayout()
+        self.vel_rate_layout.addWidget(self.vel_rate_label)
+        self.vel_rate_layout.addWidget(self.vel_rate_value)
+        self.vel_rate_widget.setLayout(self.vel_rate_layout)
+
+        self.vel_frame_layout = QVBoxLayout()
+        self.vel_frame_layout.addWidget(self.vel_label)
+        self.vel_frame_layout.addWidget(self.vel_status_widget)
+        self.vel_frame_layout.addWidget(self.vel_rate_widget)
+        self.vel_frame_layout.addWidget(self.vel_control_button)
+        self.vel_frame.setLayout(self.vel_frame_layout)
+
+        self.vel_status_label.setStyleSheet(MES_L_STYLE)
+        self.vel_status_value.setStyleSheet(MES_L_STYLE)
+        self.vel_rate_label.setStyleSheet(MES_L_STYLE)
+        self.vel_rate_value.setStyleSheet(MES_L_STYLE)
+
+        self.vel_control_button.setStyleSheet(SMALL_BUTTON_NORMAL)
+
+        self.vel_control_button.clicked.connect(self.vel_control)
+
+        # Degraded | Running | Disabled
+        self.vel_status = 0
+        # Enabled | Disabled
+        self.vel_control = 0
+        self.vel_times = np.zeros(HZ_CALC_SIZE)
+
+        self.vel_update()
+
+    def initHok(self):
+        self.hok_frame.setStyleSheet(FRAME_STYLE)
+        self.hok_label.setStyleSheet(SUB_L_STYLE)
+
+        self.hok_status_layout = QHBoxLayout()
+        self.hok_status_layout.addWidget(self.hok_status_label)
+        self.hok_status_layout.addWidget(self.hok_status_value)
+        self.hok_status_widget.setLayout(self.hok_status_layout)
+
+        self.hok_rate_layout = QHBoxLayout()
+        self.hok_rate_layout.addWidget(self.hok_rate_label)
+        self.hok_rate_layout.addWidget(self.hok_rate_value)
+        self.hok_rate_widget.setLayout(self.hok_rate_layout)
+
+        self.hok_frame_layout = QVBoxLayout()
+        self.hok_frame_layout.addWidget(self.hok_label)
+        self.hok_frame_layout.addWidget(self.hok_status_widget)
+        self.hok_frame_layout.addWidget(self.hok_rate_widget)
+        self.hok_frame_layout.addWidget(self.hok_control_button)
+        self.hok_frame.setLayout(self.hok_frame_layout)
+
+        self.hok_status_label.setStyleSheet(MES_L_STYLE)
+        self.hok_status_value.setStyleSheet(MES_L_STYLE)
+        self.hok_rate_label.setStyleSheet(MES_L_STYLE)
+        self.hok_rate_value.setStyleSheet(MES_L_STYLE)
+
+        self.hok_control_button.setStyleSheet(SMALL_BUTTON_NORMAL)
+
+        self.hok_control_button.clicked.connect(self.hok_control)
+
+        # Degraded | Running | Disabled
+        self.hok_status = 0
+        # Enabled | Disabled
+        self.hok_control = 0
+        self.hok_times = np.zeros(HZ_CALC_SIZE)
+
+        self.hok_update()
 
     def calcFrequency(self, times):
         t = time.time()
@@ -312,3 +423,99 @@ class tt_panel_systems_ui(QWidget):
             self.gps_lat_value.setText('%2.10f' % lat)
         else:
             pass
+
+    def cam_update(self):
+        if self.cam_status == 0:
+            self.cam_status_value.setText(STATUS_LABELS[0])
+            self.cam_status_value.setStyleSheet(S_DEGRADED)
+        elif self.cam_status == 1:
+            self.cam_status_value.setText(STATUS_LABELS[1])
+            self.cam_status_value.setStyleSheet(S_RUNNING)
+        else:
+            self.cam_status_value.setText(STATUS_LABELS[2])
+            self.cam_status_value.setStyleSheet(S_DISABLED)
+
+        if self.cam_control == 0:
+            self.cam_control_button.setText(CONTROL_LABELS[0])
+        else:
+            self.cam_control_button.setText(CONTROL_LABELS[1])
+
+    def cam_control(self):
+        self.cam_control = not self.cam_control
+        self.cam_update()
+        if self.cam_control == 0:
+            self.cam_enable()
+        else:
+            self.cam_disable()
+
+    def cam_enable(self):
+        # TODO - not sure what to do yet
+        pass
+
+    def cam_disable(self):
+        # TODO - not sure what to do yet
+        pass
+
+    def vel_update(self):
+        if self.vel_status == 0:
+            self.vel_status_value.setText(STATUS_LABELS[0])
+            self.vel_status_value.setStyleSheet(S_DEGRADED)
+        elif self.vel_status == 1:
+            self.vel_status_value.setText(STATUS_LABELS[1])
+            self.vel_status_value.setStyleSheet(S_RUNNING)
+        else:
+            self.vel_status_value.setText(STATUS_LABELS[2])
+            self.vel_status_value.setStyleSheet(S_DISABLED)
+
+        if self.vel_control == 0:
+            self.vel_control_button.setText(CONTROL_LABELS[0])
+        else:
+            self.vel_control_button.setText(CONTROL_LABELS[1])
+
+    def vel_control(self):
+        self.vel_control = not self.vel_control
+        self.vel_update()
+        if self.vel_control == 0:
+            self.vel_enable()
+        else:
+            self.vel_disable()
+
+    def vel_enable(self):
+        # TODO - not sure what to do yet
+        pass
+
+    def vel_disable(self):
+        # TODO - not sure what to do yet
+        pass
+
+    def hok_update(self):
+        if self.hok_status == 0:
+            self.hok_status_value.setText(STATUS_LABELS[0])
+            self.hok_status_value.setStyleSheet(S_DEGRADED)
+        elif self.hok_status == 1:
+            self.hok_status_value.setText(STATUS_LABELS[1])
+            self.hok_status_value.setStyleSheet(S_RUNNING)
+        else:
+            self.hok_status_value.setText(STATUS_LABELS[2])
+            self.hok_status_value.setStyleSheet(S_DISABLED)
+
+        if self.hok_control == 0:
+            self.hok_control_button.setText(CONTROL_LABELS[0])
+        else:
+            self.hok_control_button.setText(CONTROL_LABELS[1])
+
+    def hok_control(self):
+        self.hok_control = not self.hok_control
+        self.hok_update()
+        if self.hok_control == 0:
+            self.hok_enable()
+        else:
+            self.hok_disable()
+
+    def hok_enable(self):
+        # TODO - not sure what to do yet
+        pass
+
+    def hok_disable(self):
+        # TODO - not sure what to do yet
+        pass

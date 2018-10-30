@@ -28,13 +28,15 @@ class tt_panels_ui(QWidget):
         self.nav_widget = tt_panel_nav_ui(parent = self)
         self.mode_widget = tt_panel_mode_ui(parent = self)
         self.camera_widget = tt_panel_camera_ui(parent = self)
+        self.systems_scroll.setWidgetResizable(True)
         self.systems_widget = tt_panel_systems_ui(parent = self)
+        self.systems_scroll.setWidget(self.systems_widget)
 
         self.tab_layout = QStackedLayout()
         self.tab_layout.addWidget(self.nav_widget)
         self.tab_layout.addWidget(self.mode_widget)
         self.tab_layout.addWidget(self.camera_widget)
-        self.tab_layout.addWidget(self.systems_widget)
+        self.tab_layout.addWidget(self.systems_scroll)
         self.tab_frame.setLayout(self.tab_layout)
 
         self.button_frame = QFrame(parent = self)

@@ -38,10 +38,10 @@ class tt_panel_systems_ui(QWidget):
         self.layout.addStretch()
         self.layout.addWidget(self.cam_frame)
         self.layout.addStretch()
-        #self.layout.addWidget(self.vel_frame)
-        #self.layout.addStretch()
-        #self.layout.addWidget(self.hok_frame)
-        #self.layout.addStretch()
+        self.layout.addWidget(self.vel_frame)
+        self.layout.addStretch()
+        self.layout.addWidget(self.hok_frame)
+        self.layout.addStretch()
         self.setLayout(self.layout)
 
     def initIMU(self):

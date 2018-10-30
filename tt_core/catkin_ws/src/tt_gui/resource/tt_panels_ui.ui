@@ -7,7 +7,9 @@
         <widget class="QWidget" name="nav_widget"></widget>
         <widget class="QWidget" name="mode_widget"></widget>
         <widget class="QWidget" name="camera_widget"></widget>
-        <widget class="QWidget" name="systems_widget"></widget>
+        <widget class="QScrollArea" name="systems_scroll">
+            <widget class="QWidget" name="systems_widget"></widget>
+        </widget>
     </widget>
 
     <widget class="QFrame" name="tab_frame">

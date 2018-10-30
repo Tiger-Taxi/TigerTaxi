@@ -20,7 +20,9 @@
     <remap from="/noimu" to="/imu/data"/> <!-- Remap the IMU to nothing. It's not in the correct coordinate system. -->
 
     <node pkg="loam_velodyne" type="multiScanRegistration" name="multiScanRegistration" output="screen">
+        <!-- TODO: Zach -->
         <remap from="/multi_scan_points" to="/velodyne_points"/>
+        <!--<remap from="/multi_scan_points" to="/loam_velodyne_points"/>-->
 
         <param name="lidar" value="VLP-16"/> <!-- options: VLP-16  HDL-32  HDL-64E -->
         <param name="scanPeriod" value="$(arg scanPeriod)"/>
@@ -45,6 +47,23 @@
     </node>
 
     <node pkg="loam_velodyne" type="laserMapping" name="laserMapping" output="screen">
+        <!-- === PUBLISHED TOPICS ===-->
+        <!-- MsgType: PointCloud2; frame_id: /loam_init -->
+        <!--<remap from="/laser_cloud_surround" to="/laser_cloud_surround"/>-->
+        <!-- MsgType: PointCloud2; Full-resolution Velodyne PointCloud; frame_id: /loam_init -->
+        <!--<remap from="/velodyne_cloud_registered" to="/velodyne_cloud_registered"/>-->
+        <!-- MsgType: Odometry; frame_id: /loam_init; child_frame_id: /aft_mapped -->
+        <!--<remap from="/aft_mapped_to_init" to="/aft_mapped_to_init"/>-->
+        <!-- === SUBSCRIBED TOPICS ===-->
+        <!-- MsgType: PointCloud2; LaserMapping::laserCloudCornerLastHandler -->
+        <!--<remap from="/laser_cloud_corner_last" to="/laser_cloud_corner_last"/>-->
+        <!-- MsgType: PointCloud2; LaserMapping::laserCloudSurfLastHandler -->
+        <!--<remap from="/laser_cloud_surf_last" to="/laser_cloud_surf_last"/>-->
+        <!-- MsgType: PoseWithCovarianceStamped; LaserMapping::laserOdometryHandler -->
+        <!--<remap from="/laser_odom_to_init" to="ekf/loam_converted_odom_gps_corrected"/>-->
+        <!-- MsgType: PointCloud2; LaserMapping::laserCloudFullResHandler; Full-resolution Velodyne PointCloud -->
+        <!--<remap from="/velodyne_cloud_3" to="/velodyne_cloud_3"/>-->
+
         <param name="scanPeriod" value="$(arg scanPeriod)"/>
         <param name="maxIterations" value="$(arg maxIterationsMapping)"/>
         <param name="deltaTAbort" value="$(arg deltaTAbortMapping)"/>
@@ -52,8 +71,6 @@
         <!--<param name="cornerFilterSize" value="$(arg cornerFilterSize)" />-->
         <!--<param name="surfaceFilterSize" value="$(arg surfaceFilterSize)" />-->
         <!--<param name="mapFilterSize" value="$(arg mapFilterSize)" />-->
-
-        <!--<remap from="laser_odom_to_init" to="ekf/loam_converted_odom_gps_corrected"/>-->
     </node>
 
     <node pkg="loam_velodyne" type="transformMaintenance" name="transformMaintenance" output="screen">

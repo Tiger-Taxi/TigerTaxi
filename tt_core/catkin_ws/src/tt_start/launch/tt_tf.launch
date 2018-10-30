@@ -12,10 +12,10 @@
 
     <!-- LiDAR - Front - No Tilt - TODO THERE MOST DEFINITELY IS A TILT... -->
     <!--<node pkg="tf2_ros" type="static_transform_publisher" name="velodyne_broadcaster"-->
-    <!--args="1.4859 0 0.965 0 -0.174533 0 base_link velodyne"/>-->
+    <!--args="1.4859 0 0.965 0 0 0 base_link velodyne"/>-->
     <!-- TODO: Note that this pitch offset is empirical (set through rviz observations...) and requires measurement for both pitch AND x position -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="velodyne_broadcaster"
-          args="1.4859 0 0.965 0 -0.06 0 base_link velodyne"/>
+          args="1.4859 0 0.965 0 0.0349 0 base_link velodyne"/>
 
     <!-- Velodyne Heightmap -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="hm_broadcaster"
@@ -28,6 +28,22 @@
     <!-- Vectornav IMU -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="imu_broadcaster"
           args="0.2413 0 1.7653 0 0 0 base_link imu_link"/>
+
+    <!-- ** loam_velodyne has a non-standard coordinate system, so we need to transform it to be ROS compliant ** -->
+    <!-- loam_init is like a map frame. The vehicle is measured relative to this. -->
+    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="loam_init_to_odom" args="-1.4859 0 0.965 1.570795 0.174533 1.570795 odom loam_init" />-->
+
+    <!-- NOTE: Don't add velodyne pitch inverse TF here -->
+    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="loam_init_to_odom"-->
+    <!--args="1.4859 0 0.965 1.570795 0 1.570795 odom loam_init"/>-->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="loam_init_to_odom"
+          args="0 0 0 1.570795 0 1.570795 odom loam_init"/>
+    <!-- TODO: add transform from velodyne_points to loam_velodyne_points -->
+    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="loam_init_to_odom"-->
+    <!--args="0 0 0 1.570795 0 1.570795 odom loam_init"/>-->
+
+    <!-- loam is a moving frame, positioned on the LIDAR-->
+    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="velodyne_to_loam" args="-1.4859 0 -0.964 -1.570795 0 -1.570795 velodyne loam" />-->
 
     <!-- Cart links (for robot_self_filter) - I am retarded TODO -->
     <!-- [[1.9384, -0.6096], [1.9384, 0.6096], [-0.5, 0.6096], [-0.5, -0.6096]]-->
@@ -47,18 +63,6 @@
           <!--args="-0.5 -0.6096 1.78 0 0 0 base_link rear_left_high_link"/>-->
     <!--<node pkg="tf2_ros" type="static_transform_publisher" name="rear_right_high_broadcaster"-->
           <!--args="-0.5 0.6096 1.78 0 0 0 base_link rear_right_high_link"/>-->
-    
-    <!-- ** loam_velodyne has a non-standard coordinate system, so we need to transform it to be ROS compliant ** -->
-    <!-- loam_init is like a map frame. The vehicle is measured relative to this. -->
-    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="loam_init_to_odom" args="-1.4859 0 0.965 1.570795 0.174533 1.570795 odom loam_init" />-->
-    <!-- NOTE: Don't add velodyne pitch inverse TF here -->
-    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="loam_init_to_odom"-->
-          <!--args="1.4859 0 0.965 1.570795 0 1.570795 odom loam_init"/>-->
-    <node pkg="tf2_ros" type="static_transform_publisher" name="loam_init_to_odom"
-          args="0 0 0 1.570795 0 1.570795 odom loam_init"/>
-
-    <!-- loam is a moving frame, positioned on the LIDAR-->
-    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="velodyne_to_loam" args="-1.4859 0 -0.964 -1.570795 0 -1.570795 velodyne loam" />-->
 
     <!-- ................................................................................ -->
     <!-- Old Transforms -->

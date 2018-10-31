@@ -44,9 +44,16 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <tf/transform_datatypes.h>
 #include <tf/transform_broadcaster.h>
+#include <tf2/transform_datatypes.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_ros/transform_listener.h>
+#include <tf2_sensor_msgs/tf2_sensor_msgs.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/filters/voxel_grid.h>
+#include <pcl/common/io.h>
+#include <pcl_ros/transforms.h>
+#include <pcl_conversions/pcl_conversions.h>
 
 
 namespace loam {
@@ -202,6 +209,7 @@ private:
 
   std::vector<size_t> _laserCloudValidInd;
   std::vector<size_t> _laserCloudSurroundInd;
+  std::vector<size_t> _localLaserCloudSurroundInd;
 
   ros::Time _timeLaserCloudCornerLast;   ///< time of current last corner cloud
   ros::Time _timeLaserCloudSurfLast;     ///< time of current last surface cloud
@@ -227,9 +235,12 @@ private:
 
   nav_msgs::Odometry _odomAftMapped;      ///< mapping odometry message
   tf::StampedTransform _aftMappedTrans;   ///< mapping odometry transformation
+  geometry_msgs::TransformStamped loam_init_to_map;
 
   ros::Publisher _pubLaserCloudSurround;    ///< map cloud message publisher
+  ros::Publisher _pubLocalLaserCloudSurround;///< local map cloud message publisher
   ros::Publisher _pubLaserCloudFullRes;     ///< current full resolution cloud message publisher
+  ros::Publisher _pubLaserCloudFullResLoam;     ///< current full resolution cloud message publisher
   ros::Publisher _pubOdomAftMapped;         ///< mapping odometry publisher
   tf::TransformBroadcaster _tfBroadcaster;  ///< mapping odometry transform broadcaster
 

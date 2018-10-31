@@ -4,7 +4,7 @@
     <!-- NOTE: TT_ROOT env variable must be set to TigerTaxi root directory -->
 
     <arg name="simulate" default="true"/>
-    <arg name="collect_map" default="false"/>
+    <arg name="collect_map" default="true"/>
     <arg name="use_static_map" default="false"/>
     <arg name="slam_pkg" default="loam"/>
     <arg name="old_nav" default="false"/>
@@ -16,7 +16,7 @@
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --start=25 --rate=1 $(env TT_ROOT)/Post_callibration_driving_around.bag"/>
+              args="--clock --start=25 --rate=1 /home/ben/Downloads/Post_callibration_driving_around.bag"/>
         <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
               <!--args="&#45;&#45;clock &#45;&#45;keep-alive &#45;&#45;rate=0.25 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>
@@ -97,7 +97,9 @@
             <include file="$(find tt_start)/launch/slam_gmapping.launch"/>
         </group>
         <group if="$(eval slam_pkg == 'loam')">
-            <include file="$(find loam_velodyne)/launch/loam_velodyne.launch"/>
+            <include file="$(find
+			   loam_velodyne)/launch/loam_velodyne.launch"/>
+	    <include file="$(find tt_start)/launch/octomap.launch"/>
             <!--<include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/> -->o<!-- TODO REMOVE ME -->
         </group>
     </group>

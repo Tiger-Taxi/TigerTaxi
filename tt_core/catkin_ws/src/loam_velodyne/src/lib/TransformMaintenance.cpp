@@ -51,6 +51,7 @@ TransformMaintenance::TransformMaintenance()
   tf2_ros::TransformListener tf2_listener(tfBuffer);
   ROS_INFO_STREAM("Waiting for TF: Integrated");
   loam_init_to_map = tfBuffer.lookupTransform("odom", "loam_init", ros::Time(0), ros::Duration(10.0));
+  //velodyne_to_odom = tfBuffer.lookupTransform("odom", "velodyne", ros::Time(0), ros::Duration(10.0));
   ROS_INFO_STREAM("TF received");
 
 
@@ -69,6 +70,7 @@ bool TransformMaintenance::setup(ros::NodeHandle &node, ros::NodeHandle &private
   // advertise integrated laser odometry topic
   _pubLaserOdometry2 = node.advertise<geometry_msgs::PoseWithCovarianceStamped> ("/integrated_to_init", 5);
   _pubLaserOdometry2Map = node.advertise<geometry_msgs::PoseWithCovarianceStamped> ("/integrated_to_map", 5);
+  _pubLaserCloudFullResLoam = node.advertise<sensor_msgs::PointCloud2>("/velodyne_cloud_registered_baselink", 2);
 
   // subscribe to laser odometry and mapping odometry topics
   _subLaserOdometry = node.subscribe<geometry_msgs::PoseWithCovarianceStamped>
@@ -76,6 +78,9 @@ bool TransformMaintenance::setup(ros::NodeHandle &node, ros::NodeHandle &private
 
   _subOdomAftMapped = node.subscribe<nav_msgs::Odometry>
       ("/aft_mapped_to_init", 5, &TransformMaintenance::odomAftMappedHandler, this);
+
+  _subLaserCloudFullRes = node.subscribe<sensor_msgs::PointCloud2>
+      ("/velodyne_cloud_registered_loam", 2, &TransformMaintenance::laserCloudFullResHandler, this);
 
   return true;
 }
@@ -256,6 +261,16 @@ void TransformMaintenance::laserOdometryHandler(const geometry_msgs::PoseWithCov
   _laserOdometryTrans2.setRotation(tf::Quaternion(-geoQuat.y, -geoQuat.z, geoQuat.x, geoQuat.w));
   _laserOdometryTrans2.setOrigin(tf::Vector3(_transformMapped[3], _transformMapped[4], _transformMapped[5]));
   _tfBroadcaster2.sendTransform(_laserOdometryTrans2);
+}
+
+
+void TransformMaintenance::laserCloudFullResHandler(const sensor_msgs::PointCloud2ConstPtr& laserCloudFullResMsg)
+{
+    //sensor_msgs::PointCloud2 input = *laserCloudFullResMsg;
+    //sensor_msgs::PointCloud2 transformed;
+    //tf2::doTransform(transformed, input, loam_init_to_map);
+    //tf2::doTransform(transformed, transformed, velodyne_to_odom);
+    //_pubLaserCloudFullResLoam.publish(transformed);
 }
 
 

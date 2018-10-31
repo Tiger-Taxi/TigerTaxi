@@ -40,6 +40,16 @@
 #include <tf/transform_broadcaster.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2_ros/transform_listener.h>
+#include <sensor_msgs/PointCloud2.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_ros/transform_listener.h>
+#include <tf2_sensor_msgs/tf2_sensor_msgs.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl/common/io.h>
+#include <pcl_ros/transforms.h>
+#include <pcl_conversions/pcl_conversions.h>
 
 namespace loam {
 
@@ -70,6 +80,12 @@ public:
    */
   void odomAftMappedHandler(const nav_msgs::Odometry::ConstPtr& odomAftMapped);
 
+  /** \brief Handler method for full res laser cloud
+   *
+   * @param laserCloudFullResMsg the new full resolution cloud message
+   */
+  void laserCloudFullResHandler(const sensor_msgs::PointCloud2ConstPtr& laserCloudFullResMsg);
+
 
 protected:
   void transformAssociateToMap();
@@ -85,13 +101,17 @@ private:
   geometry_msgs::PoseWithCovarianceStamped _laserOdometry2;         ///< latest integrated laser odometry message
   tf::StampedTransform _laserOdometryTrans2;  ///< latest integrated laser odometry transformation
   geometry_msgs::TransformStamped loam_init_to_map;
+  geometry_msgs::TransformStamped velodyne_to_odom;
 
   ros::Publisher _pubLaserOdometry2;          ///< integrated laser odometry publisher
   ros::Publisher _pubLaserOdometry2Map;          ///< integrated laser odometry publisher, map frame
+  ros::Publisher _pubLaserCloudFullResLoam;     ///< current full resolution cloud message publisher
   tf::TransformBroadcaster _tfBroadcaster2;   ///< integrated laser odometry transformation broadcaster
 
   ros::Subscriber _subLaserOdometry;    ///< (high frequency) laser odometry subscriber
   ros::Subscriber _subOdomAftMapped;    ///< (low frequency) mapping odometry subscriber
+  ros::Subscriber _subLaserCloudFullRes;///< full resolution cloud message subscriber
+  pcl::PointCloud<pcl::PointXYZI>::Ptr _laserCloudFullRes;      ///< last full resolution cloud
 };
 
 } // end namespace loam

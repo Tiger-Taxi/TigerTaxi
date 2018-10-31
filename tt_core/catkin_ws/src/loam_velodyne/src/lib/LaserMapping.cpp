@@ -84,6 +84,13 @@ LaserMapping::LaserMapping(const float& scanPeriod,
   _aftMappedTrans.frame_id_ = "/loam_init";
   _aftMappedTrans.child_frame_id_ = "/aft_mapped";
 
+  tf2_ros::Buffer tfBuffer;
+  tf2_ros::TransformListener tf2_listener(tfBuffer);
+  //ROS_INFO_STREAM("Waiting for TF: Integrated");
+  //loam_init_to_map = tfBuffer.lookupTransform("odom", "loam_init", ros::Time(0), ros::Duration(10.0));
+  //ROS_INFO_STREAM("TF received");
+
+
   // initialize frame counter
   _frameCount = _stackFrameNum - 1;
   _mapFrameCount = _mapFrameNum - 1;
@@ -190,6 +197,7 @@ bool LaserMapping::setup(ros::NodeHandle& node,
   // advertise laser mapping topics
   _pubLaserCloudSurround = node.advertise<sensor_msgs::PointCloud2> ("/laser_cloud_surround", 1);
   _pubLaserCloudFullRes = node.advertise<sensor_msgs::PointCloud2> ("/velodyne_cloud_registered", 2);
+  _pubLaserCloudFullResLoam = node.advertise<sensor_msgs::PointCloud2> ("/velodyne_cloud_registered_loam", 2);
   _pubOdomAftMapped = node.advertise<nav_msgs::Odometry> ("/aft_mapped_to_init", 5);
 
 
@@ -613,9 +621,9 @@ void LaserMapping::process()
             for (int jj = -1; jj <= 1; jj += 2) {
               for (int kk = -1; kk <= 1; kk += 2) {
                 pcl::PointXYZI corner;
-                corner.x = centerX + 25.0f * ii;
-                corner.y = centerY + 25.0f * jj;
-                corner.z = centerZ + 25.0f * kk;
+                corner.x = centerX + 5.0f * ii;
+                corner.y = centerY + 5.0f * jj;
+                corner.z = centerZ + 5.0f * kk;
 
                 float squaredSide1 = calcSquaredDiff(transform_pos, corner);
                 float squaredSide2 = calcSquaredDiff(pointOnYAxis, corner);
@@ -1061,12 +1069,16 @@ void LaserMapping::publishResult()
     _downSizeFilterCorner.filter(*_laserCloudSurroundDS);
 
     // publish new map cloud
+    // laser_cloud_surround
     publishCloudMsg(_pubLaserCloudSurround, *_laserCloudSurroundDS, _timeLaserOdometry, "/loam_init");
   }
 
 
   // transform full resolution input cloud to map
   size_t laserCloudFullResNum = _laserCloudFullRes->points.size();
+  pcl::PointCloud<pcl::PointXYZI>::Ptr _laserCloudFullResLoam(new pcl::PointCloud<pcl::PointXYZI>());
+  pcl::copyPointCloud(*_laserCloudFullRes, *_laserCloudFullResLoam);
+
   for (int i = 0; i < laserCloudFullResNum; i++) {
     pointAssociateToMap(_laserCloudFullRes->points[i], _laserCloudFullRes->points[i]);
   }
@@ -1074,6 +1086,11 @@ void LaserMapping::publishResult()
   // publish transformed full resolution input cloud
   publishCloudMsg(_pubLaserCloudFullRes, *_laserCloudFullRes, _timeLaserOdometry, "/loam_init");
 
+  sensor_msgs::PointCloud2 msg;
+  pcl::toROSMsg(*_laserCloudFullResLoam, msg);
+  msg.header.stamp = _timeLaserOdometry;
+  msg.header.frame_id = "aft_mapped";
+  _pubLaserCloudFullResLoam.publish(msg);
 
   // publish odometry after mapped transformations
   geometry_msgs::Quaternion geoQuat = tf::createQuaternionMsgFromRollPitchYaw

@@ -37,7 +37,7 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/point_types.h>
-
+#include "time_utils.h"
 
 namespace loam {
 
@@ -59,6 +59,20 @@ inline void publishCloudMsg(ros::Publisher& publisher,
   msg.header.stamp = stamp;
   msg.header.frame_id = frameID;
   publisher.publish(msg);
+}
+
+
+// ROS time adapters
+inline Time fromROSTime(ros::Time const& rosTime)
+{
+  auto epoch = std::chrono::system_clock::time_point();
+  auto since_epoch = std::chrono::seconds(rosTime.sec) + std::chrono::nanoseconds(rosTime.nsec);
+  return epoch + since_epoch;
+}
+
+inline ros::Time toROSTime(Time const& time_point)
+{
+  return ros::Time().fromNSec(std::chrono::duration_cast<std::chrono::nanoseconds>(time_point.time_since_epoch()).count());
 }
 
 } // end namespace loam

@@ -2,12 +2,13 @@
 <launch>
     <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
         <!-- data source to integrate (PointCloud2) -->
-        <remap from="cloud_in" to="/laser_cloud_surround"/>
+        <!--<remap from="cloud_in" to="/laser_cloud_surround"/>-->
+        <remap from="cloud_in" to="/velodyne_cloud_registered"/>
 
         <param name="resolution" value="0.05"/>
 
-        <param name="frame_id" value="odom"/>
-        <!--<param name="frame_id" value="map"/>-->
+        <!--<param name="frame_id" value="odom"/>-->
+        <param name="frame_id" value="map"/>
         <param name="base_frame_id" value="base_link"/>
 
         <param name="height_map" value="true"/>
@@ -16,8 +17,15 @@
         <!-- maximum range to integrate (speedup!) -->
         <param name="sensor_model/max_range" value="50.0"/>
 
+        <param name="filter_speckles" value="true"/>
+
         <!-- Filter ground obstacles -->
         <param name="filter_ground" value="true"/>
-        <param name="ground_filter/plane_distance" value="1"/>
+        <param name="ground_filter/distance" value="-0.6"/>
+        <param name="ground_filter/plane_distance" value="0.2"/>
+        <param name="pointcloud_min_z" value="-10"/>
+        <param name="pointcloud_max_z" value="10"/>
+        <param name="occupancy_min_z" value="-1"/>
+        <param name="occupancy_max_z" value="10"/>
     </node>
 </launch>

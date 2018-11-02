@@ -8,7 +8,12 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  tf)
+  tf
+  tf2
+  tf2_ros
+  tf2_msgs
+  tf2_sensor_msgs
+  pcl_conversions)
 
 find_package(Eigen3 REQUIRED)
 find_package(PCL REQUIRED)
@@ -20,11 +25,15 @@ include_directories(
 	${PCL_INCLUDE_DIRS})
 
 catkin_package(
-  CATKIN_DEPENDS geometry_msgs nav_msgs roscpp rospy std_msgs
+  CATKIN_DEPENDS geometry_msgs nav_msgs roscpp rospy std_msgs tf pcl_conversions
   DEPENDS EIGEN3 PCL
   INCLUDE_DIRS include
   LIBRARIES loam
 )
+
+## Compile as C++14, supported in ROS Kinetic and newer
+# set_property(TARGET invz_player PROPERTY CXX_STANDARD 17)
+add_compile_options(-std=c++14)
 
 add_definitions( -march=native )
 

@@ -2,6 +2,10 @@
 <launch>
     <node pkg="amcl" type="amcl" name="amcl" output="screen">
         <!-- <remap from="scan" to="laser"/> -->
+        <!--<remap from="scan" to="/velodyne_cloud_registered"/>-->
+        <remap from="/map" to="/projected_map"/>
+
+        <param name="use_map_topic" value="true"/>
 
         <!-- Publish scans from best pose at a max of 10 Hz -->
         <param name="odom_model_type" value="diff"/>

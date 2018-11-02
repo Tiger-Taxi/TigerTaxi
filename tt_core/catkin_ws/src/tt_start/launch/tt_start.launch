@@ -34,7 +34,7 @@
     <!-- TFs, odom used in all operation -->
     <include file="$(find tt_start)/launch/tt_tf.launch"/>
     <include file="$(find tt_start)/launch/ekf.launch"/>
-    <include file="$(find tt_start)/launch/scan_matcher.launch"/>
+    <!--<include file="$(find tt_start)/launch/scan_matcher.launch"/> TODO: debugging so disabled... -->
     <include file="$(find tt_start)/launch/p2l_2.launch"/>
     <!-- TODO: I do not believe that we are launching this properly (no nodelet manager), see: https://github.com/jack-oquin/velodyne_height_map/blob/master/tests/heightmap_nodelet_hz.test-->
     <node name="height_map" pkg="velodyne_height_map" type="heightmap_node"
@@ -96,9 +96,9 @@
     </group>
     <!-- Unless we are collecting a map (any driving mode) -->
     <group unless="$(arg collect_map)">
-        <include file="$(find tt_start)/launch/move_base.launch">
-            <arg name="use_safezone" value="$(arg use_safezone)"/>
-        </include>
+        <!--<include file="$(find tt_start)/launch/move_base.launch"> TODO: debugging so disabled... -->
+            <!--<arg name="use_safezone" value="$(arg use_safezone)"/>-->
+        <!--</include>-->
         <!-- Phase 5 Navigation TODO add apf_navigation? -->
         <group if="$(arg old_nav)">
             <node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node">
@@ -127,7 +127,8 @@
                 <group if="$(eval slam_pkg == 'loam')">
                     <!-- TODO This is where we are currently putting things for LOAM [ACTIVE] -->
                     <include file="$(find loam_velodyne)/launch/loam_velodyne.launch"/>
-                    <include file="$(find tt_start)/launch/octomap.launch"/>
+                    <include file="$(find tt_start)/launch/octomap.launch"/> <!-- TODO TODO TODO -->
+                    <!--<include file="$(find tt_start)/launch/amcl.launch"/> TODO: debugging so disabled... -->
                     <!--<include file="$(find loam_to_octomap)/launch/loam_to_octomap.launch"/>-->
                     <!--<include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/> --><!-- TODO REMOVE ME -->
                 </group>

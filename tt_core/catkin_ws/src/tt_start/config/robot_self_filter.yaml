@@ -28,13 +28,68 @@
 #max_y: 0.62
 #min_z: 0
 #max_z: 1.78
-min_x: -3
-max_x: 3
-min_y: -3
-max_y: 3
-min_z: -3
-max_z: 3
-keep_organized: True
-negative: True
+passthrough:
+#  min_x: -0.52
+#  max_x: 1.95
+#  min_y: -0.62
+#  max_y: 0.62
+#  min_z: 0
+#  max_z: 1.78
+#  min_x: -1.5
+#  max_x: 1
+#  min_y: -1
+#  max_y: 1
+#  min_z: -1
+#  max_z: 1
+  min_x: -2.0059
+#  max_x: 1
+  max_x: .4641
+#  min_y: -1
+#  max_y: 1
+  min_y: -0.7
+  max_y: 0.7
+#  min_z: -1
+#  max_z: 1
+  min_z: -0.965
+  max_z: 0.815
+  # NOTE: Use these values if there is no offset to base_link (or if we don't use base_link, e.g. loam_velodyne/aft_mapped...)
+  #min_x: -0.52
+  #max_x: 1.95
+  #min_y: -0.62
+  #max_y: 0.62
+  #min_z: 0
+  #max_z: 1.78
+  keep_organized: True
+  negative: True
+
+groundFiltering:
+  # -[ Mandatory parameters
+  # model_type:
+  # 0: SACMODEL_PLANE
+  # 1: SACMODEL_LINE
+  # 2: SACMODEL_CIRCLE2D
+  # 3: SACMODEL_CIRCLE3D
+  # 4: SACMODEL_SPHERE
+  # 5: SACMODEL_CYLINDER
+  # 6: SACMODEL_CONE
+  # 7: SACMODEL_TORUS
+  # 8: SACMODEL_PARALLEL_LINE
+  # 9: SACMODEL_PERPENDICULAR_PLANE
+  # 10: SACMODEL_PARALLEL_LINES
+  # 11: SACMODEL_NORMAL_PLANE
+  # 12: SACMODEL_NORMAL_SPHERE
+  # 13: SACMODEL_REGISTRATION
+  # 14: SACMODEL_REGISTRATION_2D
+  # 15: SACMODEL_PARALLEL_PLANE
+  # 16: SACMODEL_NORMAL_PARALLEL_PLANE
+  # 17: SACMODEL_STICK
+  model_type: 0
+  distance_threshold: 0.1
+  max_iterations: 1000
+  method_type: 0
+  optimize_coefficients: true
+  use_indices: false
+  #normal_distance_weight: 0.1
+  eps_angle: 0.09
 #input_frame
 #output_frame

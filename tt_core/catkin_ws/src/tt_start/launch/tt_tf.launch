@@ -10,12 +10,9 @@
     <node pkg="tf2_ros" type="static_transform_publisher" name="camera_broadcaster"
           args="3.92 0 0 3.14 0 0 base_link camera"/>
 
-    <!-- LiDAR - Front - No Tilt - TODO THERE MOST DEFINITELY IS A TILT... -->
-    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="velodyne_broadcaster"-->
-    <!--args="1.4859 0 0.965 0 0 0 base_link velodyne"/>-->
-    <!-- TODO: Note that this pitch offset is empirical (set through rviz observations...) and requires measurement for both pitch AND x position -->
+    <!-- LiDAR - Front - No Tilt -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="velodyne_broadcaster"
-          args="1.4859 0 0.965 0 0.0349 0 base_link velodyne"/>
+          args="1.4859 0 0.965 0 0 0 base_link velodyne"/>
 
     <!-- Velodyne Heightmap -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="hm_broadcaster"
@@ -29,40 +26,29 @@
     <node pkg="tf2_ros" type="static_transform_publisher" name="imu_broadcaster"
           args="0.2413 0 1.7653 0 0 0 base_link imu_link"/>
 
+    <!-- TODO: new stuff... -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_loam"
+          args="0 0 0 1.570795 0 1.570795 base_link loam"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_loam_odom"
+          args="0 0 0 1.570795 0 1.570795 base_link loam_odom"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_loam_mapped"
+          args="0 0 0 1.570795 0 1.570795 base_link loam_mapped"/>
+
+    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="this_is_a_terrible_idea"-->
+          <!--args="0 0 0 0 0 0 odom base_link"/>-->
+
     <!-- ** loam_velodyne has a non-standard coordinate system, so we need to transform it to be ROS compliant ** -->
     <!-- loam_init is like a map frame. The vehicle is measured relative to this. -->
     <!--<node pkg="tf2_ros" type="static_transform_publisher" name="loam_init_to_odom" args="-1.4859 0 0.965 1.570795 0.174533 1.570795 odom loam_init" />-->
 
     <!-- NOTE: Don't add velodyne pitch inverse TF here -->
     <!--<node pkg="tf2_ros" type="static_transform_publisher" name="loam_init_to_odom"-->
-    <!--args="1.4859 0 0.965 1.570795 0 1.570795 odom loam_init"/>-->
-    <node pkg="tf2_ros" type="static_transform_publisher" name="loam_init_to_odom"
-          args="0 0 0 1.570795 0 1.570795 odom loam_init"/>
-    <!-- TODO: add transform from velodyne_points to loam_velodyne_points -->
-    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="loam_init_to_odom"-->
-    <!--args="0 0 0 1.570795 0 1.570795 odom loam_init"/>-->
+          <!--args="0 0 0 1.570795 0 1.570795 odom loam_init"/>-->
+    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="loam_init_to_odom" TODO old car_loc stuff... -->
+          <!--args="1.4859 0 0.965 1.570795 0 1.570795 odom loam_init"/>-->
 
     <!-- loam is a moving frame, positioned on the LIDAR-->
     <!--<node pkg="tf2_ros" type="static_transform_publisher" name="velodyne_to_loam" args="-1.4859 0 -0.964 -1.570795 0 -1.570795 velodyne loam" />-->
-
-    <!-- Cart links (for robot_self_filter) - I am retarded TODO -->
-    <!-- [[1.9384, -0.6096], [1.9384, 0.6096], [-0.5, 0.6096], [-0.5, -0.6096]]-->
-    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="front_left_low_broadcaster"-->
-          <!--args="1.9384 -0.6096 0 0 0 0 base_link front_left_low_link"/>-->
-    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="front_right_low_broadcaster"-->
-          <!--args="1.9384 0.6096 0 0 0 0 base_link front_right_low_link"/>-->
-    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="rear_left_low_broadcaster"-->
-          <!--args="-0.5 -0.6096 0 0 0 0 base_link rear_left_low_link"/>-->
-    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="rear_right_low_broadcaster"-->
-          <!--args="-0.5 0.6096 0 0 0 0 base_link rear_right_low_link"/>-->
-    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="front_left_high_broadcaster"-->
-          <!--args="1.9384 -0.6096 1.78 0 0 0 base_link front_left_high_link"/>-->
-    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="front_right_high_broadcaster"-->
-          <!--args="1.9384 0.6096 1.78 0 0 0 base_link front_right_high_link"/>-->
-    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="rear_left_high_broadcaster"-->
-          <!--args="-0.5 -0.6096 1.78 0 0 0 base_link rear_left_high_link"/>-->
-    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="rear_right_high_broadcaster"-->
-          <!--args="-0.5 0.6096 1.78 0 0 0 base_link rear_right_high_link"/>-->
 
     <!-- ................................................................................ -->
     <!-- Old Transforms -->

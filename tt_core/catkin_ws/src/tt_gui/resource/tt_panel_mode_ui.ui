@@ -23,10 +23,16 @@
 	        <property name="text"><string>Sound Board</string></property>
 	    </widget>
 		<widget class="QPushButton" name="button_sound1">
-	        <property name="text"><string>Sound 1</string></property>
+	        <property name="text"><string>Dj airhorn</string></property>
 	    </widget>
 		<widget class="QPushButton" name="button_sound2">
-	        <property name="text"><string>Sound 2</string></property>
+	        <property name="text"><string>Tiger Roar</string></property>
+	    </widget>
+		<widget class="QPushButton" name="button_sound3">
+	        <property name="text"><string>Stacey's Mom</string></property>
+	    </widget>
+		<widget class="QPushButton" name="button_sound4">
+	        <property name="text"><string>Dixie Horn</string></property>
 	    </widget>
 	</widget>
 

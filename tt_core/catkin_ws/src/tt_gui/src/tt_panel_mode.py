@@ -12,6 +12,7 @@ import rospy
 import os
 
 from stylesheet import *
+from playsound import playsound
 
 class tt_panel_mode_ui(QWidget):
     def __init__(self, parent):
@@ -40,6 +41,8 @@ class tt_panel_mode_ui(QWidget):
 
         self.button_sound1.setStyleSheet(BUTTON_NORMAL)
         self.button_sound2.setStyleSheet(BUTTON_NORMAL)
+        self.button_sound3.setStyleSheet(BUTTON_NORMAL)
+        self.button_sound4.setStyleSheet(BUTTON_NORMAL)
 
         self.button_man.clicked.connect(self.button_man_pressed)
         self.button_rem.clicked.connect(self.button_rem_pressed)
@@ -49,10 +52,14 @@ class tt_panel_mode_ui(QWidget):
         self.sound_control_layout.addWidget(self.sound_control_label)
         self.sound_control_layout.addWidget(self.button_sound1)
         self.sound_control_layout.addWidget(self.button_sound2)
+        self.sound_control_layout.addWidget(self.button_sound3)
+        self.sound_control_layout.addWidget(self.button_sound4)
         self.sound_control_frame.setLayout(self.sound_control_layout)
 
         self.button_sound1.clicked.connect(self.button_sound1_pressed)
         self.button_sound2.clicked.connect(self.button_sound2_pressed)
+        self.button_sound3.clicked.connect(self.button_sound3_pressed)
+        self.button_sound4.clicked.connect(self.button_sound4_pressed)
 
         self.layout = QVBoxLayout()
         self.layout.addStretch()
@@ -83,14 +90,16 @@ class tt_panel_mode_ui(QWidget):
         self._publish_mode(None)
 
     def button_sound1_pressed(self):
-        # TODO - Kenny add in the functonality here and let know if you want more
-        #        make the path to the sounds a global variable in stylesheet.py
-        pass
+        playsound(os.environ['TT_ROOT'] + '/horn_sounds/DJ Airhorn Sound Effect.mp3')
 
     def button_sound2_pressed(self):
-        # TODO - Kenny add in the functonality here and let know if you want more
-        #        make the path to the sounds a global variable in stylesheet.py
-        pass
+        playsound(os.environ['TT_ROOT'] + '/horn_sounds/Tiger Roar.mp3')
+
+    def button_sound3_pressed(self):
+        playsound(os.environ['TT_ROOT'] + '/horn_sounds/Fountains of Wayne - Stacy\'s Mom.mp3')
+
+    def button_sound4_pressed(self):
+        playsound(os.environ['TT_ROOT'] + '/horn_sounds/dixie-horn_daniel-simion.mp3')
 
     def _update_button_state(self):
         styles = [BUTTON_NORMAL] * 3

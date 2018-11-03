@@ -8,7 +8,9 @@ from argparse import ArgumentParser
 from sensor_msgs.msg import Imu
 from sensor_msgs.msg import NavSatFix
 
+import gui_freq_listener
 import numpy as np
+import rostopic
 import rospkg
 import rospy
 import math
@@ -24,6 +26,9 @@ class tt_panel_systems_ui(QWidget):
         self.setObjectName('tt_panel_systems_ui')
         ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_panel_systems_ui.ui'
         loadUi(ui_file, self)
+
+        self.hz = rostopic.ROSTopicHz(-1)
+
         self.initIMU()
         self.initGPS()
         self.initCam()
@@ -100,12 +105,12 @@ class tt_panel_systems_ui(QWidget):
         self.imu_toggle = 1
         # Enabled | Disabled
         self.imu_control = 0
-        self.imu_times = np.zeros(HZ_CALC_SIZE)
 
         self.imu_update()
 
         if TRACK_SYSTEM_STATUS:
-            self.subscriber_IMU = rospy.Subscriber('vectornav/IMU', Imu, self.imu_callback, queue_size=100)
+            self.subscriber_IMU = rospy.Subscriber('tt_gui/throttle/imu', Imu, self.imu_callback, queue_size=1)
+            self.imu_hz = rospy.Subscriber('/vectornav/IMU', rospy.AnyMsg, self.hz.callback_hz, callback_args='/vectornav/IMU')
 
     def initGPS(self):
         self.gps_frame.setStyleSheet(FRAME_STYLE)
@@ -171,12 +176,12 @@ class tt_panel_systems_ui(QWidget):
         self.gps_toggle = 1
         # Enabled | Disabled
         self.gps_control = 0
-        self.gps_times = np.zeros(HZ_CALC_SIZE)
 
         self.gps_update()
 
         if TRACK_SYSTEM_STATUS:
-            self.subscriber_GPS = rospy.Subscriber('vectornav/GPS', NavSatFix, self.gps_callback, queue_size=100)
+            self.subscriber_GPS = rospy.Subscriber('tt_gui/throttle/gps', NavSatFix, self.gps_callback, queue_size=1)
+            self.gps_hz = rospy.Subscriber('/vectornav/GPS', rospy.AnyMsg, self.hz.callback_hz, callback_args='/vectornav/GPS')
 
     def initCam(self):
         self.cam_frame.setStyleSheet(FRAME_STYLE)
@@ -212,7 +217,6 @@ class tt_panel_systems_ui(QWidget):
         self.cam_status = 0
         # Enabled | Disabled
         self.cam_control = 0
-        self.cam_times = np.zeros(HZ_CALC_SIZE)
 
         self.cam_update()
 
@@ -250,7 +254,6 @@ class tt_panel_systems_ui(QWidget):
         self.vel_status = 0
         # Enabled | Disabled
         self.vel_control = 0
-        self.vel_times = np.zeros(HZ_CALC_SIZE)
 
         self.vel_update()
 
@@ -288,18 +291,8 @@ class tt_panel_systems_ui(QWidget):
         self.hok_status = 0
         # Enabled | Disabled
         self.hok_control = 0
-        self.hok_times = np.zeros(HZ_CALC_SIZE)
 
         self.hok_update()
-
-    def calcFrequency(self, times):
-        t = time.time()
-        temp = times
-        times = np.roll(times, -1)
-        times[-1] = t
-        avg_dif = np.mean(times - temp)
-        hz = 1 / avg_dif
-        return (hz < FREQ_CUTOFF), times, hz
 
     def imu_update(self):
         if self.imu_status == 0:
@@ -344,12 +337,6 @@ class tt_panel_systems_ui(QWidget):
 
     # TODO - getting logs that say a filesheet couldn't be parsed - I don't like it
     def imu_callback(self, data):
-#        deg, self.imu_times, hz = self.calcFrequency(self.imu_times)
-#        if deg != self.imu_status:
-#            self.imu_update()
-#        self.imu_status = not deg
-#        self.imu_rate_value.setText(str(hz))
-
         if self.imu_toggle == 1:
             orien = data.orientation
             x = orien.x
@@ -363,6 +350,14 @@ class tt_panel_systems_ui(QWidget):
             yaw = math.atan2(siny_cosp, cosy_cosp);
 
             self.imu_yaw_value.setText('%3.5f' % math.degrees(yaw))
+            rate = self.hz.get_hz('/vectornav/IMU')
+            if rate is not None:
+                self.imu_rate_value.setText('%3.5f' % rate[0])
+                if rate[0] > FREQ_CUTOFF:
+                    self.imu_status = 1
+                else:
+                    self.imu_status = 0
+                self.imu_update()
         else:
             pass
 
@@ -409,18 +404,20 @@ class tt_panel_systems_ui(QWidget):
 
     # TODO - getting logs that say a filesheet couldn't be parsed - I don't like it
     def gps_callback(self, data):
- #       deg, self.gps_times, hz = self.calcFrequency(self.gps_times)
- #       if deg != self.gps_status:
- #           self.gps_update()
- #       self.gps_status = not deg
- #       self.gps_rate_value.setText(str(hz))
-
         if self.gps_toggle == 1:
             lon = data.longitude
             lat = data.latitude
 
             self.gps_lon_value.setText('%2.10f' % lon)
             self.gps_lat_value.setText('%2.10f' % lat)
+            rate = self.hz.get_hz('/vectornav/GPS')
+            if rate is not None:
+                self.gps_rate_value.setText('%3.5f' % rate[0])
+                if rate[0] > FREQ_CUTOFF:
+                    self.gps_status = 1
+                else:
+                    self.gps_status = 0
+                self.gps_update()
         else:
             pass
 

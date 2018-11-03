@@ -34,6 +34,4 @@ TOGGLE_LABELS = ['Live Feed', 'Pause']
 CONTROL_LABELS = ['Disable', 'Enable']
 
 TRACK_SYSTEM_STATUS = 1
-
-HZ_CALC_SIZE = 10
 FREQ_CUTOFF  = 1

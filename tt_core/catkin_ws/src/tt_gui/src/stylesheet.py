@@ -41,6 +41,7 @@ FREQ_CUTOFF  = 1
 
 OSM_PATH = os.environ['TT_ROOT'] + '/tt_core/catkin_ws/src/tt_gui/imgs/rit_osm_map.png'
 LOGO_PATH = os.environ['TT_ROOT'] + '/tt_core/catkin_ws/src/tt_gui/imgs/rit_tt.png'
+GOAL_PATH = os.environ['TT_ROOT'] + '/tt_core/catkin_ws/src/tt_gui/imgs/rit_dest.png'
 
 MIN_LAT = 43.0776
 MAX_LAT = 43.0898

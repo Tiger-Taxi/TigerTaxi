@@ -67,15 +67,6 @@
 		        <property name="text"><string>N/A</string></property>
 		    </widget>
 		</widget>
-
-		<widget class="QWidget" name="goal_yaw_widget">
-			<widget class="QLabel" name="label_goal_yaw">
-		        <property name="text"><string>Yaw:</string></property>
-		    </widget>
-		    <widget class="QLabel" name="value_goal_yaw">
-		        <property name="text"><string>N/A</string></property>
-		    </widget>
-		</widget>
 	</widget>
 
 	<widget class="QWidget" name="nav_control_widget">

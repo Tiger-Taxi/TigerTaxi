@@ -5,8 +5,11 @@ from PyQt5.QtGui import *
 
 from argparse import ArgumentParser
 
+from geometry_msgs.msg import PoseStamped
 from sensor_msgs.msg import NavSatFix
+from std_msgs.msg import Float32
 from sensor_msgs.msg import Imu
+from std_msgs.msg import String
 
 import rospkg
 import rospy
@@ -66,17 +69,11 @@ class tt_panel_nav_ui(QWidget):
         self.goal_lat_layout.addWidget(self.value_goal_lat)
         self.goal_lat_widget.setLayout(self.goal_lat_layout)
 
-        self.goal_yaw_layout = QHBoxLayout()
-        self.goal_yaw_layout.addWidget(self.label_goal_yaw)
-        self.goal_yaw_layout.addWidget(self.value_goal_yaw)
-        self.goal_yaw_widget.setLayout(self.goal_yaw_layout)
-
         self.goal_pos_layout = QVBoxLayout()
         self.goal_pos_layout.addWidget(self.goal_pos_label)
         self.goal_pos_layout.addWidget(self.goal_status_widget)
         self.goal_pos_layout.addWidget(self.goal_long_widget)
         self.goal_pos_layout.addWidget(self.goal_lat_widget)
-        self.goal_pos_layout.addWidget(self.goal_yaw_widget)
         self.goal_pos_frame.setLayout(self.goal_pos_layout)
 
         self.button_follow.clicked.connect(self.button_follow_pressed)
@@ -112,42 +109,73 @@ class tt_panel_nav_ui(QWidget):
         self.value_goal_long.setStyleSheet(SUB_L_STYLE)
         self.label_goal_lat.setStyleSheet(SUB_L_STYLE)
         self.value_goal_lat.setStyleSheet(SUB_L_STYLE)
-        self.label_goal_yaw.setStyleSheet(SUB_L_STYLE)
-        self.value_goal_yaw.setStyleSheet(SUB_L_STYLE)
+
+        self.subscriber_GPS = rospy.Subscriber('tt_gui/throttle/gps', NavSatFix, self.gps_callback, queue_size=QUEUE_SIZE)
+        self.subscriber_IMU = rospy.Subscriber('tt_gui/throttle/imu', Imu, self.imu_callback, queue_size=QUEUE_SIZE)
+
+        self.subscriber_nav = rospy.Subscriber('tt_gui/nav/coords', String, self.nav_callback, queue_size = QUEUE_SIZE)
+        self.publisher_nav = rospy.Publisher('tt_gui/nav/status', Float32, queue_size = QUEUE_SIZE)
+        self.publisher_gps = rospy.Publisher('gps_goal_pose', PoseStamped, queue_size = QUEUE_SIZE)
 
         # Not Set | Confirm | Following
         self.navstatus = 0
         self._update_button_state()
 
-        self.subscriber_GPS = rospy.Subscriber('tt_gui/throttle/gps', NavSatFix, self.gps_callback, queue_size=QUEUE_SIZE)
-        self.subscriber_IMU = rospy.Subscriber('tt_gui/throttle/imu', Imu, self.imu_callback, queue_size=QUEUE_SIZE)
-
     def button_follow_pressed(self):
-        # TODO - Need to add in all of the logic here
+        if self.navstatus == 1:
+            self.navstatus = 2
+            lat = self.value_goal_lat.text()
+            lon = self.value_goal_long.text()
+            if lat != 'N/A' and lon != 'N/A':
+                self.sendGpsGoal(float(lat), float(lon))
         self._update_button_state()
 
     def button_pause_pressed(self):
-        # TODO - Need to add in all of the logic here
+        if self.navstatus == 2:
+            self.navstatus = 1
+            lat = self.value_cur_lat.text()
+            lon = self.value_cur_long.text()
+            if lat != 'N/A' and lon != 'N/A':
+                self.sendGpsGoal(float(lat), float(lon))
         self._update_button_state()
 
     def button_cancel_pressed(self):
-        # TODO - Need to add in all of the logic here
+        if self.navstatus == 1 or self.navstatus == 2:
+            if self.navstatus == 2:
+                lat = self.value_cur_lat.text()
+                lon = self.value_cur_long.text()
+                if lat != 'N/A' and lon != 'N/A':
+                    self.sendGpsGoal(float(lat), float(lon))
+            self.navstatus = 0
+            self.value_goal_long.setText('N/A')
+            self.value_goal_lat.setText('N/A')
         self._update_button_state()
 
     def _update_button_state(self):
         if self.navstatus == 0:
-            # TODO - more logic needs to be added here
             styles = [BUTTON_OFF, BUTTON_OFF, BUTTON_OFF]
+            self.value_goal_status.setText('Not Set')
         elif self.navstatus == 1:
-            # TODO - more logic needs to be added here
-            styles = [BUTTON_NORMAL, BUTTON_OFF, BUTTON_OFF]
+            styles = [BUTTON_NORMAL, BUTTON_OFF, BUTTON_NORMAL]
+            self.value_goal_status.setText('Confirm')
         else:
-            # TODO - more logic needs to be added here
             styles = [BUTTON_OFF, BUTTON_NORMAL, BUTTON_NORMAL]
+            self.value_goal_status.setText('Following')
 
         self.button_follow.setStyleSheet(styles[0])
         self.button_pause.setStyleSheet(styles[1])
         self.button_cancel.setStyleSheet(styles[2])
+
+        msg = Float32(self.navstatus)
+        self.publisher_nav.publish(msg)
+
+    def sendGpsGoal(self, lat, lon):
+        msg = PoseStamped()
+        msg.header.stamp = rospy.Time.now()
+        msg.header.frame_id = '/map'
+        msg.pose.position.x = lon
+        msg.pose.position.y = lat
+        self.publisher_gps.publish(msg)
 
     def gps_callback(self, data):
         lon = data.longitude
@@ -169,3 +197,12 @@ class tt_panel_nav_ui(QWidget):
         yaw = math.atan2(siny_cosp, cosy_cosp);
 
         self.value_cur_yaw.setText('%3.5f' % math.degrees(yaw))
+
+    def nav_callback(self, data):
+        lat, lon = str(data.data).split(',')
+        lat, lon = float(lat), float(lon)
+        if self.navstatus == 0 or self.navstatus == 1:
+            self.navstatus = 1
+            self.value_goal_long.setText('%2.10f' % lon)
+            self.value_goal_lat.setText('%2.10f' % lat)
+            self._update_button_state()

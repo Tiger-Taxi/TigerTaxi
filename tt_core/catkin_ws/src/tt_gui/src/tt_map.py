@@ -9,6 +9,7 @@ from argparse import ArgumentParser
 from std_msgs.msg import Float32
 from std_msgs.msg import String
 
+import numpy as np
 import rospkg
 import rospy
 import os
@@ -22,29 +23,19 @@ class tt_map_ui(QWidget):
         ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_map_ui.ui'
         loadUi(ui_file, self)
         self.viewer = MapViewer(self)
-        self.viewer.setPhoto(QPixmap(IMG_PATH))
-        # Button to change from drag/pan to getting pixel info
-        self.btnPixInfo = QToolButton(self)
-        self.btnPixInfo.setText('Enter pixel info mode')
-        self.btnPixInfo.clicked.connect(self.pixInfo)
-        self.editPixInfo = QLineEdit(self)
-        self.editPixInfo.setReadOnly(True)
         self.viewer.photoClicked.connect(self.photoClicked)
         # Arrange layout
         VBlayout = QVBoxLayout(self)
         VBlayout.addWidget(self.viewer)
-        HBlayout = QHBoxLayout()
-        HBlayout.setAlignment(Qt.AlignLeft)
-        HBlayout.addWidget(self.btnPixInfo)
-        HBlayout.addWidget(self.editPixInfo)
-        VBlayout.addLayout(HBlayout)
 
-    def pixInfo(self):
-        self.viewer.toggleDragMode()
+        self.gps_coords_lat = np.repeat(np.expand_dims(np.arange(MIN_LAT, MAX_LAT, PIX_H), axis = 0), PIX_W, axis = 1)
+        self.gps_coords_lon = np.repeat(np.expand_dims(np.arange(MIN_LON, MAX_LON, PIX_W), axis = 0), PIX_H, axis = 0)
 
     def photoClicked(self, pos):
-        if self.viewer.dragMode()  == QGraphicsView.NoDrag:
-            self.editPixInfo.setText('%d, %d' % (pos.x(), pos.y()))
+    	rospy.loginfo(pos)
+    	img_coords = self.viewer._photo.mapToItem(self.viewer._photo, self.viewer.mapToScene(pos))
+    	rospy.loginfo(img_coords)
+        self.viewer._logo.setOffset(int(img_coords.x() - (LOGO_SIZE / 2)), int(img_coords.y() - (LOGO_SIZE / 2)))
 
 class MapViewer(QGraphicsView):
     photoClicked = pyqtSignal(QPoint)
@@ -54,12 +45,21 @@ class MapViewer(QGraphicsView):
         self._zoom = 0
         self._scene = QGraphicsScene(self)
         self._photo = QGraphicsPixmapItem()
+        self._logo = QGraphicsPixmapItem()
+
+        self._photo.setPixmap(QPixmap(MAP_PATH))
+        self._logo.setPixmap(QPixmap(LOGO_PATH).scaledToWidth(LOGO_SIZE).scaledToHeight(LOGO_SIZE))
+
         self._scene.addItem(self._photo)
+        self._scene.addItem(self._logo)
         self.setScene(self._scene)
+
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
         self.setResizeAnchor(QGraphicsView.AnchorUnderMouse)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setDragMode(QGraphicsView.ScrollHandDrag)
+        self.fitInView()
 
     def fitInView(self, scale=True):
         rect = QRectF(self._photo.pixmap().rect())
@@ -72,12 +72,6 @@ class MapViewer(QGraphicsView):
         self.scale(factor, factor)
         self._zoom = 0
 
-    def setPhoto(self, pixmap=None):
-        self._zoom = 0
-        self.setDragMode(QGraphicsView.ScrollHandDrag)
-        self._photo.setPixmap(pixmap)
-        self.fitInView()
-
     def wheelEvent(self, event):
         if event.angleDelta().y() > 0:
             factor = 1.25
@@ -85,6 +79,7 @@ class MapViewer(QGraphicsView):
         else:
             factor = 0.8
             self._zoom -= 1
+
         if self._zoom > 0:
             self.scale(factor, factor)
         elif self._zoom == 0:

@@ -1,5 +1,7 @@
 from python_qt_binding.QtWidgets import QDesktopWidget
 
+import os
+
 desktop = QDesktopWidget().availableGeometry()
 
 START_X = desktop.x()
@@ -35,3 +37,10 @@ CONTROL_LABELS = ['Disable', 'Enable']
 
 TRACK_SYSTEM_STATUS = 1
 FREQ_CUTOFF  = 1
+
+IMG_PATH = os.environ['TT_ROOT'] + '/tt_core/catkin_ws/src/tt_gui/imgs/rit_osm_map.png'
+
+MIN_LAT = 43.0898
+MAX_LAT = 43.0776
+MIN_LONG = -77.6873
+MAX_LONG = -77.6640

@@ -6,13 +6,13 @@ from PyQt5.QtGui import *
 from argparse import ArgumentParser
 
 from std_msgs.msg import Float32
+from playsound import playsound
 
 import rospkg
 import rospy
 import os
 
 from stylesheet import *
-from playsound import playsound
 
 class tt_panel_mode_ui(QWidget):
     def __init__(self, parent):

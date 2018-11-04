@@ -36,105 +36,79 @@
 #include "loam_velodyne/common.h"
 #include "math_utils.h"
 
-namespace loam
-{
+namespace loam {
 
-  using std::sin;
-  using std::cos;
-  using std::asin;
-  using std::atan2;
-  using std::sqrt;
-  using std::fabs;
-  using std::pow;
+using std::sin;
+using std::cos;
+using std::asin;
+using std::atan2;
+using std::sqrt;
+using std::fabs;
+using std::pow;
 
 
-  LaserOdometry::LaserOdometry(float scanPeriod, uint16_t ioRatio, size_t maxIterations):
-    BasicLaserOdometry(scanPeriod, maxIterations),
-    _ioRatio(ioRatio)
-  {
+LaserOdometry::LaserOdometry(float scanPeriod, uint16_t ioRatio, size_t maxIterations) :
+        BasicLaserOdometry(scanPeriod, maxIterations),
+        _ioRatio(ioRatio) {
     // initialize odometry and odometry tf messages
     _laserOdometryMsg.header.frame_id = "odom";
-    _laserOdometryMsg.child_frame_id  = "/loam_odom";
-
-    //_laserOdometryTrans.frame_id_       = "base_link";
-    //_laserOdometryTrans.child_frame_id_ = "/loam_odom";
-  }
+    _laserOdometryMsg.child_frame_id = "/loam_odom";
+}
 
 
-  bool LaserOdometry::setup(ros::NodeHandle &node, ros::NodeHandle &privateNode)
-  {
+bool LaserOdometry::setup(ros::NodeHandle &node, ros::NodeHandle &privateNode) {
     // fetch laser odometry params
     float fParam;
     int iParam;
 
-    if (privateNode.getParam("scanPeriod", fParam))
-    {
-      if (fParam <= 0)
-      {
-        ROS_ERROR("Invalid scanPeriod parameter: %f (expected > 0)", fParam);
-        return false;
-      }
-      else
-      {
-        setScanPeriod(fParam);
-        ROS_INFO("Set scanPeriod: %g", fParam);
-      }
+    if (privateNode.getParam("scanPeriod", fParam)) {
+        if (fParam <= 0) {
+            ROS_ERROR("Invalid scanPeriod parameter: %f (expected > 0)", fParam);
+            return false;
+        } else {
+            setScanPeriod(fParam);
+            ROS_INFO("Set scanPeriod: %g", fParam);
+        }
     }
 
-    if (privateNode.getParam("ioRatio", iParam))
-    {
-      if (iParam < 1)
-      {
-        ROS_ERROR("Invalid ioRatio parameter: %d (expected > 0)", iParam);
-        return false;
-      }
-      else
-      {
-        _ioRatio = iParam;
-        ROS_INFO("Set ioRatio: %d", iParam);
-      }
+    if (privateNode.getParam("ioRatio", iParam)) {
+        if (iParam < 1) {
+            ROS_ERROR("Invalid ioRatio parameter: %d (expected > 0)", iParam);
+            return false;
+        } else {
+            _ioRatio = iParam;
+            ROS_INFO("Set ioRatio: %d", iParam);
+        }
     }
 
-    if (privateNode.getParam("maxIterations", iParam))
-    {
-      if (iParam < 1)
-      {
-        ROS_ERROR("Invalid maxIterations parameter: %d (expected > 0)", iParam);
-        return false;
-      }
-      else
-      {
-        setMaxIterations(iParam);
-        ROS_INFO("Set maxIterations: %d", iParam);
-      }
+    if (privateNode.getParam("maxIterations", iParam)) {
+        if (iParam < 1) {
+            ROS_ERROR("Invalid maxIterations parameter: %d (expected > 0)", iParam);
+            return false;
+        } else {
+            setMaxIterations(iParam);
+            ROS_INFO("Set maxIterations: %d", iParam);
+        }
     }
 
-    if (privateNode.getParam("deltaTAbort", fParam))
-    {
-      if (fParam <= 0)
-      {
-        ROS_ERROR("Invalid deltaTAbort parameter: %f (expected > 0)", fParam);
-        return false;
-      }
-      else
-      {
-        setDeltaTAbort(fParam);
-        ROS_INFO("Set deltaTAbort: %g", fParam);
-      }
+    if (privateNode.getParam("deltaTAbort", fParam)) {
+        if (fParam <= 0) {
+            ROS_ERROR("Invalid deltaTAbort parameter: %f (expected > 0)", fParam);
+            return false;
+        } else {
+            setDeltaTAbort(fParam);
+            ROS_INFO("Set deltaTAbort: %g", fParam);
+        }
     }
 
-    if (privateNode.getParam("deltaRAbort", fParam))
-    {
-      if (fParam <= 0)
-      {
-        ROS_ERROR("Invalid deltaRAbort parameter: %f (expected > 0)", fParam);
-        return false;
-      }
-      else
-      {
-        setDeltaRAbort(fParam);
-        ROS_INFO("Set deltaRAbort: %g", fParam);
-      }
+    if (privateNode.getParam("deltaRAbort", fParam)) {
+        if (fParam <= 0) {
+            ROS_ERROR("Invalid deltaRAbort parameter: %f (expected > 0)", fParam);
+            return false;
+        } else {
+            setDeltaRAbort(fParam);
+            ROS_INFO("Set deltaRAbort: %g", fParam);
+        }
     }
 
     // advertise laser odometry topics
@@ -145,38 +119,36 @@ namespace loam
 
     // subscribe to scan registration topics
     _subCornerPointsSharp = node.subscribe<sensor_msgs::PointCloud2>
-      ("/laser_cloud_sharp", 2, &LaserOdometry::laserCloudSharpHandler, this);
+            ("/laser_cloud_sharp", 2, &LaserOdometry::laserCloudSharpHandler, this);
 
     _subCornerPointsLessSharp = node.subscribe<sensor_msgs::PointCloud2>
-      ("/laser_cloud_less_sharp", 2, &LaserOdometry::laserCloudLessSharpHandler, this);
+            ("/laser_cloud_less_sharp", 2, &LaserOdometry::laserCloudLessSharpHandler, this);
 
     _subSurfPointsFlat = node.subscribe<sensor_msgs::PointCloud2>
-      ("/laser_cloud_flat", 2, &LaserOdometry::laserCloudFlatHandler, this);
+            ("/laser_cloud_flat", 2, &LaserOdometry::laserCloudFlatHandler, this);
 
     _subSurfPointsLessFlat = node.subscribe<sensor_msgs::PointCloud2>
-      ("/laser_cloud_less_flat", 2, &LaserOdometry::laserCloudLessFlatHandler, this);
+            ("/laser_cloud_less_flat", 2, &LaserOdometry::laserCloudLessFlatHandler, this);
 
     _subLaserCloudFullRes = node.subscribe<sensor_msgs::PointCloud2>
-      ("/velodyne_cloud_2", 2, &LaserOdometry::laserCloudFullResHandler, this);
+            ("/velodyne_cloud_2", 2, &LaserOdometry::laserCloudFullResHandler, this);
 
     _subImuTrans = node.subscribe<sensor_msgs::PointCloud2>
-      ("/imu_trans", 5, &LaserOdometry::imuTransHandler, this);
+            ("/imu_trans", 5, &LaserOdometry::imuTransHandler, this);
 
     return true;
-  }
+}
 
-  void LaserOdometry::reset()
-  {
+void LaserOdometry::reset() {
     _newCornerPointsSharp = false;
     _newCornerPointsLessSharp = false;
     _newSurfPointsFlat = false;
     _newSurfPointsLessFlat = false;
     _newLaserCloudFullRes = false;
     _newImuTrans = false;
-  }
+}
 
-  void LaserOdometry::laserCloudSharpHandler(const sensor_msgs::PointCloud2ConstPtr& cornerPointsSharpMsg)
-  {
+void LaserOdometry::laserCloudSharpHandler(const sensor_msgs::PointCloud2ConstPtr &cornerPointsSharpMsg) {
     _timeCornerPointsSharp = cornerPointsSharpMsg->header.stamp;
 
     cornerPointsSharp()->clear();
@@ -184,12 +156,10 @@ namespace loam
     std::vector<int> indices;
     pcl::removeNaNFromPointCloud(*cornerPointsSharp(), *cornerPointsSharp(), indices);
     _newCornerPointsSharp = true;
-  }
+}
 
 
-
-  void LaserOdometry::laserCloudLessSharpHandler(const sensor_msgs::PointCloud2ConstPtr& cornerPointsLessSharpMsg)
-  {
+void LaserOdometry::laserCloudLessSharpHandler(const sensor_msgs::PointCloud2ConstPtr &cornerPointsLessSharpMsg) {
     _timeCornerPointsLessSharp = cornerPointsLessSharpMsg->header.stamp;
 
     cornerPointsLessSharp()->clear();
@@ -197,12 +167,10 @@ namespace loam
     std::vector<int> indices;
     pcl::removeNaNFromPointCloud(*cornerPointsLessSharp(), *cornerPointsLessSharp(), indices);
     _newCornerPointsLessSharp = true;
-  }
+}
 
 
-
-  void LaserOdometry::laserCloudFlatHandler(const sensor_msgs::PointCloud2ConstPtr& surfPointsFlatMsg)
-  {
+void LaserOdometry::laserCloudFlatHandler(const sensor_msgs::PointCloud2ConstPtr &surfPointsFlatMsg) {
     _timeSurfPointsFlat = surfPointsFlatMsg->header.stamp;
 
     surfPointsFlat()->clear();
@@ -210,12 +178,10 @@ namespace loam
     std::vector<int> indices;
     pcl::removeNaNFromPointCloud(*surfPointsFlat(), *surfPointsFlat(), indices);
     _newSurfPointsFlat = true;
-  }
+}
 
 
-
-  void LaserOdometry::laserCloudLessFlatHandler(const sensor_msgs::PointCloud2ConstPtr& surfPointsLessFlatMsg)
-  {
+void LaserOdometry::laserCloudLessFlatHandler(const sensor_msgs::PointCloud2ConstPtr &surfPointsLessFlatMsg) {
     _timeSurfPointsLessFlat = surfPointsLessFlatMsg->header.stamp;
 
     surfPointsLessFlat()->clear();
@@ -223,12 +189,10 @@ namespace loam
     std::vector<int> indices;
     pcl::removeNaNFromPointCloud(*surfPointsLessFlat(), *surfPointsLessFlat(), indices);
     _newSurfPointsLessFlat = true;
-  }
+}
 
 
-
-  void LaserOdometry::laserCloudFullResHandler(const sensor_msgs::PointCloud2ConstPtr& laserCloudFullResMsg)
-  {
+void LaserOdometry::laserCloudFullResHandler(const sensor_msgs::PointCloud2ConstPtr &laserCloudFullResMsg) {
     _timeLaserCloudFullRes = laserCloudFullResMsg->header.stamp;
 
     laserCloud()->clear();
@@ -236,96 +200,82 @@ namespace loam
     std::vector<int> indices;
     pcl::removeNaNFromPointCloud(*laserCloud(), *laserCloud(), indices);
     _newLaserCloudFullRes = true;
-  }
+}
 
 
-
-  void LaserOdometry::imuTransHandler(const sensor_msgs::PointCloud2ConstPtr& imuTransMsg)
-  {
+void LaserOdometry::imuTransHandler(const sensor_msgs::PointCloud2ConstPtr &imuTransMsg) {
     _timeImuTrans = imuTransMsg->header.stamp;
 
-    pcl::PointCloud<pcl::PointXYZ> imuTrans;
+    pcl::PointCloud <pcl::PointXYZ> imuTrans;
     pcl::fromROSMsg(*imuTransMsg, imuTrans);
     updateIMU(imuTrans);
     _newImuTrans = true;
-  }
+}
 
 
-  void LaserOdometry::spin()
-  {
+void LaserOdometry::spin() {
     ros::Rate rate(100);
     bool status = ros::ok();
 
     // loop until shutdown
-    while (status)
-    {
-      ros::spinOnce();
+    while (status) {
+        ros::spinOnce();
 
-      // try processing new data
-      process();
+        // try processing new data
+        process();
 
-      status = ros::ok();
-      rate.sleep();
+        status = ros::ok();
+        rate.sleep();
     }
-  }
+}
 
 
-  bool LaserOdometry::hasNewData()
-  {
+bool LaserOdometry::hasNewData() {
     return _newCornerPointsSharp && _newCornerPointsLessSharp && _newSurfPointsFlat &&
-      _newSurfPointsLessFlat && _newLaserCloudFullRes && _newImuTrans &&
-      fabs((_timeCornerPointsSharp - _timeSurfPointsLessFlat).toSec()) < 0.005 &&
-      fabs((_timeCornerPointsLessSharp - _timeSurfPointsLessFlat).toSec()) < 0.005 &&
-      fabs((_timeSurfPointsFlat - _timeSurfPointsLessFlat).toSec()) < 0.005 &&
-      fabs((_timeLaserCloudFullRes - _timeSurfPointsLessFlat).toSec()) < 0.005 &&
-      fabs((_timeImuTrans - _timeSurfPointsLessFlat).toSec()) < 0.005;
-  }
+           _newSurfPointsLessFlat && _newLaserCloudFullRes && _newImuTrans &&
+           fabs((_timeCornerPointsSharp - _timeSurfPointsLessFlat).toSec()) < 0.005 &&
+           fabs((_timeCornerPointsLessSharp - _timeSurfPointsLessFlat).toSec()) < 0.005 &&
+           fabs((_timeSurfPointsFlat - _timeSurfPointsLessFlat).toSec()) < 0.005 &&
+           fabs((_timeLaserCloudFullRes - _timeSurfPointsLessFlat).toSec()) < 0.005 &&
+           fabs((_timeImuTrans - _timeSurfPointsLessFlat).toSec()) < 0.005;
+}
 
 
-
-  void LaserOdometry::process()
-  {
+void LaserOdometry::process() {
     if (!hasNewData())
-      return;// waiting for new data to arrive...
+        return;// waiting for new data to arrive...
 
     reset();// reset flags, etc.
     BasicLaserOdometry::process();
     publishResult();
-  }
+}
 
 
-  void LaserOdometry::publishResult()
-  {
+void LaserOdometry::publishResult() {
     // publish odometry transformations
     geometry_msgs::Quaternion geoQuat = tf::createQuaternionMsgFromRollPitchYaw(transformSum().rot_z.rad(),
-                                                                               -transformSum().rot_x.rad(),
-                                                                               -transformSum().rot_y.rad());
+                                                                                -transformSum().rot_x.rad(),
+                                                                                -transformSum().rot_y.rad());
 
-    _laserOdometryMsg.header.stamp            = _timeSurfPointsLessFlat;
+    _laserOdometryMsg.header.stamp = _timeSurfPointsLessFlat;
     _laserOdometryMsg.pose.pose.orientation.x = -geoQuat.y;
     _laserOdometryMsg.pose.pose.orientation.y = -geoQuat.z;
     _laserOdometryMsg.pose.pose.orientation.z = geoQuat.x;
     _laserOdometryMsg.pose.pose.orientation.w = geoQuat.w;
-    _laserOdometryMsg.pose.pose.position.x    = transformSum().pos.x();
-    _laserOdometryMsg.pose.pose.position.y    = transformSum().pos.y();
-    _laserOdometryMsg.pose.pose.position.z    = transformSum().pos.z();
+    _laserOdometryMsg.pose.pose.position.x = transformSum().pos.x();
+    _laserOdometryMsg.pose.pose.position.y = transformSum().pos.y();
+    _laserOdometryMsg.pose.pose.position.z = transformSum().pos.z();
     _pubLaserOdometry.publish(_laserOdometryMsg);
 
-//    _laserOdometryTrans.stamp_ = _timeSurfPointsLessFlat;
-//    _laserOdometryTrans.setRotation(tf::Quaternion(-geoQuat.y, -geoQuat.z, geoQuat.x, geoQuat.w));
-//    _laserOdometryTrans.setOrigin(tf::Vector3(transformSum().pos.x(), transformSum().pos.y(), transformSum().pos.z()));
-//    _tfBroadcaster.sendTransform(_laserOdometryTrans);
-
     // publish cloud results according to the input output ratio
-    if (_ioRatio < 2 || frameCount() % _ioRatio == 1)
-    {
-      ros::Time sweepTime = _timeSurfPointsLessFlat;
-      publishCloudMsg(_pubLaserCloudCornerLast, *lastCornerCloud(), sweepTime, "/loam");
-      publishCloudMsg(_pubLaserCloudSurfLast, *lastSurfaceCloud(), sweepTime, "/loam");
+    if (_ioRatio < 2 || frameCount() % _ioRatio == 1) {
+        ros::Time sweepTime = _timeSurfPointsLessFlat;
+        publishCloudMsg(_pubLaserCloudCornerLast, *lastCornerCloud(), sweepTime, "/loam");
+        publishCloudMsg(_pubLaserCloudSurfLast, *lastSurfaceCloud(), sweepTime, "/loam");
 
-      transformToEnd(laserCloud());  // transform full resolution cloud to sweep end before sending it
-      publishCloudMsg(_pubLaserCloudFullRes, *laserCloud(), sweepTime, "/loam");
+        transformToEnd(laserCloud());  // transform full resolution cloud to sweep end before sending it
+        publishCloudMsg(_pubLaserCloudFullRes, *laserCloud(), sweepTime, "/loam");
     }
-  }
+}
 
 } // end namespace loam

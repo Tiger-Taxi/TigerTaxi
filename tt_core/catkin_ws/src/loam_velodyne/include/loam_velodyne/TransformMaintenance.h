@@ -50,44 +50,37 @@ namespace loam {
 /** \brief Implementation of the LOAM transformation maintenance component.
  *
  */
-class TransformMaintenance: public BasicTransformMaintenance {
-public:
-  TransformMaintenance();
+class TransformMaintenance : public BasicTransformMaintenance {
+    public:
+        TransformMaintenance();
 
-  /** \brief Setup component.
-   *
-   * @param node the ROS node handle
-   * @param privateNode the private ROS node handle
-   */
-  virtual bool setup(ros::NodeHandle& node, ros::NodeHandle& privateNode);
+        /** \brief Setup component.
+         *
+         * @param node the ROS node handle
+         * @param privateNode the private ROS node handle
+         */
+        virtual bool setup(ros::NodeHandle &node, ros::NodeHandle &privateNode);
 
-  /** \brief Handler method for laser odometry messages.
-   *
-   * @param laserOdometry the new laser odometry
-   */
-  void laserOdometryHandler(const nav_msgs::Odometry::ConstPtr& laserOdometry);
+        /** \brief Handler method for laser odometry messages.
+         *
+         * @param laserOdometry the new laser odometry
+         */
+        void laserOdometryHandler(const nav_msgs::Odometry::ConstPtr &laserOdometry);
 
-  /** \brief Handler method for mapping odometry messages.
-   *
-   * @param odomAftMapped the new mapping odometry
-   */
-  void odomAftMappedHandler(const nav_msgs::Odometry::ConstPtr& odomAftMapped);
+        /** \brief Handler method for mapping odometry messages.
+         *
+         * @param odomAftMapped the new mapping odometry
+         */
+        void odomAftMappedHandler(const nav_msgs::Odometry::ConstPtr &odomAftMapped);
 
-private:
-  nav_msgs::Odometry _laserOdometry2;         ///< latest integrated laser odometry message
-  geometry_msgs::PoseWithCovarianceStamped _laserOdomToBaseLink;         ///< latest integrated laser odometry message
+    private:
+        nav_msgs::Odometry _laserOdometry2;         ///< latest integrated laser odometry message
 
-  tf::StampedTransform _laserOdometryTrans2;  ///< latest integrated laser odometry transformation
+        ros::Publisher _pubLaserOdometry2;          ///< integrated laser odometry publisher (LOAM)
+        ros::Publisher _pubLaserOdometry2BaseLink;  ///< integrated laser odometry publisher (NORMAL)
 
-  ros::Publisher _pubLaserOdometry2;          ///< integrated laser odometry publisher
-  ros::Publisher _pubLaserOdometry2BaseLink;          ///< integrated laser odometry publisher
-  geometry_msgs::TransformStamped loam_to_base_link;
-
-
-  tf::TransformBroadcaster _tfBroadcaster2;   ///< integrated laser odometry transformation broadcaster
-
-  ros::Subscriber _subLaserOdometry;    ///< (high frequency) laser odometry subscriber
-  ros::Subscriber _subOdomAftMapped;    ///< (low frequency) mapping odometry subscriber
+        ros::Subscriber _subLaserOdometry;    ///< (high frequency) laser odometry subscriber
+        ros::Subscriber _subOdomAftMapped;    ///< (low frequency) mapping odometry subscriber
 };
 
 } // end namespace loam

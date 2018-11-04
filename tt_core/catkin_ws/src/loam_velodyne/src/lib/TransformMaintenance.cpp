@@ -32,132 +32,86 @@
 
 #include "loam_velodyne/TransformMaintenance.h"
 
-namespace loam
-{
+namespace loam {
 
-TransformMaintenance::TransformMaintenance()
-{
-   // initialize odometry and odometry tf messages
-   _laserOdometry2.header.frame_id = "odom";
-   _laserOdometry2.child_frame_id = "/loam";
-
-   //_laserOdomToBaseLink.header.frame_id = "odom";
-   //_laserOdomToBaseLink.child_frame_id = "/loam";
-
-    tf2_ros::Buffer tfBuffer;
-    tf2_ros::TransformListener tf2_listener(tfBuffer);
-    ROS_INFO_STREAM("Waiting for TF: Integrated");
-    loam_to_base_link = tfBuffer.lookupTransform("base_link", "loam", ros::Time(0), ros::Duration(10.0));
-    ROS_INFO_STREAM("TF received");
-   _laserOdometryTrans2.frame_id_ = "base_link";
-   _laserOdometryTrans2.child_frame_id_ = "/loam";
+TransformMaintenance::TransformMaintenance() {
+    // initialize odometry and odometry tf messages
+    _laserOdometry2.header.frame_id = "odom";
+    _laserOdometry2.child_frame_id = "/loam";
 }
 
 
-bool TransformMaintenance::setup(ros::NodeHandle &node, ros::NodeHandle &privateNode)
-{
-   // advertise integrated laser odometry topic
-   _pubLaserOdometry2 = node.advertise<nav_msgs::Odometry>("/integrated_to_odom", 5);
-   _pubLaserOdometry2BaseLink = node.advertise<nav_msgs::Odometry>("/integrated_to_baselink", 5);
-//   _pubLaserOdometry2BaseLink = node.advertise<geometry_msgs::PoseWithCovarianceStamped>("/integrated_to_baselink", 5);
-
+bool TransformMaintenance::setup(ros::NodeHandle &node, ros::NodeHandle &privateNode) {
+    // advertise integrated laser odometry topic
+    _pubLaserOdometry2 = node.advertise<nav_msgs::Odometry>("/integrated_to_odom", 5);
+    _pubLaserOdometry2BaseLink = node.advertise<nav_msgs::Odometry>("/integrated_to_baselink", 5);
 
     // subscribe to laser odometry and mapping odometry topics
-   _subLaserOdometry = node.subscribe<nav_msgs::Odometry>
-      ("/loam_odom_to_odom", 5, &TransformMaintenance::laserOdometryHandler, this);
+    _subLaserOdometry = node.subscribe<nav_msgs::Odometry>
+            ("/loam_odom_to_odom", 5, &TransformMaintenance::laserOdometryHandler, this);
 
-   _subOdomAftMapped = node.subscribe<nav_msgs::Odometry>
-      ("/loam_mapped_to_odom", 5, &TransformMaintenance::odomAftMappedHandler, this);
+    _subOdomAftMapped = node.subscribe<nav_msgs::Odometry>
+            ("/loam_mapped_to_odom", 5, &TransformMaintenance::odomAftMappedHandler, this);
 
-   return true;
+    return true;
 }
 
 
+void TransformMaintenance::laserOdometryHandler(const nav_msgs::Odometry::ConstPtr &laserOdometry) {
+    double roll, pitch, yaw;
+    geometry_msgs::Quaternion geoQuat = laserOdometry->pose.pose.orientation;
+    tf::Matrix3x3(tf::Quaternion(geoQuat.z, -geoQuat.x, -geoQuat.y, geoQuat.w)).getRPY(roll, pitch, yaw);
 
-void TransformMaintenance::laserOdometryHandler(const nav_msgs::Odometry::ConstPtr& laserOdometry)
-{
-   double roll, pitch, yaw;
-   geometry_msgs::Quaternion geoQuat = laserOdometry->pose.pose.orientation;
-   tf::Matrix3x3(tf::Quaternion(geoQuat.z, -geoQuat.x, -geoQuat.y, geoQuat.w)).getRPY(roll, pitch, yaw);
+    updateOdometry(-pitch, -yaw, roll,
+                   laserOdometry->pose.pose.position.x,
+                   laserOdometry->pose.pose.position.y,
+                   laserOdometry->pose.pose.position.z);
 
-   updateOdometry(-pitch, -yaw, roll,
-      laserOdometry->pose.pose.position.x,
-      laserOdometry->pose.pose.position.y,
-      laserOdometry->pose.pose.position.z);
+    transformAssociateToMap();
 
-   transformAssociateToMap();
+    geoQuat = tf::createQuaternionMsgFromRollPitchYaw(transformMapped()[2], -transformMapped()[0],
+                                                      -transformMapped()[1]);
 
-   geoQuat = tf::createQuaternionMsgFromRollPitchYaw(transformMapped()[2], -transformMapped()[0], -transformMapped()[1]);
+    // LOAM FRAME
+    _laserOdometry2.header.stamp = laserOdometry->header.stamp;
+    _laserOdometry2.pose.pose.orientation.x = -geoQuat.y;
+    _laserOdometry2.pose.pose.orientation.y = -geoQuat.z;
+    _laserOdometry2.pose.pose.orientation.z = geoQuat.x;
+    _laserOdometry2.pose.pose.orientation.w = geoQuat.w;
+    _laserOdometry2.pose.pose.position.x = transformMapped()[3];
+    _laserOdometry2.pose.pose.position.y = transformMapped()[4];
+    _laserOdometry2.pose.pose.position.z = transformMapped()[5];
+    _pubLaserOdometry2.publish(_laserOdometry2);
 
-   _laserOdometry2.header.stamp = laserOdometry->header.stamp;
-   _laserOdometry2.pose.pose.orientation.x = -geoQuat.y;
-   _laserOdometry2.pose.pose.orientation.y = -geoQuat.z;
-   _laserOdometry2.pose.pose.orientation.z = geoQuat.x;
-   _laserOdometry2.pose.pose.orientation.w = geoQuat.w;
-   _laserOdometry2.pose.pose.position.x = transformMapped()[3];
-   _laserOdometry2.pose.pose.position.y = transformMapped()[4];
-   _laserOdometry2.pose.pose.position.z = transformMapped()[5];
-   _pubLaserOdometry2.publish(_laserOdometry2);
-
-   geometry_msgs::PoseStamped msgTransformTemp;
-   //msgTransformTemp.header = _laserOdometry2.header;
-   msgTransformTemp.header.seq = _laserOdometry2.header.seq;
-   msgTransformTemp.header.stamp = _laserOdometry2.header.stamp;
-   msgTransformTemp.header.frame_id = "odom";
-
-   msgTransformTemp.pose.orientation = _laserOdometry2.pose.pose.orientation;
-   msgTransformTemp.pose.position = _laserOdometry2.pose.pose.position;
-
-   tf2::doTransform(msgTransformTemp, msgTransformTemp, loam_to_base_link);
-
-   tf::Quaternion q = tf::createQuaternionFromRPY(0, 0, -3.141592654 / 2);
-   geometry_msgs::TransformStamped quatRot;
-   quatRot.transform.translation.x = 0;
-   quatRot.transform.translation.y = 0;
-   quatRot.transform.translation.z = 0;
-   quatRot.transform.rotation.x = q.x();
-   quatRot.transform.rotation.y = q.y();
-   quatRot.transform.rotation.z = q.z();
-   quatRot.transform.rotation.w = q.w();
-
-   geometry_msgs::PoseStamped msgQuaternionTemp;
-   msgQuaternionTemp.pose.orientation = msgTransformTemp.pose.orientation;
-   tf2::doTransform(msgQuaternionTemp, msgQuaternionTemp, quatRot);
-
-   _laserOdomToBaseLink.header.frame_id = "odom";
-   _laserOdomToBaseLink.pose.pose.position = msgTransformTemp.pose.position;
-   _laserOdomToBaseLink.pose.pose.orientation = msgQuaternionTemp.pose.orientation;
-//   _pubLaserOdometry2BaseLink.publish(_laserOdomToBaseLink);
-
-   // Ugh
-   _laserOdometry2.pose.pose.position = msgTransformTemp.pose.position;
-   _laserOdometry2.pose.pose.orientation = msgQuaternionTemp.pose.orientation;
-   _pubLaserOdometry2BaseLink.publish(_laserOdometry2);
-
-//   _laserOdometryTrans2.stamp_ = laserOdometry->header.stamp;
-//   _laserOdometryTrans2.setRotation(tf::Quaternion(-geoQuat.y, -geoQuat.z, geoQuat.x, geoQuat.w));
-//   _laserOdometryTrans2.setOrigin(tf::Vector3(transformMapped()[3], transformMapped()[4], transformMapped()[5]));
-//   _tfBroadcaster2.sendTransform(_laserOdometryTrans2);
+    // NORMAL FRAME
+    _laserOdometry2.pose.pose.orientation.x = geoQuat.x;
+    _laserOdometry2.pose.pose.orientation.y = -geoQuat.y;
+    _laserOdometry2.pose.pose.orientation.z = -geoQuat.z;
+    _laserOdometry2.pose.pose.orientation.w = geoQuat.w;
+    _laserOdometry2.pose.pose.position.x = transformMapped()[5];
+    _laserOdometry2.pose.pose.position.y = transformMapped()[3];
+    _laserOdometry2.pose.pose.position.z = transformMapped()[4];
+    _pubLaserOdometry2BaseLink.publish(_laserOdometry2);
 }
 
-void TransformMaintenance::odomAftMappedHandler(const nav_msgs::Odometry::ConstPtr& odomAftMapped)
-{
-   double roll, pitch, yaw;
-   geometry_msgs::Quaternion geoQuat = odomAftMapped->pose.pose.orientation;
-   tf::Matrix3x3(tf::Quaternion(geoQuat.z, -geoQuat.x, -geoQuat.y, geoQuat.w)).getRPY(roll, pitch, yaw);
 
-   updateMappingTransform(-pitch, -yaw, roll,
-      odomAftMapped->pose.pose.position.x,
-      odomAftMapped->pose.pose.position.y,
-      odomAftMapped->pose.pose.position.z,
+void TransformMaintenance::odomAftMappedHandler(const nav_msgs::Odometry::ConstPtr &odomAftMapped) {
+    double roll, pitch, yaw;
+    geometry_msgs::Quaternion geoQuat = odomAftMapped->pose.pose.orientation;
+    tf::Matrix3x3(tf::Quaternion(geoQuat.z, -geoQuat.x, -geoQuat.y, geoQuat.w)).getRPY(roll, pitch, yaw);
 
-      odomAftMapped->twist.twist.angular.x,
-      odomAftMapped->twist.twist.angular.y,
-      odomAftMapped->twist.twist.angular.z,
+    updateMappingTransform(-pitch, -yaw, roll,
+                           odomAftMapped->pose.pose.position.x,
+                           odomAftMapped->pose.pose.position.y,
+                           odomAftMapped->pose.pose.position.z,
 
-      odomAftMapped->twist.twist.linear.x,
-      odomAftMapped->twist.twist.linear.y,
-      odomAftMapped->twist.twist.linear.z);
+                           odomAftMapped->twist.twist.angular.x,
+                           odomAftMapped->twist.twist.angular.y,
+                           odomAftMapped->twist.twist.angular.z,
+
+                           odomAftMapped->twist.twist.linear.x,
+                           odomAftMapped->twist.twist.linear.y,
+                           odomAftMapped->twist.twist.linear.z);
 }
 
 } // end namespace loam

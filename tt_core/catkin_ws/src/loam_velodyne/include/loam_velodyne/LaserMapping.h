@@ -123,12 +123,12 @@ private:
 
 
    nav_msgs::Odometry _odomAftMapped;      ///< mapping odometry message
-   tf::StampedTransform _aftMappedTrans;   ///< mapping odometry transformation
 
-   ros::Publisher _pubLaserCloudSurround;    ///< map cloud message publisher
-   ros::Publisher _pubLaserCloudFullRes;     ///< current full resolution cloud message publisher
-   ros::Publisher _pubOdomAftMapped;         ///< mapping odometry publisher
-   tf::TransformBroadcaster _tfBroadcaster;  ///< mapping odometry transform broadcaster
+   ros::Publisher _pubLaserCloudSurround;         ///< map cloud message publisher (LOAM)
+   ros::Publisher _pubLaserCloudSurroundBaseLink; ///< map cloud message publisher (NORMAL)
+   ros::Publisher _pubLaserCloudFullRes;          ///< current full resolution cloud message publisher (LOAM)
+   ros::Publisher _pubLaserCloudFullResBaseLink;  ///< current full resolution cloud message publisher (NORMAL)
+   ros::Publisher _pubOdomAftMapped;              ///< mapping odometry publisher
 
    ros::Subscriber _subLaserCloudCornerLast;   ///< last corner cloud message subscriber
    ros::Subscriber _subLaserCloudSurfLast;     ///< last surface cloud message subscriber

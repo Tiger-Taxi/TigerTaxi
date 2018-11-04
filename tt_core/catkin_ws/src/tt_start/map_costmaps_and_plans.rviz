@@ -6,12 +6,17 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /TF1
+        - /TF1/Frames1
         - /PointCloud24
         - /Odometry1
+        - /Odometry1/Shape1
         - /Odometry2
+        - /Odometry2/Shape1
         - /Odometry3
         - /Odometry3/Shape1
         - /Odometry4
+        - /Odometry4/Shape1
         - /Odometry5
         - /Odometry5/Shape1
       Splitter Ratio: 0.5
@@ -34,7 +39,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: PointCloud2
+    SyncSource: ""
 Visualization Manager:
   Class: ""
   Displays:
@@ -71,7 +76,7 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 100
+      Max Intensity: 104
       Min Color: 0; 0; 0
       Min Intensity: 0
       Name: PointCloud2
@@ -198,7 +203,7 @@ Visualization Manager:
       Enabled: true
       Frame Timeout: 15
       Frames:
-        All Enabled: true
+        All Enabled: false
         base_link:
           Value: true
         camera:
@@ -215,8 +220,6 @@ Visualization Manager:
           Value: true
         loam_odom:
           Value: true
-        odom:
-          Value: true
         velodyne:
           Value: true
       Marker Scale: 1
@@ -225,24 +228,7 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        odom:
-          base_link:
-            camera:
-              {}
-            heightmap:
-              {}
-            imu_link:
-              {}
-            laser:
-              {}
-            loam:
-              {}
-            loam_mapped:
-              {}
-            loam_odom:
-              {}
-            velodyne:
-              {}
+        {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -335,7 +321,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: FlatColor
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 15
@@ -352,7 +338,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Angle Tolerance: 0.100000001
       Class: rviz/Odometry
       Covariance:
@@ -519,9 +505,39 @@ Visualization Manager:
         Head Radius: 0.100000001
         Shaft Length: 1
         Shaft Radius: 0.0500000007
-        Value: Arrow
+        Value: Axes
       Topic: /ekf/odom
       Unreliable: false
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 15
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: velodyne_cloud_registered
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /velodyne_cloud_registered
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
       Value: true
   Enabled: true
   Global Options:
@@ -548,25 +564,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 6.28669357
+      Distance: 22.7553616
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: 2.26321101
+        Y: 0.195844084
+        Z: -3.71213484
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.785398185
+      Pitch: 0.884796917
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.785398185
+      Yaw: 1.65851545
     Saved: ~
 Window Geometry:
   Displays:

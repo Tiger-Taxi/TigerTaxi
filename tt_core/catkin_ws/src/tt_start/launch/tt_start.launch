@@ -2,6 +2,7 @@
 <launch>
 
     <!-- NOTE: TT_ROOT env variable must be set to TigerTaxi root directory -->
+    <!-- NOTE (building): catkin_make -DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone" -->
 
     <arg name="simulate" default="true"/>
     <arg name="collect_map" default="false"/>

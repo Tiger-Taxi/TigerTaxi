@@ -1,7 +1,7 @@
 ekf_se_odom:
  frequency: 10
  sensor_timeout: 0.2
- two_d_mode: true # TODO - We're not working in a planar enviornemt, probably want to set to false
+ two_d_mode: false # TODO - We're not working in a planar environment, probably want to set to false
  transform_time_offset: 0.0
  transform_timeout: 0.0
  print_diagnostics: true

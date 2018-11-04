@@ -57,9 +57,10 @@ class tt_map_ui(QWidget):
         self.goal_lat = None
         self.goal_lon = None
 
-        self.update()
         coords = QPoint(-1000, -1000)
         self.gpsSignal.emit(coords)
+        self.goalSignal.emit(coords)
+        self.update()
 
     def gps_callback(self, data):
         lat = data.latitude
@@ -156,7 +157,6 @@ class MapViewer(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setDragMode(QGraphicsView.ScrollHandDrag)
-        self.fitInView()
 
     def fitInView(self, scale = True):
         rect = QRectF(self._photo.pixmap().rect())

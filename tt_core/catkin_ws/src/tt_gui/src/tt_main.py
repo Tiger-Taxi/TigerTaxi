@@ -36,3 +36,6 @@ class tt_main_ui(Plugin):
         self.layout.addWidget(self.map_widget, MAP_WEIGHT)
         self.layout.addWidget(self.panels_widget, PAN_WEIGHT)
         self.main_widget.setLayout(self.layout)
+        rect = QDesktopWidget().availableGeometry()
+        width, height = rect.width(), rect.height() - rect.y()
+        self.main_widget.setFixedSize(width, height)

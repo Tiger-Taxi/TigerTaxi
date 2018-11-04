@@ -6,8 +6,7 @@ from PyQt5.QtGui import *
 
 from argparse import ArgumentParser
 
-from std_msgs.msg import Float32
-from std_msgs.msg import String
+from sensor_msgs.msg import NavSatFix
 
 import numpy as np
 import rospkg
@@ -17,6 +16,8 @@ import os
 from stylesheet import *
 
 class tt_map_ui(QWidget):
+    gpsSignal = pyqtSignal(QPoint)
+
     def __init__(self):
         super(tt_map_ui, self).__init__()
         self.setObjectName('tt_map_ui')
@@ -24,18 +25,83 @@ class tt_map_ui(QWidget):
         loadUi(ui_file, self)
         self.viewer = MapViewer(self)
         self.viewer.photoClicked.connect(self.photoClicked)
+        self.gpsSignal.connect(self.updateOffset)
         # Arrange layout
         VBlayout = QVBoxLayout(self)
         VBlayout.addWidget(self.viewer)
 
-        self.gps_coords_lat = np.repeat(np.expand_dims(np.arange(MIN_LAT, MAX_LAT, PIX_H), axis = 0), PIX_W, axis = 1)
-        self.gps_coords_lon = np.repeat(np.expand_dims(np.arange(MIN_LON, MAX_LON, PIX_W), axis = 0), PIX_H, axis = 0)
+        HBlayout = QHBoxLayout()
+        HBlayout.addWidget(self.button_mode)
+        HBlayout.addWidget(self.button_lock)
+        VBlayout.addLayout(HBlayout)
+
+        self.button_mode.setStyleSheet(BUTTON_NORMAL)
+        self.button_lock.setStyleSheet(BUTTON_NORMAL)
+        self.button_mode.clicked.connect(self.togglePanMode)
+        self.button_lock.clicked.connect(self.toggleLockMode)
+
+        self.gps_lats = np.flip(np.linspace(MIN_LAT, MAX_LAT, PIX_H))
+        self.gps_lons = np.linspace(MIN_LON, MAX_LON, PIX_W)
+        self.subscriber_GPS = rospy.Subscriber('tt_gui/throttle/gps', NavSatFix, self.gps_callback, queue_size = QUEUE_SIZE)
+
+        self.pan = True
+        self.lock = False
+        self.update()
+        coords = QPoint(-1000, -1000)
+        self.gpsSignal.emit(coords)
+
+    def gps_callback(self, data):
+        lat = data.latitude
+        lon = data.longitude
+
+        if lat != 0 and lon != 0:
+            y_pix, x_pix = self.getXYCoordsFromGps(lat, lon)
+            coords = QPoint(x_pix - (LOGO_SIZE // 2), y_pix - (LOGO_SIZE // 2))
+            self.gpsSignal.emit(coords)
+        else:
+            coords = QPoint(-1000, -1000)
+            self.gpsSignal.emit(coords)
+
+    def getXYCoordsFromGps(self, lat, lon):
+        y_pix = np.where(self.gps_lats > lat)[0][-1]
+        x_pix = np.where(self.gps_lons < lon)[0][-1]
+        return y_pix, x_pix
+
+    def getGpsCoordsFromXY(self, x, y):
+        lat = self.gps_lats[x]
+        lon = self.gps_lons[x]
+        return lat, lon
+
+    def updateOffset(self, pos):
+        self.viewer._logo.setOffset(pos.x(), pos.y())
+        if self.lock:
+            # TODO - leaves behind artifacts when zoomed in
+            self.viewer.centerOn(self.viewer._logo)
+
+    def togglePanMode(self):
+        self.pan = not self.pan
+        self.update()
+
+    def toggleLockMode(self):
+        self.lock = not self.lock
+        self.update()
+
+    def update(self):
+        if not self.pan:
+            self.viewer.setDragMode(QGraphicsView.NoDrag)
+            self.button_mode.setText('Pan')
+        else:
+            self.viewer.setDragMode(QGraphicsView.ScrollHandDrag)
+            self.button_mode.setText('Select')
+
+        if self.lock:
+            self.button_lock.setText('Unlock')
+        else:
+            self.button_lock.setText('Lock')
 
     def photoClicked(self, pos):
-    	rospy.loginfo(pos)
-    	img_coords = self.viewer._photo.mapToItem(self.viewer._photo, self.viewer.mapToScene(pos))
-    	rospy.loginfo(img_coords)
-        self.viewer._logo.setOffset(int(img_coords.x() - (LOGO_SIZE / 2)), int(img_coords.y() - (LOGO_SIZE / 2)))
+        # TODO - link this to nav
+        img_coords = self.viewer._photo.mapToItem(self.viewer._photo, self.viewer.mapToScene(pos))
 
 class MapViewer(QGraphicsView):
     photoClicked = pyqtSignal(QPoint)
@@ -47,7 +113,7 @@ class MapViewer(QGraphicsView):
         self._photo = QGraphicsPixmapItem()
         self._logo = QGraphicsPixmapItem()
 
-        self._photo.setPixmap(QPixmap(MAP_PATH))
+        self._photo.setPixmap(QPixmap(OSM_PATH))
         self._logo.setPixmap(QPixmap(LOGO_PATH).scaledToWidth(LOGO_SIZE).scaledToHeight(LOGO_SIZE))
 
         self._scene.addItem(self._photo)
@@ -61,7 +127,7 @@ class MapViewer(QGraphicsView):
         self.setDragMode(QGraphicsView.ScrollHandDrag)
         self.fitInView()
 
-    def fitInView(self, scale=True):
+    def fitInView(self, scale = True):
         rect = QRectF(self._photo.pixmap().rect())
         self.setSceneRect(rect)
         unity = self.transform().mapRect(QRectF(0, 0, 1, 1))
@@ -80,18 +146,14 @@ class MapViewer(QGraphicsView):
             factor = 0.8
             self._zoom -= 1
 
-        if self._zoom > 0:
+        if self._zoom >= MAX_ZOOM:
+            self._zoom = MAX_ZOOM
+        elif self._zoom > 0:
             self.scale(factor, factor)
-        elif self._zoom == 0:
-            self.fitInView()
         else:
             self._zoom = 0
-
-    def toggleDragMode(self):
-        if self.dragMode() == QGraphicsView.ScrollHandDrag:
-            self.setDragMode(QGraphicsView.NoDrag)
-        elif not self._photo.pixmap().isNull():
-            self.setDragMode(QGraphicsView.ScrollHandDrag)
+            self.fitInView()
+        rospy.loginfo(str(self._zoom))
 
     def mousePressEvent(self, event):
         if self._photo.isUnderMouse():

@@ -36,13 +36,14 @@ TOGGLE_LABELS = ['Live Feed', 'Pause']
 CONTROL_LABELS = ['Disable', 'Enable']
 
 TRACK_SYSTEM_STATUS = 1
+QUEUE_SIZE = 5
 FREQ_CUTOFF  = 1
 
-MAP_PATH = os.environ['TT_ROOT'] + '/tt_core/catkin_ws/src/tt_gui/imgs/rit_osm_map.png'
+OSM_PATH = os.environ['TT_ROOT'] + '/tt_core/catkin_ws/src/tt_gui/imgs/rit_osm_map.png'
 LOGO_PATH = os.environ['TT_ROOT'] + '/tt_core/catkin_ws/src/tt_gui/imgs/rit_tt.png'
 
-MIN_LAT = 43.0898
-MAX_LAT = 43.0776
+MIN_LAT = 43.0776
+MAX_LAT = 43.0898
 MIN_LON = -77.6873
 MAX_LON = -77.6640
 
@@ -50,3 +51,5 @@ PIX_W = 9771
 PIX_H = 7046
 
 LOGO_SIZE = 30
+
+MAX_ZOOM = 15

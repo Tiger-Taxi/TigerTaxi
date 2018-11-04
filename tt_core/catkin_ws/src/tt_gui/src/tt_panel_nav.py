@@ -119,8 +119,8 @@ class tt_panel_nav_ui(QWidget):
         self.navstatus = 0
         self._update_button_state()
 
-        self.subscriber_GPS = rospy.Subscriber('tt_gui/throttle/gps', NavSatFix, self.gps_callback, queue_size=1)
-        self.subscriber_IMU = rospy.Subscriber('tt_gui/throttle/imu', Imu, self.imu_callback, queue_size=1)
+        self.subscriber_GPS = rospy.Subscriber('tt_gui/throttle/gps', NavSatFix, self.gps_callback, queue_size=QUEUE_SIZE)
+        self.subscriber_IMU = rospy.Subscriber('tt_gui/throttle/imu', Imu, self.imu_callback, queue_size=QUEUE_SIZE)
 
     def button_follow_pressed(self):
         # TODO - Need to add in all of the logic here

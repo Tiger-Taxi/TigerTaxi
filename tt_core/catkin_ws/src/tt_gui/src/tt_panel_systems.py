@@ -109,7 +109,7 @@ class tt_panel_systems_ui(QWidget):
         self.imu_update()
 
         if TRACK_SYSTEM_STATUS:
-            self.subscriber_IMU = rospy.Subscriber('tt_gui/throttle/imu', Imu, self.imu_callback, queue_size=1)
+            self.subscriber_IMU = rospy.Subscriber('tt_gui/throttle/imu', Imu, self.imu_callback, queue_size = QUEUE_SIZE)
             self.imu_hz = rospy.Subscriber('/vectornav/IMU', rospy.AnyMsg, self.hz.callback_hz, callback_args='/vectornav/IMU')
 
     def initGPS(self):
@@ -180,7 +180,7 @@ class tt_panel_systems_ui(QWidget):
         self.gps_update()
 
         if TRACK_SYSTEM_STATUS:
-            self.subscriber_GPS = rospy.Subscriber('tt_gui/throttle/gps', NavSatFix, self.gps_callback, queue_size=1)
+            self.subscriber_GPS = rospy.Subscriber('tt_gui/throttle/gps', NavSatFix, self.gps_callback, queue_size=QUEUE_SIZE)
             self.gps_hz = rospy.Subscriber('/vectornav/GPS', rospy.AnyMsg, self.hz.callback_hz, callback_args='/vectornav/GPS')
 
     def initCam(self):

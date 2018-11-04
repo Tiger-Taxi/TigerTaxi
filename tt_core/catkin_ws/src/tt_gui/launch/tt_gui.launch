@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
 
-    <arg name="update_freq" default="1"/>
+    <arg name="update_freq" default="2"/>
 
     <node pkg="topic_tools" type="throttle" name="imu_throttle" args="messages vectornav/IMU $(arg update_freq) tt_gui/throttle/imu"/>
 

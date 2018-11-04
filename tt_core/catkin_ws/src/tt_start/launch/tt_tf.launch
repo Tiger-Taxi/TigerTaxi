@@ -33,12 +33,18 @@
           <!--args="0 0 0 1.570795 0 1.570795 base_link loam_odom"/>-->
     <!--<node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_loam_mapped"-->
           <!--args="0 0 0 1.570795 0 1.570795 base_link loam_mapped"/>-->
+    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_loam"-->
+          <!--args="0 0 0 0 0 0 base_link loam"/>-->
+    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_loam_odom"-->
+          <!--args="0 0 0 0 0 0 base_link loam_odom"/>-->
+    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_loam_mapped"-->
+          <!--args="0 0 0 0 0 0 base_link loam_mapped"/>-->
     <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_loam"
-          args="0 0 0 0 0 0 base_link loam"/>
+          args="1.4859 0 0.965 0 0 0 base_link loam"/>
     <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_loam_odom"
-          args="0 0 0 0 0 0 base_link loam_odom"/>
+          args="1.4859 0 0.965 0 0 0 base_link loam_odom"/>
     <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_loam_mapped"
-          args="0 0 0 0 0 0 base_link loam_mapped"/>
+          args="1.4859 0 0.965 0 0 0 base_link loam_mapped"/>
 
     <!--<node pkg="tf2_ros" type="static_transform_publisher" name="this_is_a_terrible_idea"-->
           <!--args="0 0 0 0 0 0 odom base_link"/>-->

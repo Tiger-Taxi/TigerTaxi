@@ -33,6 +33,9 @@
 #include "loam_velodyne/LaserMapping.h"
 #include "loam_velodyne/common.h"
 
+// For PointCloud transform
+#include "pcl_ros/transforms.h"
+
 namespace loam {
 
 LaserMapping::LaserMapping(const float &scanPeriod, const size_t &maxIterations) {
@@ -119,9 +122,8 @@ bool LaserMapping::setup(ros::NodeHandle &node, ros::NodeHandle &privateNode) {
 
     // advertise laser mapping topics
     _pubLaserCloudSurround = node.advertise<sensor_msgs::PointCloud2>("/laser_cloud_surround", 1);
-    _pubLaserCloudSurroundBaseLink = node.advertise<sensor_msgs::PointCloud2>("/laser_cloud_surround", 1);
     _pubLaserCloudFullRes = node.advertise<sensor_msgs::PointCloud2>("/velodyne_cloud_registered", 2);
-    _pubLaserCloudFullResBaseLink = node.advertise<sensor_msgs::PointCloud2>("/velodyne_cloud_registered", 2);
+    _pubLaserCloudFullResBaseLink = node.advertise<sensor_msgs::PointCloud2>("/velodyne_cloud_registered_baselink", 2);
     _pubOdomAftMapped = node.advertise<nav_msgs::Odometry>("/loam_mapped_to_odom", 5);
 
     // subscribe to laser odometry topics
@@ -232,14 +234,21 @@ void LaserMapping::process() {
 
 void LaserMapping::publishResult() {
     // publish new map cloud according to the input output ratio
-    if (hasFreshMap()) { // publish new map cloud
-        pcl::PointCloud<pcl::PointXYZI> laserCloudMapDS = laserCloudSurroundDS();
-        publishCloudMsg(_pubLaserCloudSurround, laserCloudMapDS, _timeLaserOdometry, "/odom");
-        publishCloudMsg(_pubLaserCloudSurround, laserCloudMapDS, _timeLaserOdometry, "/odom");
-    }
+    if (hasFreshMap()) // publish new map cloud
+        publishCloudMsg(_pubLaserCloudSurround, laserCloudSurroundDS(), _timeLaserOdometry, "/odom");
 
     // publish transformed full resolution input cloud
-    publishCloudMsg(_pubLaserCloudFullRes, laserCloud(), _timeLaserOdometry, "/odom");
+    pcl::PointCloud <pcl::PointXYZI> &velCloudReg = laserCloud();
+    publishCloudMsg(_pubLaserCloudFullRes, velCloudReg, _timeLaserOdometry, "/odom");
+
+    // Copy and transform PointCloud to NORMAL frame...
+    pcl::PointCloud <pcl::PointXYZI> velCloudRegNorm;
+
+    tf::Quaternion q = tf::createQuaternionFromRPY(3.141592654 / 2, 0, 3.141592654 / 2);
+    tf::Transform quatRot(q);
+
+    pcl_ros::transformPointCloud(velCloudReg, velCloudRegNorm, quatRot);
+    publishCloudMsg(_pubLaserCloudFullResBaseLink, velCloudRegNorm, _timeLaserOdometry, "/odom");
 
     // publish odometry after mapped transformations
     geometry_msgs::Quaternion geoQuat = tf::createQuaternionMsgFromRollPitchYaw

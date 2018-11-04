@@ -125,7 +125,6 @@ private:
    nav_msgs::Odometry _odomAftMapped;      ///< mapping odometry message
 
    ros::Publisher _pubLaserCloudSurround;         ///< map cloud message publisher (LOAM)
-   ros::Publisher _pubLaserCloudSurroundBaseLink; ///< map cloud message publisher (NORMAL)
    ros::Publisher _pubLaserCloudFullRes;          ///< current full resolution cloud message publisher (LOAM)
    ros::Publisher _pubLaserCloudFullResBaseLink;  ///< current full resolution cloud message publisher (NORMAL)
    ros::Publisher _pubOdomAftMapped;              ///< mapping odometry publisher

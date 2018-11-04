@@ -3,12 +3,14 @@
     <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
         <!-- data source to integrate (PointCloud2) -->
         <!--<remap from="cloud_in" to="/laser_cloud_surround"/>-->
-        <remap from="cloud_in" to="/velodyne_cloud_registered"/>
+        <!--<remap from="cloud_in" to="/velodyne_cloud_registered"/>-->
+        <remap from="cloud_in" to="/velodyne_cloud_registered_baselink"/>
+        <!--<remap from="cloud_in" to="/velodyne_points"/>-->
 
         <param name="resolution" value="0.05"/>
 
-        <!--<param name="frame_id" value="odom"/>-->
-        <param name="frame_id" value="map"/>
+        <param name="frame_id" value="odom"/>
+        <!--<param name="frame_id" value="map"/>-->
         <param name="base_frame_id" value="base_link"/>
 
         <param name="height_map" value="true"/>

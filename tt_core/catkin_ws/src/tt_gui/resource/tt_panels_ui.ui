@@ -19,9 +19,10 @@
         <widget class="QPushButton" name="button_mode">
             <property name="text"><string>Control</string></property>
         </widget>
-        <widget class="QPushButton" name="button_camera">
-            <property name="text"><string>Camera</string></property>
-        </widget>
+        <!-- Camera panel is not implemented and therefore left out for now... -->
+        <!-- <widget class="QPushButton" name="button_camera"> -->
+            <!-- <property name="text"><string>Camera</string></property> -->
+        <!-- </widget> -->
         <widget class="QPushButton" name="button_systems">
             <property name="text"><string>Subsystems</string></property>
         </widget>

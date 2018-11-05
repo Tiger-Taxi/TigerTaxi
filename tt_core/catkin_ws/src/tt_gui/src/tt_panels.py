@@ -27,15 +27,16 @@ class tt_panels_ui(QWidget):
 
         self.nav_widget = tt_panel_nav_ui(parent = self)
         self.mode_widget = tt_panel_mode_ui(parent = self)
-        self.camera_widget = tt_panel_camera_ui(parent = self)
+        #self.camera_widget = tt_panel_camera_ui(parent = self)
         self.systems_scroll.setWidgetResizable(True)
         self.systems_widget = tt_panel_systems_ui(parent = self)
         self.systems_scroll.setWidget(self.systems_widget)
+        self.systems_scroll.verticalScrollBar().setStyleSheet(BUTTON_NORMAL)
 
         self.tab_layout = QStackedLayout()
         self.tab_layout.addWidget(self.nav_widget)
         self.tab_layout.addWidget(self.mode_widget)
-        self.tab_layout.addWidget(self.camera_widget)
+        #self.tab_layout.addWidget(self.camera_widget)
         self.tab_layout.addWidget(self.systems_scroll)
         self.tab_frame.setLayout(self.tab_layout)
 
@@ -43,13 +44,13 @@ class tt_panels_ui(QWidget):
 
         self.button_nav.clicked.connect(self.nav_button_pressed)
         self.button_mode.clicked.connect(self.mode_button_pressed)
-        self.button_camera.clicked.connect(self.camera_button_pressed)
+        #self.button_camera.clicked.connect(self.camera_button_pressed)
         self.button_systems.clicked.connect(self.systems_button_pressed)
 
         self.button_layout = QHBoxLayout()
         self.button_layout.addWidget(self.button_nav)
         self.button_layout.addWidget(self.button_mode)
-        self.button_layout.addWidget(self.button_camera)
+        #self.button_layout.addWidget(self.button_camera)
         self.button_layout.addWidget(self.button_systems)
         self.button_frame.setLayout(self.button_layout)
 
@@ -73,20 +74,20 @@ class tt_panels_ui(QWidget):
         self.selection = 1
         self._update_button_state()
 
-    def camera_button_pressed(self):
-        self.selection = 2
-        self._update_button_state()
+#    def camera_button_pressed(self):
+#        self.selection = 2
+#        self._update_button_state()
 
     def systems_button_pressed(self):
-        self.selection = 3
+        self.selection = 2
         self._update_button_state()
 
     def _update_button_state(self):
         self.tab_layout.setCurrentIndex(self.selection)
-        styles = [BUTTON_NORMAL] * 4
+        styles = [BUTTON_NORMAL] * 3
         styles[self.selection] = BUTTON_ACTIVE
 
         self.button_nav.setStyleSheet(styles[0])
         self.button_mode.setStyleSheet(styles[1])
-        self.button_camera.setStyleSheet(styles[2])
-        self.button_systems.setStyleSheet(styles[3])
+        #self.button_camera.setStyleSheet(styles[2])
+        self.button_systems.setStyleSheet(styles[2])

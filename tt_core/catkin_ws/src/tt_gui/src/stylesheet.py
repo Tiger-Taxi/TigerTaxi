@@ -1,13 +1,4 @@
-from python_qt_binding.QtWidgets import QDesktopWidget
-
 import os
-
-desktop = QDesktopWidget().availableGeometry()
-
-START_X = desktop.x()
-START_Y = desktop.y()
-TOTAL_W = desktop.width()
-TOTAL_H = desktop.height()
 
 NO_STYLE      = ''
 BUTTON_NORMAL = 'color:black; font-size:26px; background-color:rgb(200,200,200)'
@@ -37,6 +28,7 @@ CONTROL_LABELS = ['Disable', 'Enable']
 
 TRACK_SYSTEM_STATUS = 1
 QUEUE_SIZE = 5
+FREQ_UPDATE = 1
 FREQ_CUTOFF  = 5
 
 OSM_PATH = os.environ['TT_ROOT'] + '/tt_core/catkin_ws/src/tt_gui/imgs/rit_osm_map.png'

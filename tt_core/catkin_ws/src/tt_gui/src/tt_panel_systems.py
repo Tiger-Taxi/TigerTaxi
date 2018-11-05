@@ -55,7 +55,43 @@ class HzThread(object):
                 self.systems_panel.gps_status = 0
             self.systems_panel.gps_update()
 
-            rospy.sleep(1)
+            rate = self.hz_topic.get_hz('/camera/image')
+            if rate is not None:
+                self.systems_panel.cam_rate_value.setText('%3.5f' % rate[0])
+                if rate[0] > FREQ_CUTOFF:
+                    self.systems_panel.cam_status = 1
+                else:
+                    self.systems_panel.cam_status = 0
+            else:
+                self.systems_panel.cam_rate_value.setText('%3.5f' % 0)
+                self.systems_panel.cam_status = 0
+            self.systems_panel.cam_update()
+
+            rate = self.hz_topic.get_hz('/velodyne_points')
+            if rate is not None:
+                self.systems_panel.vel_rate_value.setText('%3.5f' % rate[0])
+                if rate[0] > FREQ_CUTOFF:
+                    self.systems_panel.vel_status = 1
+                else:
+                    self.systems_panel.vel_status = 0
+            else:
+                self.systems_panel.vel_rate_value.setText('%3.5f' % 0)
+                self.systems_panel.vel_status = 0
+            self.systems_panel.vel_update()
+
+            rate = self.hz_topic.get_hz('/scan')
+            if rate is not None:
+                self.systems_panel.hok_rate_value.setText('%3.5f' % rate[0])
+                if rate[0] > FREQ_CUTOFF:
+                    self.systems_panel.hok_status = 1
+                else:
+                    self.systems_panel.hok_status = 0
+            else:
+                self.systems_panel.hok_rate_value.setText('%3.5f' % 0)
+                self.systems_panel.hok_status = 0
+            self.systems_panel.hok_update()
+
+            rospy.sleep(FREQ_UPDATE)
 
 class tt_panel_systems_ui(QWidget):
     def __init__(self, parent):
@@ -121,7 +157,6 @@ class tt_panel_systems_ui(QWidget):
         self.imu_frame_layout.addWidget(self.imu_status_widget)
         self.imu_frame_layout.addWidget(self.imu_rate_widget)
         self.imu_frame_layout.addWidget(self.imu_message_widget)
-        self.imu_frame_layout.addWidget(self.imu_control_button)
         self.imu_frame.setLayout(self.imu_frame_layout)
 
         self.imu_status_label.setStyleSheet(MES_L_STYLE)
@@ -134,17 +169,13 @@ class tt_panel_systems_ui(QWidget):
         self.imu_yaw_value.setStyleSheet(MES_L_STYLE)
 
         self.imu_message_button.setStyleSheet(SMALL_BUTTON_NORMAL)
-        self.imu_control_button.setStyleSheet(SMALL_BUTTON_NORMAL)
 
         self.imu_message_button.clicked.connect(self.imu_toggle_pause)
-        self.imu_control_button.clicked.connect(self.imu_control)
 
         # Degraded | Running | Disabled
         self.imu_status = 0
         # Paused | Resumed
         self.imu_toggle = 1
-        # Enabled | Disabled
-        self.imu_control = 0
 
         self.imu_update()
 
@@ -190,7 +221,6 @@ class tt_panel_systems_ui(QWidget):
         self.gps_frame_layout.addWidget(self.gps_status_widget)
         self.gps_frame_layout.addWidget(self.gps_rate_widget)
         self.gps_frame_layout.addWidget(self.gps_message_widget)
-        self.gps_frame_layout.addWidget(self.gps_control_button)
         self.gps_frame.setLayout(self.gps_frame_layout)
 
         self.gps_status_label.setStyleSheet(MES_L_STYLE)
@@ -205,17 +235,13 @@ class tt_panel_systems_ui(QWidget):
         self.gps_lat_value.setStyleSheet(MES_L_STYLE)
 
         self.gps_message_button.setStyleSheet(SMALL_BUTTON_NORMAL)
-        self.gps_control_button.setStyleSheet(SMALL_BUTTON_NORMAL)
 
         self.gps_message_button.clicked.connect(self.gps_toggle_pause)
-        self.gps_control_button.clicked.connect(self.gps_control)
 
         # Degraded | Running | Disabled
         self.gps_status = 0
         # Paused | Resumed
         self.gps_toggle = 1
-        # Enabled | Disabled
-        self.gps_control = 0
 
         self.gps_update()
 
@@ -241,7 +267,6 @@ class tt_panel_systems_ui(QWidget):
         self.cam_frame_layout.addWidget(self.cam_label)
         self.cam_frame_layout.addWidget(self.cam_status_widget)
         self.cam_frame_layout.addWidget(self.cam_rate_widget)
-        self.cam_frame_layout.addWidget(self.cam_control_button)
         self.cam_frame.setLayout(self.cam_frame_layout)
 
         self.cam_status_label.setStyleSheet(MES_L_STYLE)
@@ -249,16 +274,13 @@ class tt_panel_systems_ui(QWidget):
         self.cam_rate_label.setStyleSheet(MES_L_STYLE)
         self.cam_rate_value.setStyleSheet(MES_L_STYLE)
 
-        self.cam_control_button.setStyleSheet(SMALL_BUTTON_NORMAL)
-
-        self.cam_control_button.clicked.connect(self.cam_control)
-
         # Degraded | Running | Disabled
         self.cam_status = 0
-        # Enabled | Disabled
-        self.cam_control = 0
 
         self.cam_update()
+
+        if TRACK_SYSTEM_STATUS:
+            self.cam_hz = rospy.Subscriber('/camera/image', rospy.AnyMsg, self.hz.callback_hz, callback_args='/camera/image')
 
     def initVel(self):
         self.vel_frame.setStyleSheet(FRAME_STYLE)
@@ -278,7 +300,6 @@ class tt_panel_systems_ui(QWidget):
         self.vel_frame_layout.addWidget(self.vel_label)
         self.vel_frame_layout.addWidget(self.vel_status_widget)
         self.vel_frame_layout.addWidget(self.vel_rate_widget)
-        self.vel_frame_layout.addWidget(self.vel_control_button)
         self.vel_frame.setLayout(self.vel_frame_layout)
 
         self.vel_status_label.setStyleSheet(MES_L_STYLE)
@@ -286,16 +307,13 @@ class tt_panel_systems_ui(QWidget):
         self.vel_rate_label.setStyleSheet(MES_L_STYLE)
         self.vel_rate_value.setStyleSheet(MES_L_STYLE)
 
-        self.vel_control_button.setStyleSheet(SMALL_BUTTON_NORMAL)
-
-        self.vel_control_button.clicked.connect(self.vel_control)
-
         # Degraded | Running | Disabled
         self.vel_status = 0
-        # Enabled | Disabled
-        self.vel_control = 0
 
         self.vel_update()
+
+        if TRACK_SYSTEM_STATUS:
+            self.vel_hz = rospy.Subscriber('/velodyne_points', rospy.AnyMsg, self.hz.callback_hz, callback_args='/velodyne_points')
 
     def initHok(self):
         self.hok_frame.setStyleSheet(FRAME_STYLE)
@@ -315,7 +333,6 @@ class tt_panel_systems_ui(QWidget):
         self.hok_frame_layout.addWidget(self.hok_label)
         self.hok_frame_layout.addWidget(self.hok_status_widget)
         self.hok_frame_layout.addWidget(self.hok_rate_widget)
-        self.hok_frame_layout.addWidget(self.hok_control_button)
         self.hok_frame.setLayout(self.hok_frame_layout)
 
         self.hok_status_label.setStyleSheet(MES_L_STYLE)
@@ -323,16 +340,13 @@ class tt_panel_systems_ui(QWidget):
         self.hok_rate_label.setStyleSheet(MES_L_STYLE)
         self.hok_rate_value.setStyleSheet(MES_L_STYLE)
 
-        self.hok_control_button.setStyleSheet(SMALL_BUTTON_NORMAL)
-
-        self.hok_control_button.clicked.connect(self.hok_control)
-
         # Degraded | Running | Disabled
         self.hok_status = 0
-        # Enabled | Disabled
-        self.hok_control = 0
 
         self.hok_update()
+
+        if TRACK_SYSTEM_STATUS:
+            self.hok_hz = rospy.Subscriber('/scan', rospy.AnyMsg, self.hz.callback_hz, callback_args='/scan')
 
     def imu_update(self):
         if self.imu_status == 0:
@@ -350,32 +364,10 @@ class tt_panel_systems_ui(QWidget):
         else:
             self.imu_message_button.setText(TOGGLE_LABELS[1])
 
-        if self.imu_control == 0:
-            self.imu_control_button.setText(CONTROL_LABELS[0])
-        else:
-            self.imu_control_button.setText(CONTROL_LABELS[1])
-
     def imu_toggle_pause(self):
         self.imu_toggle = not self.imu_toggle
         self.imu_update()
 
-    def imu_control(self):
-        self.imu_control = not self.imu_control
-        self.imu_update()
-        if self.imu_control == 0:
-            self.imu_enable()
-        else:
-            self.imu_disable()
-
-    def imu_enable(self):
-        # TODO - not sure what to do yet
-        pass
-
-    def imu_disable(self):
-        # TODO - not sure what to do yet
-        pass
-
-    # TODO - getting logs that say a filesheet couldn't be parsed - I don't like it
     def imu_callback(self, data):
         if self.imu_toggle == 1:
             orien = data.orientation
@@ -409,32 +401,10 @@ class tt_panel_systems_ui(QWidget):
         else:
             self.gps_message_button.setText(TOGGLE_LABELS[1])
 
-        if self.gps_control == 0:
-            self.gps_control_button.setText(CONTROL_LABELS[0])
-        else:
-            self.gps_control_button.setText(CONTROL_LABELS[1])
-
     def gps_toggle_pause(self):
         self.gps_toggle = not self.gps_toggle
         self.gps_update()
 
-    def gps_control(self):
-        self.gps_control = not self.gps_control
-        self.gps_update()
-        if self.gps_control == 0:
-            self.gps_enable()
-        else:
-            self.gps_disable()
-
-    def gps_enable(self):
-        # TODO - not sure what to do yet
-        pass
-
-    def gps_disable(self):
-        # TODO - not sure what to do yet
-        pass
-
-    # TODO - getting logs that say a filesheet couldn't be parsed - I don't like it
     def gps_callback(self, data):
         if self.gps_toggle == 1:
             lon = data.longitude
@@ -456,27 +426,6 @@ class tt_panel_systems_ui(QWidget):
             self.cam_status_value.setText(STATUS_LABELS[2])
             self.cam_status_value.setStyleSheet(S_DISABLED)
 
-        if self.cam_control == 0:
-            self.cam_control_button.setText(CONTROL_LABELS[0])
-        else:
-            self.cam_control_button.setText(CONTROL_LABELS[1])
-
-    def cam_control(self):
-        self.cam_control = not self.cam_control
-        self.cam_update()
-        if self.cam_control == 0:
-            self.cam_enable()
-        else:
-            self.cam_disable()
-
-    def cam_enable(self):
-        # TODO - not sure what to do yet
-        pass
-
-    def cam_disable(self):
-        # TODO - not sure what to do yet
-        pass
-
     def vel_update(self):
         if self.vel_status == 0:
             self.vel_status_value.setText(STATUS_LABELS[0])
@@ -488,27 +437,6 @@ class tt_panel_systems_ui(QWidget):
             self.vel_status_value.setText(STATUS_LABELS[2])
             self.vel_status_value.setStyleSheet(S_DISABLED)
 
-        if self.vel_control == 0:
-            self.vel_control_button.setText(CONTROL_LABELS[0])
-        else:
-            self.vel_control_button.setText(CONTROL_LABELS[1])
-
-    def vel_control(self):
-        self.vel_control = not self.vel_control
-        self.vel_update()
-        if self.vel_control == 0:
-            self.vel_enable()
-        else:
-            self.vel_disable()
-
-    def vel_enable(self):
-        # TODO - not sure what to do yet
-        pass
-
-    def vel_disable(self):
-        # TODO - not sure what to do yet
-        pass
-
     def hok_update(self):
         if self.hok_status == 0:
             self.hok_status_value.setText(STATUS_LABELS[0])
@@ -519,24 +447,3 @@ class tt_panel_systems_ui(QWidget):
         else:
             self.hok_status_value.setText(STATUS_LABELS[2])
             self.hok_status_value.setStyleSheet(S_DISABLED)
-
-        if self.hok_control == 0:
-            self.hok_control_button.setText(CONTROL_LABELS[0])
-        else:
-            self.hok_control_button.setText(CONTROL_LABELS[1])
-
-    def hok_control(self):
-        self.hok_control = not self.hok_control
-        self.hok_update()
-        if self.hok_control == 0:
-            self.hok_enable()
-        else:
-            self.hok_disable()
-
-    def hok_enable(self):
-        # TODO - not sure what to do yet
-        pass
-
-    def hok_disable(self):
-        # TODO - not sure what to do yet
-        pass

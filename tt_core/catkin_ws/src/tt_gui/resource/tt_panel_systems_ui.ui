@@ -41,9 +41,6 @@
 		        <property name="text"><string>Pause Feed</string></property>
 		    </widget>
 		</widget>
-		<widget class="QPushButton" name="imu_control_button">
-	        <property name="text"><string>Disable</string></property>
-	    </widget>
 	</widget>
 
 	<widget class="QFrame" name="gps_frame">
@@ -92,9 +89,6 @@
 		        <property name="text"><string>Pause Feed</string></property>
 		    </widget>
 		</widget>
-		<widget class="QPushButton" name="gps_control_button">
-	        <property name="text"><string>Disable</string></property>
-	    </widget>
 	</widget>
 
 	<widget class="QFrame" name="cam_frame">
@@ -118,9 +112,6 @@
 		        <property name="text"><string>N/A</string></property>
 		    </widget>
 		</widget>
-		<widget class="QPushButton" name="cam_control_button">
-	        <property name="text"><string>Disable</string></property>
-	    </widget>
 	</widget>
 
 	<widget class="QFrame" name="vel_frame">
@@ -144,9 +135,6 @@
 		        <property name="text"><string>N/A</string></property>
 		    </widget>
 		</widget>
-		<widget class="QPushButton" name="vel_control_button">
-	        <property name="text"><string>Disable</string></property>
-	    </widget>
 	</widget>
 
 	<widget class="QFrame" name="hok_frame">
@@ -170,9 +158,6 @@
 		        <property name="text"><string>N/A</string></property>
 		    </widget>
 		</widget>
-		<widget class="QPushButton" name="hok_control_button">
-	        <property name="text"><string>Disable</string></property>
-	    </widget>
 	</widget>
 
 </widget>

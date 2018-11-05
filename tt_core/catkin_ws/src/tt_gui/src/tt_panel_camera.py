@@ -22,4 +22,4 @@ class tt_panel_camera_ui(QWidget):
         ui_file = rospkg.RosPack().get_path('tt_gui') + '/resource/' + 'tt_panel_camera_ui.ui'
         loadUi(ui_file, self)
 
-        self.coming_soon.setStyleSheet(SUB_L_STYLE)
+        self.not_impl.setStyleSheet(SUB_L_STYLE)

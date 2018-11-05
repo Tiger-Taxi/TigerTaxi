@@ -10,6 +10,7 @@ from sensor_msgs.msg import NavSatFix
 
 import gui_freq_listener
 import numpy as np
+import threading
 import rostopic
 import rospkg
 import rospy
@@ -18,6 +19,43 @@ import time
 import os
 
 from stylesheet import *
+
+class HzThread(object):
+    def __init__(self, systems_panel, hz_topic):
+        self.systems_panel = systems_panel
+        self.hz_topic = hz_topic
+
+        self.thread = threading.Thread(target=self.run, args=())
+        self.thread.daemon = True
+        self.thread.start()
+
+    def run(self):
+        while not rospy.is_shutdown():
+            rate = self.hz_topic.get_hz('/vectornav/IMU')
+            if rate is not None:
+                self.systems_panel.imu_rate_value.setText('%3.5f' % rate[0])
+                if rate[0] > FREQ_CUTOFF:
+                    self.systems_panel.imu_status = 1
+                else:
+                    self.systems_panel.imu_status = 0
+            else:
+                self.systems_panel.imu_rate_value.setText('%3.5f' % 0)
+                self.systems_panel.imu_status = 0
+            self.systems_panel.imu_update()
+
+            rate = self.hz_topic.get_hz('/vectornav/GPS')
+            if rate is not None:
+                self.systems_panel.gps_rate_value.setText('%3.5f' % rate[0])
+                if rate[0] > FREQ_CUTOFF:
+                    self.systems_panel.gps_status = 1
+                else:
+                    self.systems_panel.gps_status = 0
+            else:
+                self.systems_panel.gps_rate_value.setText('%3.5f' % 0)
+                self.systems_panel.gps_status = 0
+            self.systems_panel.gps_update()
+
+            rospy.sleep(1)
 
 class tt_panel_systems_ui(QWidget):
     def __init__(self, parent):
@@ -48,6 +86,8 @@ class tt_panel_systems_ui(QWidget):
         self.layout.addWidget(self.hok_frame)
         self.layout.addStretch()
         self.setLayout(self.layout)
+
+        self.hz_thread = HzThread(self, self.hz)
 
     def initIMU(self):
         self.imu_frame.setStyleSheet(FRAME_STYLE)
@@ -350,14 +390,6 @@ class tt_panel_systems_ui(QWidget):
             yaw = math.atan2(siny_cosp, cosy_cosp);
 
             self.imu_yaw_value.setText('%3.5f' % math.degrees(yaw))
-            rate = self.hz.get_hz('/vectornav/IMU')
-            if rate is not None:
-                self.imu_rate_value.setText('%3.5f' % rate[0])
-                if rate[0] > FREQ_CUTOFF:
-                    self.imu_status = 1
-                else:
-                    self.imu_status = 0
-                self.imu_update()
         else:
             pass
 
@@ -410,14 +442,6 @@ class tt_panel_systems_ui(QWidget):
 
             self.gps_lon_value.setText('%2.10f' % lon)
             self.gps_lat_value.setText('%2.10f' % lat)
-            rate = self.hz.get_hz('/vectornav/GPS')
-            if rate is not None:
-                self.gps_rate_value.setText('%3.5f' % rate[0])
-                if rate[0] > FREQ_CUTOFF:
-                    self.gps_status = 1
-                else:
-                    self.gps_status = 0
-                self.gps_update()
         else:
             pass
 

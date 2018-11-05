@@ -37,7 +37,7 @@ CONTROL_LABELS = ['Disable', 'Enable']
 
 TRACK_SYSTEM_STATUS = 1
 QUEUE_SIZE = 5
-FREQ_CUTOFF  = 1
+FREQ_CUTOFF  = 5
 
 OSM_PATH = os.environ['TT_ROOT'] + '/tt_core/catkin_ws/src/tt_gui/imgs/rit_osm_map.png'
 LOGO_PATH = os.environ['TT_ROOT'] + '/tt_core/catkin_ws/src/tt_gui/imgs/rit_tt.png'

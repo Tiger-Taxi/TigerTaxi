@@ -10,6 +10,7 @@
     <arg name="slam_pkg" default="loam"/>
     <arg name="old_nav" default="false"/>
     <arg name="use_safezone" default="false"/>
+    <arg name="mapAddress" default="$(find tt_start)/maps/circle_jerk_map.bt"/>
 
     <!-- Dependent on simulate (only true for simulation) -->
     <param name="/use_sim_time" value="$(arg simulate)"/>
@@ -91,8 +92,10 @@
             <include file="$(find tt_start)/launch/slam_gmapping.launch"/>
         </group>
         <group if="$(eval slam_pkg == 'loam')">
-            <include file="$(find loam_velodyne)/launch/loam_velodyne.launch"/>
-            <!--<include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/> --> <!-- TODO REMOVE ME -->
+            <include file="$(find
+			   loam_velodyne)/launch/loam_velodyne.launch"/>
+	    <include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/>
+            <include file="$(find tt_start)/launch/octomap.launch"/> <!-- TODO TODO TODO -->
         </group>
     </group>
     <!-- Unless we are collecting a map (any driving mode) -->
@@ -129,8 +132,14 @@
                     <!-- TODO This is where we are currently putting things for LOAM [ACTIVE] -->
                     <include file="$(find
 				   loam_velodyne)/launch/loam_velodyne.launch"/>
-		    <include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/>
-                    <include file="$(find tt_start)/launch/octomap.launch"/> <!-- TODO TODO TODO -->
+		    <include file="$(find
+				   odom_to_loam)/launch/odom_to_loam.launch"/>
+                    <include file="$(find
+				   tt_start)/launch/octomap.launch">
+		      <arg name="mapAddress" value="$(arg
+						    mapAddress)"/>
+		      <arg name="collectMap" value="$(arg collect_map)"/>
+		    </include>
                     <!--<include file="$(find tt_start)/launch/amcl.launch"/> TODO: debugging so disabled... -->
                     <!--<include file="$(find loam_to_octomap)/launch/loam_to_octomap.launch"/>-->
                     <!--<include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/> --><!-- TODO REMOVE ME -->

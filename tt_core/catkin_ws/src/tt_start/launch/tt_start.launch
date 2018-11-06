@@ -19,7 +19,7 @@
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --start=25 --rate=1 /home/ben/Downloads/Post_callibration_driving_around.bag /velodyne_points:=/velodyne_points_raw"/>
+              args="--clock --start=50 --rate=1 /home/ben/Downloads/Post_callibration_driving_around.bag /velodyne_points:=/velodyne_points_raw"/>
         <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
         <!--args="&#45;&#45;clock &#45;&#45;rate=1 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>
@@ -95,7 +95,11 @@
             <include file="$(find
 			   loam_velodyne)/launch/loam_velodyne.launch"/>
 	    <include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/>
-            <include file="$(find tt_start)/launch/octomap.launch"/> <!-- TODO TODO TODO -->
+            <include file="$(find tt_start)/launch/octomap.launch">
+	      <arg name="mapAddress" value="$(arg
+					    mapAddress)"/>
+	      <arg name="collectMap" value="$(arg collect_map)"/>
+	    </include>
         </group>
     </group>
     <!-- Unless we are collecting a map (any driving mode) -->
@@ -140,7 +144,7 @@
 						    mapAddress)"/>
 		      <arg name="collectMap" value="$(arg collect_map)"/>
 		    </include>
-                    <!--<include file="$(find tt_start)/launch/amcl.launch"/> TODO: debugging so disabled... -->
+                    <include file="$(find tt_start)/launch/amcl.launch"/>
                     <!--<include file="$(find loam_to_octomap)/launch/loam_to_octomap.launch"/>-->
                     <!--<include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/> --><!-- TODO REMOVE ME -->
                 </group>

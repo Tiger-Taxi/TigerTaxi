@@ -1,7 +1,7 @@
 ekf_se_odom:
  frequency: 10
  sensor_timeout: 0.2
- two_d_mode: false # TODO - We're not working in a planar environment, probably want to set to false
+ two_d_mode: true # TODO - We're not working in a planar environment, probably want to set to false
  transform_time_offset: 0.0
  transform_timeout: 0.0
  print_diagnostics: true
@@ -152,16 +152,16 @@ ekf_se_gps:
   odom1_differential: false
   odom1_relative: false
 
-#  odom2: odometry/gps #From navsat_transform. Rectilinear coordinate system
-#  odom2_config: [true,  true, true,
-#                false, false, false,
-#                false, false, false,
-#                false, false, false,
-#                false, false, false]
-#  odom2_queue_size: 10
-#  odom2_nodelay: true
-#  odom2_differential: false
-#  odom2_relative: false
+  # odom2: odometry/gps #From navsat_transform. Rectilinear coordinate system
+  # odom2_config: [true,  true, true,
+  #               false, false, false,
+  #               false, false, false,
+  #               false, false, false,
+  #               false, false, false]
+  # odom2_queue_size: 10
+  # odom2_nodelay: true
+  # odom2_differential: false
+  # odom2_relative: false
 
 
 #  imu0: /imu/data
@@ -218,11 +218,11 @@ navsat_transform:
   frequency: 30
   delay: 3.0
   magnetic_declination_radians: 0.1919875
-  yaw_offset: -2.476255689
+  yaw_offset: 1.57079
   zero_altitude: true
   broadcast_utm_transform: false
   publish_filtered_gps: false
   use_odometry_yaw: true # Check if odom message uses the magnetometer
   #May want to set this to true, since I can't trust the IMU's yaw
-  wait_for_datum: false
+  wait_for_datum: true
   datum: [43.0852459944, -77.6783761986, 0, map, base_link]

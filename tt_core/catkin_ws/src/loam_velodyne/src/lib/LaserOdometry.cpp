@@ -116,6 +116,7 @@ bool LaserOdometry::setup(ros::NodeHandle &node, ros::NodeHandle &privateNode) {
     _pubLaserCloudSurfLast = node.advertise<sensor_msgs::PointCloud2>("/laser_cloud_surf_last", 2);
     _pubLaserCloudFullRes = node.advertise<sensor_msgs::PointCloud2>("/velodyne_cloud_3", 2);
     _pubLaserOdometry = node.advertise<nav_msgs::Odometry>("/loam_odom_to_odom", 5);
+    _pubLaserOdometry2 = node.advertise<nav_msgs::Odometry>("/loam_odom_to_baselink", 5);
 
     // subscribe to scan registration topics
     _subCornerPointsSharp = node.subscribe<sensor_msgs::PointCloud2>
@@ -257,6 +258,7 @@ void LaserOdometry::publishResult() {
                                                                                 -transformSum().rot_x.rad(),
                                                                                 -transformSum().rot_y.rad());
 
+    // LOAM FRAME
     _laserOdometryMsg.header.stamp = _timeSurfPointsLessFlat;
     _laserOdometryMsg.pose.pose.orientation.x = -geoQuat.y;
     _laserOdometryMsg.pose.pose.orientation.y = -geoQuat.z;
@@ -266,6 +268,19 @@ void LaserOdometry::publishResult() {
     _laserOdometryMsg.pose.pose.position.y = transformSum().pos.y();
     _laserOdometryMsg.pose.pose.position.z = transformSum().pos.z();
     _pubLaserOdometry.publish(_laserOdometryMsg);
+
+    // NORMAL FRAME
+    _laserOdometryMsg.header.stamp = _timeSurfPointsLessFlat;
+    _laserOdometryMsg.header.frame_id = "odom";
+    _laserOdometryMsg.child_frame_id = "loam_odom";
+    _laserOdometryMsg.pose.pose.orientation.x = geoQuat.x;
+    _laserOdometryMsg.pose.pose.orientation.y = -geoQuat.y;
+    _laserOdometryMsg.pose.pose.orientation.z = -geoQuat.z;
+    _laserOdometryMsg.pose.pose.orientation.w = geoQuat.w;
+    _laserOdometryMsg.pose.pose.position.x = transformSum().pos.z();
+    _laserOdometryMsg.pose.pose.position.y = transformSum().pos.x();
+    _laserOdometryMsg.pose.pose.position.z = transformSum().pos.y();
+    _pubLaserOdometry2.publish(_laserOdometryMsg);
 
     // publish cloud results according to the input output ratio
     if (_ioRatio < 2 || frameCount() % _ioRatio == 1) {

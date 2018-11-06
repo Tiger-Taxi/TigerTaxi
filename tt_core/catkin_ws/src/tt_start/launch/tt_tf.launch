@@ -12,7 +12,7 @@
 
     <!-- LiDAR - Front - No Tilt -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="velodyne_broadcaster"
-          args="1.4859 0 0.965 0 0 0 base_link velodyne"/>
+          args="1.4859 0 0.965 0 0 0.0349066 base_link velodyne"/>
 
     <!-- Velodyne Heightmap -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="hm_broadcaster"

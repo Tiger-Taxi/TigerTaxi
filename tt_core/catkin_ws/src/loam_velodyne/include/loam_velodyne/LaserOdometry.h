@@ -140,6 +140,7 @@ class LaserOdometry : public BasicLaserOdometry {
         ros::Publisher _pubLaserCloudSurfLast;    ///< last surface cloud message publisher
         ros::Publisher _pubLaserCloudFullRes;     ///< full resolution cloud message publisher
         ros::Publisher _pubLaserOdometry;         ///< laser odometry publisher
+        ros::Publisher _pubLaserOdometry2;         ///< laser odometry publisher
 
         ros::Subscriber _subCornerPointsSharp;      ///< sharp corner cloud message subscriber
         ros::Subscriber _subCornerPointsLessSharp;  ///< less sharp corner cloud message subscriber

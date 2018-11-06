@@ -36,7 +36,7 @@ namespace loam {
 
 TransformMaintenance::TransformMaintenance() {
     // initialize odometry and odometry tf messages
-    _laserOdometry2.header.frame_id = "odom";
+    _laserOdometry2.header.frame_id = "map";
     _laserOdometry2.child_frame_id = "/loam";
 }
 

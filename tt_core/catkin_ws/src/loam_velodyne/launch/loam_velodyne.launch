@@ -79,6 +79,8 @@
   <!--<remap from="/velodyne_cloud_2" to="/velodyne_cloud_2"/>-->
   <!-- MsgType: PointCloud2; LaserOdometry::laserCloudFullResHandler -->
   <!--<remap from="/imu_trans" to="/imu_trans"/>-->
+  <remap from="/loam_odom_to_odom" to="/usingEKFOutput"/>
+
 
   <param name="scanPeriod" value="$(arg scanPeriod)"/>
   <param name="ioRatio" value="$(arg ioRatio)"/>
@@ -106,6 +108,8 @@
   <!--<remap from="/laser_odom_to_init" to="ekf/loam_converted_odom_gps_corrected"/>-->
   <!-- MsgType: PointCloud2; LaserMapping::laserCloudFullResHandler; Full-resolution Velodyne PointCloud -->
   <!--<remap from="/velodyne_cloud_3" to="/velodyne_cloud_3"/>-->
+  <remap from="/loam_odom_to_odom"
+	 to="/ekf/loam_converted_odom_gps_corrected"/>
 
   <param name="scanPeriod" value="$(arg scanPeriod)"/>
   <param name="maxIterations" value="$(arg maxIterationsMapping)"/>
@@ -129,6 +133,10 @@
   <!--<remap from="/laser_odom_to_init" to="/ekf/loam_converted_odom_gps_corrected"/>-->
   <!-- MsgType: Odometry; TransformMaintenance::odomAftMappedHandler -->
   <!--<remap from="/aft_mapped_to_init" to="/aft_mapped_to_init"/>-->
+  <!-- MsgType: Odometry; TransformMaintenance::TODO -->
+  <remap from="/loam_odom_to_odom"
+	 to="/ekf/loam_converted_odom_gps_corrected"/>
+
 </node>
 
 <group if="$(arg rviz)">

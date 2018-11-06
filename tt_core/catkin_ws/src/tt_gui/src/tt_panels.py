@@ -32,7 +32,7 @@ class tt_panels_ui(QWidget):
         self.systems_scroll.setWidgetResizable(True)
         self.systems_widget = tt_panel_systems_ui(parent = self)
         self.systems_scroll.setWidget(self.systems_widget)
-        self.systems_scroll.verticalScrollBar().setStyleSheet(BUTTON_NORMAL)
+        self.systems_scroll.verticalScrollBar().setStyleSheet(VERT_SCROLL)
 
         self.tab_layout = QStackedLayout()
         self.tab_layout.addWidget(self.nav_widget)

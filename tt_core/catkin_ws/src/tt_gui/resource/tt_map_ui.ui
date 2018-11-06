@@ -10,6 +10,12 @@
         <widget class="QPushButton" name="button_lock">
             <property name="text"><string>Lock</string></property>
         </widget>
+        <widget class="QPushButton" name="button_zoom_in">
+            <property name="text"><string>Zoom In</string></property>
+        </widget>
+        <widget class="QPushButton" name="button_zoom_out">
+            <property name="text"><string>Zoom Out</string></property>
+        </widget>
     </widget>
 
 </widget>

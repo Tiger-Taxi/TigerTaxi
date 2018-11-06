@@ -9,6 +9,9 @@ import os
 # Frame/widget style
 FRAME_STYLE         = 'margin:0px; border:1px solid rgb(0, 0, 0);'
 
+# Vertical scroll bar for subsystems panel
+VERT_SCROLL         = 'width:20px; background-color:rgb(200,200,200)'
+
 # Large button styles
 BUTTON_NORMAL       = 'color:black; font-size:26px; background-color:rgb(200,200,200)'
 BUTTON_ACTIVE       = 'color:green; font-size:26px; background-color:rgb(200,200,200)'

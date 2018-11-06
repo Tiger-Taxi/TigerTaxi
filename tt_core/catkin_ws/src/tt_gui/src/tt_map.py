@@ -37,6 +37,8 @@ class tt_map_ui(QWidget):
         self.button_layout = QHBoxLayout()
         self.button_layout.addWidget(self.button_mode)
         self.button_layout.addWidget(self.button_lock)
+        self.button_layout.addWidget(self.button_zoom_in)
+        self.button_layout.addWidget(self.button_zoom_out)
         self.button_widget.setLayout(self.button_layout)
 
         self.layout.addWidget(self.viewer, PAN_MAP_WEIGHT)
@@ -45,8 +47,12 @@ class tt_map_ui(QWidget):
 
         self.button_mode.setStyleSheet(BUTTON_NORMAL)
         self.button_lock.setStyleSheet(BUTTON_NORMAL)
+        self.button_zoom_in.setStyleSheet(BUTTON_NORMAL)
+        self.button_zoom_out.setStyleSheet(BUTTON_NORMAL)
         self.button_mode.clicked.connect(self.togglePanMode)
         self.button_lock.clicked.connect(self.toggleLockMode)
+        self.button_zoom_in.clicked.connect(self.zoomIn)
+        self.button_zoom_out.clicked.connect(self.zoomOut)
 
         self.button_widget.setStyleSheet(FRAME_STYLE)
         self.viewer.setStyleSheet(FRAME_STYLE)
@@ -139,6 +145,12 @@ class tt_map_ui(QWidget):
             msg = String(str(lat) + ',' + str(lon))
             self.publisher_nav.publish(msg)
 
+    def zoomIn(self):
+        self.viewer.zoomIn()
+
+    def zoomOut(self):
+        self.viewer.zoomOut()
+
 # Qt object to hold the images
 class MapViewer(QGraphicsView):
     photoClicked = pyqtSignal(QPoint)
@@ -192,7 +204,25 @@ class MapViewer(QGraphicsView):
         else:
             self._zoom = 0
             self.fitInView()
-        rospy.loginfo(str(self._zoom))
+
+    def zoomIn(self):
+        factor = 1.25
+        self._zoom += 1
+
+        if self._zoom >= MAX_ZOOM:
+            self._zoom = MAX_ZOOM
+        else:
+            self.scale(factor, factor)
+
+    def zoomOut(self):
+        factor = 0.8
+        self._zoom -= 1
+
+        if self._zoom > 0:
+            self.scale(factor, factor)
+        else:
+            self._zoom = 0
+            self.fitInView()
 
     def mousePressEvent(self, event):
         if self._photo.isUnderMouse():

@@ -19,7 +19,7 @@
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --start=50 --rate=1 /home/ben/Downloads/Post_callibration_driving_around.bag /velodyne_points:=/velodyne_points_raw"/>
+              args="--clock --start=25 --rate=1 /home/ben/Downloads/Post_callibration_driving_around.bag /velodyne_points:=/velodyne_points_raw"/>
         <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
         <!--args="&#45;&#45;clock &#45;&#45;rate=1 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>
@@ -133,7 +133,8 @@
                     <include file="$(find tt_start)/launch/slam_gmapping.launch"/>
                 </group>
                 <group if="$(eval slam_pkg == 'loam')">
-                    <!-- TODO This is where we are currently putting things for LOAM [ACTIVE] -->
+                    <!-- TODO This is where we are currently putting
+			 things for LOAM [ACTIVE] -->
                     <include file="$(find
 				   loam_velodyne)/launch/loam_velodyne.launch"/>
 		    <include file="$(find

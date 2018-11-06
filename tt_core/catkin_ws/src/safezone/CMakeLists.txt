@@ -1,8 +1,10 @@
-cmake_minimum_required(VERSION 2.8.3)
-
-
 cmake_minimum_required(VERSION 2.8)
 project(safezone)
+
+set(CMAKE_CXX_STANDARD 11)
+
+# Uncomment to debug safezone:
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -gdwarf-2")
 
 # External Packages
 find_package(OpenCV REQUIRED)
@@ -47,6 +49,6 @@ target_link_libraries(safezone
 )
 
 
-include_directories(${OpenCV_INCLUDE_DIRS} ${Caffe_INCLUDE_DIRS})
+include_directories(${OpenCV_INCLUDE_DIRS} ${Caffe_INCLUDE_DIRS} /usr/local/cuda/include)
 target_link_libraries(safezone ${OpenCV_LIBS} ${Caffe_LIBRARIES})
 catkin_package()

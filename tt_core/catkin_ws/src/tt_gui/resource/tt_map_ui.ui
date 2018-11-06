@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+<class>tt_map_ui</class>
+<widget class="QWidget" name="tt_map_ui">
+
+    <widget class="QWidget" name="button_widget">
+        <widget class="QPushButton" name="button_mode">
+            <property name="text"><string>Select</string></property>
+        </widget>
+        <widget class="QPushButton" name="button_lock">
+            <property name="text"><string>Lock</string></property>
+        </widget>
+        <widget class="QPushButton" name="button_zoom_in">
+            <property name="text"><string>Zoom In</string></property>
+        </widget>
+        <widget class="QPushButton" name="button_zoom_out">
+            <property name="text"><string>Zoom Out</string></property>
+        </widget>
+    </widget>
+
+</widget>
+<resources/>
+<connections/>
+</ui>

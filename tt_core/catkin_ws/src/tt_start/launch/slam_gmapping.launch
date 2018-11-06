@@ -7,7 +7,9 @@
 
     <!-- Defaults taken from https://github.com/RobotnikAutomation/rbcar_common/blob/kinetic-devel/rbcar_localization/launch/slam_gmapping.launch -->
     <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
-        <remap from="scan" to="$(arg scan_topic)"/>
+        <!-- /laser gives much better results than /scan (3d-compressed vs 2d scans) -->
+        <!--<remap from="scan" to="$(arg scan_topic)"/>-->
+        <remap from="scan" to="/laser"/>
         <param name="map_frame" value="$(arg map_frame)"/>
         <param name="base_frame" value="$(arg base_frame)"/>
         <param name="odom_frame" value="$(arg odom_frame)"/>

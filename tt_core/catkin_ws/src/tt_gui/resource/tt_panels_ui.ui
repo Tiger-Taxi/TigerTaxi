@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+<class>tt_panels_ui</class>
+<widget class="QWidget" name="tt_panels_ui">
+
+    <widget class="QFrame" name="tab_frame">
+        <widget class="QWidget" name="nav_widget"></widget>
+        <widget class="QWidget" name="mode_widget"></widget>
+        <widget class="QWidget" name="camera_widget"></widget>
+        <widget class="QScrollArea" name="systems_scroll">
+            <widget class="QWidget" name="systems_widget"></widget>
+        </widget>
+    </widget>
+
+    <widget class="QFrame" name="tab_frame">
+        <widget class="QPushButton" name="button_nav">
+            <property name="text"><string>Navigation</string></property>
+        </widget>
+        <widget class="QPushButton" name="button_mode">
+            <property name="text"><string>Control</string></property>
+        </widget>
+        <!-- Camera panel is not implemented and therefore left out for now... -->
+        <!-- <widget class="QPushButton" name="button_camera"> -->
+            <!-- <property name="text"><string>Camera</string></property> -->
+        <!-- </widget> -->
+        <widget class="QPushButton" name="button_systems">
+            <property name="text"><string>Subsystems</string></property>
+        </widget>
+    </widget>
+
+</widget>
+<resources/>
+<connections/>
+</ui>

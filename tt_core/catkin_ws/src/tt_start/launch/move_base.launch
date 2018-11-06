@@ -8,14 +8,24 @@
     <arg name="base_frame" default="base_link"/>
     <arg name="laser_frame" default="laser"/>
     <arg name="scan_topic" default="scan"/>
+    <arg name="static" default="false"/>
 
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
 
         <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
         <remap from="odom" to="$(arg odom_topic)"/>
 
+        <!-- MOVE_BASE YAML PARAMETERS -->
+        <rosparam file="$(find tt_start)/config/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+        <rosparam file="$(find tt_start)/config/costmap_common_params.yaml" command="load" ns="local_costmap"/>
+        <rosparam file="$(find tt_start)/config/global_costmap_params.yaml" command="load"/>
+        <rosparam file="$(find tt_start)/config/local_costmap_params.yaml" command="load"/>
+        <!--<rosparam file="$(find tt_start)/config/base_local_planner_params.yaml" command="load"/>-->
+        <rosparam file="$(find tt_start)/config/teb_local_planner_params.yaml" command="load"/>
+        <!--<rosparam file="$(find tt_start)/config/costmap_converter_params.yaml" command="load"/>-->
+
         <!-- MOVE_BASE PARAMETERS -->
-        <param name="footprint_padding" value="0.01"/>
+        <param name="footprint_padding" value="0.01"/> <!-- TODO ? -->
         <param name="controller_frequency" value="10.0"/>
         <param name="controller_patience" value="15.0"/>
         <param name="oscillation_timeout" value="30.0"/>
@@ -42,35 +52,10 @@
         <!-- Planners -->
         <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS"/>
         <!-- <param name="base_global_planner" type="string" value="navfn/NavfnROS"/> -->
-
-        <!-- MOVE_BASE YAML PARAMETERS -->
-        <rosparam file="$(find tt_start)/config/costmap_common_params.yaml" command="load" ns="global_costmap"/>
-        <rosparam file="$(find tt_start)/config/costmap_common_params.yaml" command="load" ns="local_costmap"/>
-        <rosparam file="$(find tt_start)/config/global_costmap_params.yaml" command="load"/>
-        <rosparam file="$(find tt_start)/config/local_costmap_params.yaml" command="load"/>
-        <!--<rosparam file="$(find tt_start)/config/base_local_planner_params.yaml" command="load"/>-->
-        <rosparam file="$(find tt_start)/config/teb_local_planner_params.yaml" command="load"/>
-        <!--<rosparam file="$(find tt_start)/config/costmap_converter_params.yaml" command="load"/>-->
-
-        <!--<rosparam file="$(find teb_local_planner_tutorials)/cfg/carlike/costmap_common_params.yaml" command="load" ns="global_costmap"/>-->
-        <!--<rosparam file="$(find teb_local_planner_tutorials)/cfg/carlike/costmap_common_params.yaml" command="load" ns="local_costmap"/>-->
-        <!--<rosparam file="$(find teb_local_planner_tutorials)/cfg/carlike/global_costmap_params.yaml" command="load" />-->
-        <!--<rosparam file="$(find teb_local_planner_tutorials)/cfg/carlike/local_costmap_params.yaml" command="load" />-->
-        <!--<rosparam file="$(find teb_local_planner_tutorials)/cfg/carlike/teb_local_planner_params.yaml" command="load" />-->
-
-        <!-- magic configs are experimental and break out individual control of the costmaps this requires that the local planner works better -->
-        <!--<rosparam file="$(find teb_local_planner_tutorials)/cfg/carlike_magic/common_params.yaml" command="load"/>-->
-        <!--<rosparam file="$(find teb_local_planner_tutorials)/cfg/carlike_magic/global_costmap_params.yaml" command="load" />-->
-        <!--<rosparam file="$(find teb_local_planner_tutorials)/cfg/carlike_magic/local_costmap_params.yaml" command="load" />-->
-        <!--<rosparam file="$(find teb_local_planner_tutorials)/cfg/carlike_magic/teb_local_planner_params.yaml" command="load" />-->
-        <!--<rosparam file="$(find teb_local_planner_tutorials)/cfg/carlike_magic/costmap_converter_params.yaml" command="load"/>-->
+        <!-- Static map switch -->
+        <!-- TODO this may be incorrect -->
+        <!--<param name="global_costmap/static_map" value="True" if="$(arg static)"/>-->
+        <!--<param name="global_costmap/rolling_window" value="False" if="$(arg static)"/>-->
     </node>
-
-    <!-- Run the map server
-    <node name="map_server" pkg="map_server" type="map_server" args="~/operating_maps/sentinel.pgm 0.05"/> -->
-    <!--<node name="map_server" pkg="map_server" type="map_server" args="/home/apm/operating_maps/shop_door.yaml 0.05"/>-->
-
-    <!--- Run AMCL -->
-    <!--<include file="$(find amcl)/examples/amcl_diff.launch" />-->
 
 </launch>

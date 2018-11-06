@@ -4,6 +4,9 @@ tt_core/catkin_ws/devel/
 tt_core/catkin_ws/.catkin_tools/
 
 gpu_testing/build/
+maps/
+
+cmake-build-debug/
 
 *~
 Software/
@@ -13,14 +16,13 @@ opencv/
 apm_phase5/
 
 tt_core/opencv_contrib/
-tt_core/ENet/
 bagfiles/
 *.bag
 *.bag.active
 
 costmap.png
-
-tt_core/catkin_ws/src/loam_velodyne/
+*.gv
+*.pdf
 
 .idea/
 # Python stuff
@@ -126,3 +128,5 @@ ENV/
 # mypy
 .mypy_cache/
 
+# Now, whitelisting somethings I want
+!tt_core/catkin_ws/src/loam_velodyne/src/lib/

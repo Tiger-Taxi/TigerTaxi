@@ -1,0 +1,18 @@
+<library path="src">
+  <class name="tt_main_ui" type="tt_main.tt_main_ui" base_class_type="rqt_gui_py::Plugin">
+    <!-- Apologies for lack of comments in source code. If you have any questions, reach out to Frank Cwitkowitz. -->
+    <description>
+      A Python GUI to provide a smooth UI with the Tiger Taxi.
+    </description>
+    <qtgui>
+      <group>
+        <label>Tiger Taxi</label>
+        <icon type="theme">folder</icon>
+        <statustip>Plugins related to the Tiger Taxi.</statustip>
+      </group>
+      <label>GUI Core</label>
+      <icon type="theme">applications-other</icon>
+      <statustip>A Python GUI plugin for showing the UI.</statustip>
+    </qtgui>
+  </class>
+</library>

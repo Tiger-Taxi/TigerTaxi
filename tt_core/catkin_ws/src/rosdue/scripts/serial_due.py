@@ -87,7 +87,7 @@ def main():
                 topic = input_vals[0];
                 data = input_vals[1];
                 msg_length = input_vals[2];
-                if not msg_length:
+                if not msg_length or not msg_length.isdigit():
                     continue
 
                 if(len(topic) + 1 + len(data) == int(msg_length)):

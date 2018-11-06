@@ -7,34 +7,43 @@
     <!-- Camera -->
     <!-- <node pkg="tf" type="static_transform_publisher" name="camera_broadcaster" args="1.4605 0 1.7016 0 0.5585 0 base_link camera 100"/> -->
     <!-- Camera at ground level -->
-    <node pkg="tf" type="static_transform_publisher" name="camera_broadcaster"
-          args="3.92 0 0 3.14 0 0 base_link camera 100"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="camera_broadcaster"
+          args="3.92 0 0 3.14 0 0 base_link camera"/>
 
     <!-- LiDAR - Front - No Tilt -->
-    <node pkg="tf" type="static_transform_publisher" name="velodyne_broadcaster"
-          args="1.4859 0 0.965 0 0 0 base_link velodyne 100"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="velodyne_broadcaster"
+          args="1.4859 0 0.965 0 0 0 base_link velodyne"/>
 
     <!-- Velodyne Heightmap -->
-    <node pkg="tf" type="static_transform_publisher" name="hm_broadcaster"
-          args="1.4859 0 0 0 0 0 base_link heightmap 100"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="hm_broadcaster"
+          args="1.4859 0 0 0 0 0 base_link heightmap"/>
 
     <!-- Single Channel Hokuyo LiDAR -->
-    <node pkg="tf" type="static_transform_publisher" name="laser_broadcaster"
-          args="1.7272 0.0047625 0.235 0 0 0 base_link laser 100"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="laser_broadcaster"
+          args="1.7272 0.0047625 0.235 0 0 0 base_link laser"/>
+
+    <!-- Vectornav IMU -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="imu_broadcaster" args="0.2413 0 1.7653 0 0 0 base_link imu_link"/>
+
+    <!-- ** loam_velodyne has a non-standard coordinate system, so we need to transform it to be ROS compliant ** -->
+    <!-- loam_init is like a map frame. The vehicle is measured relative to this. -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="loam_init_to_map" args="0 0 0 1.570795 0 1.570795 map loam_init" />
+    <!-- loam is a moving frame, positioned on the LIDAR-->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="velodyne_to_loam" args="0 0 0 -1.570795 0 -1.570795 loam velodyne" />
+
+    <!-- ................................................................................ -->
+    <!-- Old Transforms -->
 
     <!-- IMU  -->
     <!-- <node pkg="tf" type="static_transform_publisher" name="baselink_imu_broadcaster"
           args="1.2 0 1.8288 3.14159 0 0 base_link base_imu_link 100" /> -->
-
-    <!-- ................................................................................ -->
-    <!-- Old Transforms -->
 
     <!-- LiDAR - Front - 10 degree Tilt Forward-->
     <!-- <node pkg="tf" type="static_transform_publisher" name="velodyne_broadcaster"
           args="0 0 0.965 0 0.17453 0 base_link velodyne 100" />
     -->
 
-    <!-- LiDAR - Front - 7.5 degree Tilt Foward-->
+    <!-- LiDAR - Front - 7.5 degree Tilt Forward-->
     <!-- <node pkg="tf" type="static_transform_publisher" name="velodyne_broadcaster"
           args="0 0 0.965 0 0.1309 0 base_link velodyne 100" />
     -->

@@ -20,6 +20,7 @@ import os
 
 from stylesheet import *
 
+# Thread to observe sensor frequencies
 class HzThread(object):
     def __init__(self, systems_panel, hz_topic):
         self.systems_panel = systems_panel
@@ -93,6 +94,7 @@ class HzThread(object):
 
             rospy.sleep(FREQ_UPDATE)
 
+# Widget for the subsystems panel
 class tt_panel_systems_ui(QWidget):
     def __init__(self, parent):
         super(tt_panel_systems_ui, self).__init__()
@@ -356,6 +358,7 @@ class tt_panel_systems_ui(QWidget):
             self.imu_status_value.setText(STATUS_LABELS[1])
             self.imu_status_value.setStyleSheet(S_RUNNING)
         else:
+            # Should never reach this state
             self.imu_status_value.setText(STATUS_LABELS[2])
             self.imu_status_value.setStyleSheet(S_DISABLED)
 
@@ -393,6 +396,7 @@ class tt_panel_systems_ui(QWidget):
             self.gps_status_value.setText(STATUS_LABELS[1])
             self.gps_status_value.setStyleSheet(S_RUNNING)
         else:
+            # Should never reach this state
             self.gps_status_value.setText(STATUS_LABELS[2])
             self.gps_status_value.setStyleSheet(S_DISABLED)
 
@@ -423,6 +427,7 @@ class tt_panel_systems_ui(QWidget):
             self.cam_status_value.setText(STATUS_LABELS[1])
             self.cam_status_value.setStyleSheet(S_RUNNING)
         else:
+            # Should never reach this state
             self.cam_status_value.setText(STATUS_LABELS[2])
             self.cam_status_value.setStyleSheet(S_DISABLED)
 
@@ -434,6 +439,7 @@ class tt_panel_systems_ui(QWidget):
             self.vel_status_value.setText(STATUS_LABELS[1])
             self.vel_status_value.setStyleSheet(S_RUNNING)
         else:
+            # Should never reach this state
             self.vel_status_value.setText(STATUS_LABELS[2])
             self.vel_status_value.setStyleSheet(S_DISABLED)
 
@@ -445,5 +451,6 @@ class tt_panel_systems_ui(QWidget):
             self.hok_status_value.setText(STATUS_LABELS[1])
             self.hok_status_value.setStyleSheet(S_RUNNING)
         else:
+            # Should never reach this state
             self.hok_status_value.setText(STATUS_LABELS[2])
             self.hok_status_value.setStyleSheet(S_DISABLED)

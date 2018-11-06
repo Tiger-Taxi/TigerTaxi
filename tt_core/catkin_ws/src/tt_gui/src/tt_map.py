@@ -17,6 +17,7 @@ import os
 
 from stylesheet import *
 
+# Widget to hold map and pan/lock buttons
 class tt_map_ui(QWidget):
     gpsSignal = pyqtSignal(QPoint)
     goalSignal = pyqtSignal(QPoint)
@@ -30,19 +31,25 @@ class tt_map_ui(QWidget):
         self.viewer.photoClicked.connect(self.photoClicked)
         self.gpsSignal.connect(self.updateLogoOffset)
         self.goalSignal.connect(self.updateGoalOffset)
-        # Arrange layout
-        VBlayout = QVBoxLayout(self)
-        VBlayout.addWidget(self.viewer)
 
-        HBlayout = QHBoxLayout()
-        HBlayout.addWidget(self.button_mode)
-        HBlayout.addWidget(self.button_lock)
-        VBlayout.addLayout(HBlayout)
+        self.layout = QVBoxLayout(self)
+
+        self.button_layout = QHBoxLayout()
+        self.button_layout.addWidget(self.button_mode)
+        self.button_layout.addWidget(self.button_lock)
+        self.button_widget.setLayout(self.button_layout)
+
+        self.layout.addWidget(self.viewer, PAN_MAP_WEIGHT)
+        self.layout.addWidget(self.button_widget, PAN_SWITCH_WEIGHT)
+        self.setLayout(self.layout)
 
         self.button_mode.setStyleSheet(BUTTON_NORMAL)
         self.button_lock.setStyleSheet(BUTTON_NORMAL)
         self.button_mode.clicked.connect(self.togglePanMode)
         self.button_lock.clicked.connect(self.toggleLockMode)
+
+        self.button_widget.setStyleSheet(FRAME_STYLE)
+        self.viewer.setStyleSheet(FRAME_STYLE)
 
         self.gps_lats = np.flip(np.linspace(MIN_LAT, MAX_LAT, PIX_H))
         self.gps_lons = np.linspace(MIN_LON, MAX_LON, PIX_W)
@@ -132,6 +139,7 @@ class tt_map_ui(QWidget):
             msg = String(str(lat) + ',' + str(lon))
             self.publisher_nav.publish(msg)
 
+# Qt object to hold the images
 class MapViewer(QGraphicsView):
     photoClicked = pyqtSignal(QPoint)
 

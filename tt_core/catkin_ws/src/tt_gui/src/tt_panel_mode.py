@@ -14,6 +14,7 @@ import os
 
 from stylesheet import *
 
+# Widget for the control mode panel
 class tt_panel_mode_ui(QWidget):
     def __init__(self, parent):
         super(tt_panel_mode_ui, self).__init__()

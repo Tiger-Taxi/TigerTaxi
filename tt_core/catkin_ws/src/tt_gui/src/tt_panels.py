@@ -16,6 +16,7 @@ from tt_panel_systems import tt_panel_systems_ui
 
 from stylesheet import *
 
+# Widget to hold all panels and selection mechanism
 class tt_panels_ui(QWidget):
     def __init__(self):
         super(tt_panels_ui, self).__init__()
@@ -55,8 +56,7 @@ class tt_panels_ui(QWidget):
         self.button_frame.setLayout(self.button_layout)
 
         self.layout = QVBoxLayout()
-        self.layout.addWidget(self.tab_frame, PAN_DIAG_WEIGHT)
-        self.layout.addStretch()
+        self.layout.addWidget(self.tab_frame, PAN_MAP_WEIGHT)
         self.layout.addWidget(self.button_frame, PAN_SWITCH_WEIGHT)
         self.setLayout(self.layout)
 

@@ -18,6 +18,7 @@ import os
 
 from stylesheet import *
 
+# Widget for navigation
 class tt_panel_nav_ui(QWidget):
     def __init__(self, parent):
         super(tt_panel_nav_ui, self).__init__()

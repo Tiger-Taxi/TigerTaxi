@@ -18,7 +18,7 @@ const int PULSE_MAX = 2000;
 
 // Brake write values for brake_actuator
 const int BRAKE_RETRACT = 180;
-const int BRAKE_STAY = 10;
+const int BRAKE_STAY = 90;
 const int BRAKE_EXTEND = 0;
 
 // Brake Pot position min and max values

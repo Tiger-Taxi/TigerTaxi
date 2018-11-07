@@ -8,7 +8,6 @@ from argparse import ArgumentParser
 from sensor_msgs.msg import Imu
 from sensor_msgs.msg import NavSatFix
 
-import gui_freq_listener
 import numpy as np
 import threading
 import rostopic

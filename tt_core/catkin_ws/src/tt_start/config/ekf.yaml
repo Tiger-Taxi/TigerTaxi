@@ -149,19 +149,19 @@ ekf_se_gps:
                  false, false, false] #ax ay az
   odom1_queue_size: 10
   odom1_nodelay: false
-  odom1_differential: false
+  odom1_differential: true
   odom1_relative: false
 
-  # odom2: odometry/gps #From navsat_transform. Rectilinear coordinate system
-  # odom2_config: [true,  true, true,
-  #               false, false, false,
-  #               false, false, false,
-  #               false, false, false,
-  #               false, false, false]
-  # odom2_queue_size: 10
-  # odom2_nodelay: true
-  # odom2_differential: false
-  # odom2_relative: false
+  odom2: odometry/gps #From navsat_transform. Rectilinear coordinate system
+  odom2_config: [true,  true, true,
+                false, false, false,
+                false, false, false,
+                false, false, false,
+                false, false, false]
+  odom2_queue_size: 10
+  odom2_nodelay: true
+  odom2_differential: false
+  odom2_relative: false
 
   # pose0: amcl_pose
   # pose0_config: [true, true, true,
@@ -190,9 +190,9 @@ ekf_se_gps:
   use_control: false
 
                            #x     y     z     r     p     y     vx     vy     vz    vr    vp    vy    ax    ay    az
-  process_noise_covariance:  [1e-1, 0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
-                              0,    1e-1, 0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    1e-1, 0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+  process_noise_covariance:  [10,   0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                              0,    10,   0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                              0,    0,    10,   0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
                               0,    0,    0,    0.3,  0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
                               0,    0,    0,    0,    0.3,  0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
                               0,    0,    0,    0,    0,    0.01, 0,     0,     0,    0,    0,    0,    0,    0,    0,
@@ -226,10 +226,10 @@ ekf_se_gps:
 #Inputs: gps/fix, imu/data, odometry/filtered (from the gps_map node http://docs.ros.org/lunar/api/robot_localization/html/integrating_gps.html "This should just be the output of whichever robot_localization state estimation node instance you are using to fuse GPS data.")
 #Output: odometry/gps (feed this into a state estimate node), gps/filtered (Not necessary, but nice) 
 navsat_transform:
-  frequency: 30
+  frequency: 3
   delay: 3.0
   magnetic_declination_radians: 0.1919875
-  yaw_offset: 1.57079
+  yaw_offset: 1.4
   zero_altitude: true
   broadcast_utm_transform: false
   publish_filtered_gps: false

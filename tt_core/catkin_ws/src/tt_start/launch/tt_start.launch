@@ -5,7 +5,7 @@
     <!-- NOTE (building): catkin_make -DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone" -->
 
     <arg name="simulate" default="true"/>
-    <arg name="collect_map" default="false"/>
+    <arg name="collect_map" default="true"/>
     <arg name="use_static_map" default="false"/>
     <arg name="slam_pkg" default="loam"/>
     <arg name="old_nav" default="false"/>

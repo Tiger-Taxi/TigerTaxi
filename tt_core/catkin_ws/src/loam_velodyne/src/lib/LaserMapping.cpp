@@ -188,6 +188,7 @@ void LaserMapping::imuHandler(const sensor_msgs::Imu::ConstPtr &imuIn) {
     tf::quaternionMsgToTF(imuIn->orientation, orientation);
     tf::Matrix3x3(orientation).getRPY(roll, pitch, yaw);
     updateIMU({fromROSTime(imuIn->header.stamp), roll, pitch});
+    _subImu.shutdown();
 }
 
 void LaserMapping::spin() {

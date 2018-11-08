@@ -181,6 +181,7 @@ void ScanRegistration::handleIMUMessage(const sensor_msgs::Imu::ConstPtr& imuIn)
   newState.acceleration = acc;
 
   updateIMUData(acc, newState);
+  _subImu.shutdown(); //Only subscribe to the first message
 }
 
 

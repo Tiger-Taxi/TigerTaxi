@@ -56,17 +56,17 @@ ekf_se_odom:
  odom0_differential: false
  odom0_relative: false
 
-# imu0: /imu/data
-# imu0_config: [false, false, false,
-#               true, true, false,
-#               false, false, false,
-#               true, true, true,
-#               true, true, true]
-# imu0_nodelay: true
-# imu0_differential: false
-# imu0_relative: false
-# imu0_queue_size: 10
-# imu0_remove_gravitational_acceleration: false
+ # imu0: /imu/data
+ # imu0_config: [false, false, false,
+ #               true, true, false,
+ #               false, false, false,
+ #               true, true, true,
+ #               true, true, true]
+ # imu0_nodelay: true
+ # imu0_differential: false
+ # imu0_relative: false
+ # imu0_queue_size: 10
+ # imu0_remove_gravitational_acceleration: false
 
                             #x     y     z     r     p     y     vx     vy     vz    vr    vp    vy    ax    ay    az
  process_noise_covariance:  [1e-3, 0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
@@ -138,7 +138,7 @@ ekf_se_gps:
                  false, false, false] #ax ay az
   odom0_queue_size: 10
   odom0_nodelay: false
-  odom0_differential: true
+  odom0_differential: false
   odom0_relative: false
 
   odom1: integrated_to_baselink
@@ -152,16 +152,16 @@ ekf_se_gps:
   odom1_differential: true
   odom1_relative: false
 
-  odom2: odometry/gps #From navsat_transform. Rectilinear coordinate system
-  odom2_config: [true,  true, true,
-                false, false, false,
-                false, false, false,
-                false, false, false,
-                false, false, false]
-  odom2_queue_size: 10
-  odom2_nodelay: true
-  odom2_differential: false
-  odom2_relative: false
+  # odom2: odometry/gps ## From navsat_transform. Rectilinear coordinate system
+  # odom2_config: [true,  true, true,
+  #               false, false, false,
+  #               false, false, false,
+  #               false, false, false,
+  #               false, false, false]
+  # odom2_queue_size: 10
+  # odom2_nodelay: true
+  # odom2_differential: false
+  # odom2_relative: false
 
   # pose0: amcl_pose
   # pose0_config: [true, true, true,
@@ -229,11 +229,11 @@ navsat_transform:
   frequency: 3
   delay: 3.0
   magnetic_declination_radians: 0.1919875
-  yaw_offset: 1.4
+  yaw_offset: 0 #1.57079
   zero_altitude: true
   broadcast_utm_transform: false
   publish_filtered_gps: false
-  use_odometry_yaw: true # Check if odom message uses the magnetometer
+  use_odometry_yaw: false # Check if odom message uses the magnetometer
   #May want to set this to true, since I can't trust the IMU's yaw
-  wait_for_datum: true
+  wait_for_datum: false
   datum: [43.0852459944, -77.6783761986, 0, map, base_link]

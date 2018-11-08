@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+<class>tt_panel_systems_ui</class>
+<widget class="QWidget" name="tt_panel_systems_ui">
+
+	<widget class="QFrame" name="imu_frame">
+		<widget class="QLabel" name="imu_label">
+	        <property name="text"><string>IMU</string></property>
+	    </widget>
+
+		<widget class="QWidget" name="imu_status_widget">
+			<widget class="QLabel" name="imu_status_label">
+		        <property name="text"><string>Status:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="imu_status_value">
+		        <property name="text"><string>Degraded</string></property>
+		    </widget>
+		</widget>
+		<widget class="QWidget" name="imu_rate_widget">
+			<widget class="QLabel" name="imu_rate_label">
+		        <property name="text"><string>Frequency:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="imu_rate_value">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+		<widget class="QWidget" name="imu_message_widget">
+			<widget class="QLabel" name="imu_message_label">
+		        <property name="text"><string>Last Message:</string></property>
+		    </widget>
+			<widget class="QWidget" name="imu_yaw_widget">
+				<widget class="QLabel" name="imu_yaw_label">
+			        <property name="text"><string>Yaw:</string></property>
+			    </widget>
+			    <widget class="QLabel" name="imu_yaw_value">
+			        <property name="text"><string>N/A</string></property>
+			    </widget>
+			</widget>
+			<!-- TODO - Add the other fields here -->
+			<widget class="QPushButton" name="imu_message_button">
+		        <property name="text"><string>Pause Feed</string></property>
+		    </widget>
+		</widget>
+	</widget>
+
+	<widget class="QFrame" name="gps_frame">
+		<widget class="QLabel" name="gps_label">
+	        <property name="text"><string>GPS</string></property>
+	    </widget>
+
+		<widget class="QWidget" name="gps_status_widget">
+			<widget class="QLabel" name="gps_status_label">
+		        <property name="text"><string>Status:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="gps_status_value">
+		        <property name="text"><string>Degraded</string></property>
+		    </widget>
+		</widget>
+		<widget class="QWidget" name="gps_rate_widget">
+			<widget class="QLabel" name="gps_rate_label">
+		        <property name="text"><string>Frequency:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="gps_rate_value">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+		<widget class="QWidget" name="gps_message_widget">
+			<widget class="QLabel" name="gps_message_label">
+		        <property name="text"><string>Last Message:</string></property>
+		    </widget>
+			<widget class="QWidget" name="gps_lon_widget">
+				<widget class="QLabel" name="gps_lon_label">
+			        <property name="text"><string>Longitude:</string></property>
+			    </widget>
+			    <widget class="QLabel" name="gps_lon_value">
+			        <property name="text"><string>N/A</string></property>
+			    </widget>
+			</widget>
+			<widget class="QWidget" name="gps_lat_widget">
+				<widget class="QLabel" name="gps_lat_label">
+			        <property name="text"><string>Latitude:</string></property>
+			    </widget>
+			    <widget class="QLabel" name="gps_lat_value">
+			        <property name="text"><string>N/A</string></property>
+			    </widget>
+			</widget>
+			<!-- TODO - Add the other fields here -->
+			<widget class="QPushButton" name="gps_message_button">
+		        <property name="text"><string>Pause Feed</string></property>
+		    </widget>
+		</widget>
+	</widget>
+
+	<widget class="QFrame" name="cam_frame">
+		<widget class="QLabel" name="cam_label">
+	        <property name="text"><string>Camera</string></property>
+	    </widget>
+
+		<widget class="QWidget" name="cam_status_widget">
+			<widget class="QLabel" name="cam_status_label">
+		        <property name="text"><string>Status:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="cam_status_value">
+		        <property name="text"><string>Degraded</string></property>
+		    </widget>
+		</widget>
+		<widget class="QWidget" name="cam_rate_widget">
+			<widget class="QLabel" name="cam_rate_label">
+		        <property name="text"><string>Frequency:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="cam_rate_value">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+	</widget>
+
+	<widget class="QFrame" name="vel_frame">
+		<widget class="QLabel" name="vel_label">
+	        <property name="text"><string>Velodyne 16-C</string></property>
+	    </widget>
+
+		<widget class="QWidget" name="vel_status_widget">
+			<widget class="QLabel" name="vel_status_label">
+		        <property name="text"><string>Status:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="vel_status_value">
+		        <property name="text"><string>Degraded</string></property>
+		    </widget>
+		</widget>
+		<widget class="QWidget" name="vel_rate_widget">
+			<widget class="QLabel" name="vel_rate_label">
+		        <property name="text"><string>Frequency:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="vel_rate_value">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+	</widget>
+
+	<widget class="QFrame" name="hok_frame">
+		<widget class="QLabel" name="hok_label">
+	        <property name="text"><string>Hokuyo 1-C</string></property>
+	    </widget>
+
+		<widget class="QWidget" name="hok_status_widget">
+			<widget class="QLabel" name="hok_status_label">
+		        <property name="text"><string>Status:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="hok_status_value">
+		        <property name="text"><string>Degraded</string></property>
+		    </widget>
+		</widget>
+		<widget class="QWidget" name="hok_rate_widget">
+			<widget class="QLabel" name="hok_rate_label">
+		        <property name="text"><string>Frequency:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="hok_rate_value">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+	</widget>
+
+</widget>
+<resources/>
+<connections/>
+</ui>

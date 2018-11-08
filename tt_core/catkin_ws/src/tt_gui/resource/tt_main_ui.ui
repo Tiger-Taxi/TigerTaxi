@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+<class>tt_main_ui</class>
+<widget class="QWidget" name="tt_main_ui">
+
+    <!-- X is right, Y is down -->
+
+    <property name="windowTitle">
+        <string>Tiger Taxi Navigation and Diagnostics GUI</string>
+    </property>
+
+    <widget class="QWidget" name="main_widget">
+        <widget class="QWidget" name="map_widget"></widget>
+        <widget class="QWidget" name="panels_widget"></widget>
+    </widget>
+
+</widget>
+<resources/>
+<connections/>
+</ui>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+<class>tt_panel_mode_ui</class>
+<widget class="QWidget" name="tt_panel_mode_ui">
+
+	<widget class="QFrame" name="mode_control_frame">
+		<widget class="QLabel" name="mode_control_label">
+	        <property name="text"><string>Mode Control</string></property>
+	    </widget>
+		<widget class="QPushButton" name="button_man">
+	        <property name="text"><string>Manual</string></property>
+	    </widget>
+		<widget class="QPushButton" name="button_rem">
+	        <property name="text"><string>Remote</string></property>
+	    </widget>
+		<widget class="QPushButton" name="button_aut">
+	        <property name="text"><string>Autonomous</string></property>
+	    </widget>
+	</widget>
+
+	<widget class="QFrame" name="sound_control_frame">
+		<widget class="QLabel" name="sound_control_label">
+	        <property name="text"><string>Sound Board</string></property>
+	    </widget>
+		<widget class="QPushButton" name="button_sound1">
+	        <property name="text"><string>Dj airhorn</string></property>
+	    </widget>
+		<widget class="QPushButton" name="button_sound2">
+	        <property name="text"><string>Tiger Roar</string></property>
+	    </widget>
+		<widget class="QPushButton" name="button_sound3">
+	        <property name="text"><string>Stacey's Mom</string></property>
+	    </widget>
+		<widget class="QPushButton" name="button_sound4">
+	        <property name="text"><string>Dixie Horn</string></property>
+	    </widget>
+	</widget>
+
+</widget>
+<resources/>
+<connections/>
+</ui>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+<class>tt_panel_camera_ui</class>
+<widget class="QWidget" name="tt_panel_camera_ui">
+
+    <widget class="QLabel" name="not_impl">
+        <property name="text"><string>Not Yet Implemented</string></property>
+    </widget>
+
+</widget>
+<resources/>
+<connections/>
+</ui>

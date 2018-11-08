@@ -8,7 +8,7 @@
     <arg name="base_frame" default="base_link"/>
     <arg name="laser_frame" default="laser"/>
     <arg name="scan_topic" default="scan"/>
-    <arg name="static" default="false"/>
+    <arg name="use_safezone" default="false"/>
 
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
 
@@ -16,8 +16,15 @@
         <remap from="odom" to="$(arg odom_topic)"/>
 
         <!-- MOVE_BASE YAML PARAMETERS -->
-        <rosparam file="$(find tt_start)/config/costmap_common_params.yaml" command="load" ns="global_costmap"/>
-        <rosparam file="$(find tt_start)/config/costmap_common_params.yaml" command="load" ns="local_costmap"/>
+        <rosparam if="$(arg use_safezone)" file="$(find tt_start)/config/obstacle_layer_common_safezone.yaml"
+                  command="load" ns="global_costmap"/>
+        <rosparam if="$(arg use_safezone)" file="$(find tt_start)/config/obstacle_layer_common_safezone.yaml"
+                  command="load" ns="local_costmap"/>
+        <rosparam unless="$(arg use_safezone)" file="$(find tt_start)/config/obstacle_layer_common_no_safezone.yaml"
+                  command="load" ns="global_costmap"/>
+        <rosparam unless="$(arg use_safezone)" file="$(find tt_start)/config/obstacle_layer_common_no_safezone.yaml"
+                  command="load" ns="local_costmap"/>
+
         <rosparam file="$(find tt_start)/config/global_costmap_params.yaml" command="load"/>
         <rosparam file="$(find tt_start)/config/local_costmap_params.yaml" command="load"/>
         <!--<rosparam file="$(find tt_start)/config/base_local_planner_params.yaml" command="load"/>-->
@@ -52,10 +59,6 @@
         <!-- Planners -->
         <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS"/>
         <!-- <param name="base_global_planner" type="string" value="navfn/NavfnROS"/> -->
-        <!-- Static map switch -->
-        <!-- TODO this may be incorrect -->
-        <!--<param name="global_costmap/static_map" value="True" if="$(arg static)"/>-->
-        <!--<param name="global_costmap/rolling_window" value="False" if="$(arg static)"/>-->
     </node>
 
 </launch>

@@ -2,25 +2,28 @@
 <launch>
 
     <!-- NOTE: TT_ROOT env variable must be set to TigerTaxi root directory -->
+    <!-- NOTE (building): catkin_make -DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone" -->
 
     <arg name="simulate" default="false"/>
     <arg name="collect_map" default="false"/>
     <arg name="use_static_map" default="false"/>
-    <arg name="slam_pkg" default="gmapping"/>
+    <arg name="slam_pkg" default="loam"/>
     <arg name="old_nav" default="false"/>
     <arg name="use_safezone" default="false"/>
+    <arg name="mapAddress" default="$(find tt_start)/maps/circle_jerk_map.bt"/>
     <arg name="rviz" default="true"/>
     <arg name="rqt" default="true"/>
 
     <!-- Dependent on simulate (only true for simulation) -->
     <param name="/use_sim_time" value="$(arg simulate)"/>
 
+    <!--<remap from="/velodyne_points" to="/velodyne_points_raw"/> &lt;!&ndash; TODO test this for velodyne sensor (not bag)... &ndash;&gt;-->
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --keep-alive --rate=0.25 $(env TT_ROOT)/Post_callibration_driving_around.bag"/>
+              args="--clock --start=25 --rate=1 /home/ben/Downloads/Post_callibration_driving_around.bag /velodyne_points:=/velodyne_points_raw"/>
         <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
-              <!--args="&#45;&#45;clock &#45;&#45;keep-alive &#45;&#45;rate=0.25 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
+        <!--args="&#45;&#45;clock &#45;&#45;rate=1 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>
 
     <!-- GUI Nodes -->
@@ -40,8 +43,9 @@
     <!-- TFs, odom used in all operation -->
     <include file="$(find tt_start)/launch/tt_tf.launch"/>
     <include file="$(find tt_start)/launch/ekf.launch"/>
-    <!-- <include file="$(find tt_start)/launch/scan_matcher.launch"/> TODO do we need this RIGHT NOW -->
+    <!--<include file="$(find tt_start)/launch/scan_matcher.launch"/> TODO: debugging so disabled... -->
     <include file="$(find tt_start)/launch/p2l_2.launch"/>
+    <!-- TODO: I do not believe that we are launching this properly (no nodelet manager), see: https://github.com/jack-oquin/velodyne_height_map/blob/master/tests/heightmap_nodelet_hz.test-->
     <node name="height_map" pkg="velodyne_height_map" type="heightmap_node"
           args="_height_threshold:=0.05 _full_clouds:=True _grid_dimensions:=250 _cell_size:=0.08"/>
 
@@ -78,42 +82,40 @@
 
     <!-- If we are collecting a map (manual driving) -->
     <group if="$(arg collect_map)">
-        <include file="$(find tt_start)/launch/move_base.launch"/>
-        <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py" name="cmd_vel_converter" output="screen"/>
-        <!-- NORMALLY THIS IS HOW COSTMAP IS USED: -->
-        <group if="$(arg old_nav)">
-            <node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node">
-                <rosparam file="$(find tt_start)/config/old_params.yaml" command="load" ns="costmap"/>
-            </node>
-        </group>
-
         <group if="$(eval slam_pkg == 'gmapping')">
             <include file="$(find tt_start)/launch/slam_gmapping.launch"/>
         </group>
         <group if="$(eval slam_pkg == 'loam')">
-            <include file="$(find loam_velodyne)/launch/loam_velodyne.launch"/>
-            <include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/> <!-- TODO REMOVE ME -->
+            <include file="$(find
+			   loam_velodyne)/launch/loam_velodyne.launch"/>
+	    <include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/>
+            <include file="$(find tt_start)/launch/octomap.launch">
+	      <arg name="mapAddress" value="$(arg
+					    mapAddress)"/>
+	      <arg name="collectMap" value="$(arg collect_map)"/>
+	    </include>
         </group>
     </group>
     <!-- Unless we are collecting a map (any driving mode) -->
     <group unless="$(arg collect_map)">
-        <include file="$(find tt_start)/launch/move_base.launch">
-            <arg name="static" value="$(arg use_static_map)"/>
-        </include>
-        <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py" name="cmd_vel_converter" output="screen"/>
-        <!-- NORMALLY THIS IS HOW COSTMAP IS USED: -->
+        <!--<include file="$(find tt_start)/launch/move_base.launch"> TODO: debugging so disabled... -->
+            <!--<arg name="use_safezone" value="$(arg use_safezone)"/>-->
+        <!--</include>-->
+        <!-- Phase 5 Navigation TODO add apf_navigation? -->
         <group if="$(arg old_nav)">
             <node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node">
                 <rosparam file="$(find tt_start)/config/old_params.yaml" command="load" ns="costmap"/>
             </node>
         </group>
+        <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py" name="cmd_vel_converter" output="screen"/>
         <!-- Navigation within a static map -->
         <group unless="$(arg old_nav)">
             <group if="$(arg use_static_map)">
                 <!-- Use AMCL for all SLAM packages -->
                 <include file="$(find tt_start)/launch/amcl.launch"/>
                 <group if="$(eval slam_pkg == 'gmapping')">
-                    <node name="map_server" pkg="map_server" type="map_server" args="$(env TT_ROOT)/maps/thisiscrap.yaml"/>
+                    <node name="map_server" pkg="map_server" type="map_server"
+                          args="$(env TT_ROOT)/maps/thisiscrap.yaml"/>
                 </group>
                 <group if="$(eval slam_pkg == 'loam')">
                     <!-- <node name="map_server" pkg="map_server" type="map_server" args="loam_map.yaml"/> -->
@@ -125,12 +127,28 @@
                     <include file="$(find tt_start)/launch/slam_gmapping.launch"/>
                 </group>
                 <group if="$(eval slam_pkg == 'loam')">
-                    <!-- TODO This is where we are currently putting things for LOAM [ACTIVE] -->
-                    <include file="$(find loam_velodyne)/launch/loam_velodyne.launch"/>
-                    <include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/> <!-- TODO REMOVE ME -->
+                    <!-- TODO This is where we are currently putting
+			 things for LOAM [ACTIVE] -->
+                    <include file="$(find
+				   loam_velodyne)/launch/loam_velodyne.launch"/>
+		    <include file="$(find
+				   odom_to_loam)/launch/odom_to_loam.launch"/>
+                    <include file="$(find
+				   tt_start)/launch/octomap.launch">
+		      <arg name="mapAddress" value="$(arg
+						    mapAddress)"/>
+		      <arg name="collectMap" value="$(arg collect_map)"/>
+		    </include>
+                    <include file="$(find tt_start)/launch/amcl.launch"/>
+                    <!--<include file="$(find loam_to_octomap)/launch/loam_to_octomap.launch"/>-->
+                    <!--<include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/> --><!-- TODO REMOVE ME -->
                 </group>
             </group>
         </group>
     </group>
+
+    <!-- TODO: Zach -->
+    <include file="$(find tt_start)/launch/robot_self_filter.launch"/>
+
 
 </launch>

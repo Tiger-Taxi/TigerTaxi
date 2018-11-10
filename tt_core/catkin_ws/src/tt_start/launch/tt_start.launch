@@ -4,15 +4,15 @@
     <!-- NOTE: TT_ROOT env variable must be set to TigerTaxi root directory -->
     <!-- NOTE (building): catkin_make -DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone" -->
 
-    <arg name="simulate" default="false"/>
+    <arg name="simulate" default="true"/>
     <arg name="collect_map" default="false"/>
     <arg name="use_static_map" default="false"/>
     <arg name="slam_pkg" default="loam"/>
     <arg name="old_nav" default="false"/>
     <arg name="use_safezone" default="false"/>
     <arg name="mapAddress" default="$(find tt_start)/maps/circle_jerk_map.bt"/>
-    <arg name="rviz" default="true"/>
-    <arg name="rqt" default="true"/>
+    <arg name="rviz" default="false"/>
+    <arg name="rqt" default="false"/>
 
     <!-- Dependent on simulate (only true for simulation) -->
     <param name="/use_sim_time" value="$(arg simulate)"/>
@@ -21,7 +21,7 @@
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --start=25 --rate=1 /home/ben/Downloads/Post_callibration_driving_around.bag /velodyne_points:=/velodyne_points_raw"/>
+              args="--clock --start=0 --rate=1 $(env TT_ROOT)/2018-10-04-09-51-35.bag /velodyne_points:=/velodyne_points_raw"/>
         <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
         <!--args="&#45;&#45;clock &#45;&#45;rate=1 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>
@@ -147,8 +147,9 @@
         </group>
     </group>
 
-    <!-- TODO: Zach -->
+    <!-- TODO:  -->
     <include file="$(find tt_start)/launch/robot_self_filter.launch"/>
+    <include file="$(find tt_start)/launch/enet.launch"/>
 
 
 </launch>

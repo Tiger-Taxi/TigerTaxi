@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+<class>tt_panel_nav_ui</class>
+<widget class="QWidget" name="tt_panel_nav_ui">
+
+	<widget class="QFrame" name="cur_pos_frame">
+		<widget class="QLabel" name="cur_pos_label">
+	        <property name="text"><string>Current Position</string></property>
+	    </widget>
+
+		<widget class="QWidget" name="cur_long_widget">
+			<widget class="QLabel" name="label_cur_long">
+		        <property name="text"><string>Longitude:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="value_cur_long">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+
+		<widget class="QWidget" name="cur_lat_widget">
+			<widget class="QLabel" name="label_cur_lat">
+		        <property name="text"><string>Latitude:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="value_cur_lat">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+
+		<widget class="QWidget" name="cur_yaw_widget">
+			<widget class="QLabel" name="label_cur_yaw">
+		        <property name="text"><string>Yaw:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="value_cur_yaw">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+	</widget>
+
+	<widget class="QFrame" name="goal_pos_frame">
+		<widget class="QLabel" name="goal_pos_label">
+	        <property name="text"><string>Goal Position</string></property>
+	    </widget>
+
+		<widget class="QWidget" name="goal_status_widget">
+			<widget class="QLabel" name="label_goal_status">
+		        <property name="text"><string>Status:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="value_goal_status">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+
+		<widget class="QWidget" name="goal_long_widget">
+			<widget class="QLabel" name="label_goal_long">
+		        <property name="text"><string>Longitude:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="value_goal_long">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+
+		<widget class="QWidget" name="goal_lat_widget">
+			<widget class="QLabel" name="label_goal_lat">
+		        <property name="text"><string>Latitude:</string></property>
+		    </widget>
+		    <widget class="QLabel" name="value_goal_lat">
+		        <property name="text"><string>N/A</string></property>
+		    </widget>
+		</widget>
+	</widget>
+
+	<widget class="QWidget" name="nav_control_widget">
+		<widget class="QPushButton" name="button_follow">
+	        <property name="text"><string>Follow</string></property>
+	    </widget>
+		<widget class="QPushButton" name="button_pause">
+	        <property name="text"><string>Pause</string></property>
+	    </widget>
+		<widget class="QPushButton" name="button_cancel">
+	        <property name="text"><string>Cancel</string></property>
+	    </widget>
+	</widget>
+
+</widget>
+<resources/>
+<connections/>
+</ui>

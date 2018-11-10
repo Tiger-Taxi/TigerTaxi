@@ -11,6 +11,8 @@
     <arg name="old_nav" default="false"/>
     <arg name="use_safezone" default="false"/>
     <arg name="mapAddress" default="$(find tt_start)/maps/circle_jerk_map.bt"/>
+    <arg name="rviz" default="true"/>
+    <arg name="rqt" default="true"/>
 
     <!-- Dependent on simulate (only true for simulation) -->
     <param name="/use_sim_time" value="$(arg simulate)"/>
@@ -25,12 +27,17 @@
     </group>
 
     <!-- GUI Nodes -->
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find tt_start)/map_costmaps_and_plans.rviz" output="screen"/>
+    <group if="$(arg rviz)">
+        <node pkg="rviz" type="rviz" name="rviz" args="-d $(find tt_start)/map_costmaps_and_plans.rviz" output="screen"/>
+    </group>
+    <group if="$(arg rqt)">
+        <include file="$(find tt_gui)/launch/tt_gui.launch"/>
+        <node pkg="rqt_gui" type="rqt_gui" name="" args="--standalone tt_gui --lock-perspective --hide-title --clear-config"/>
+    </group>
 
     <!-- Safezone-related -->
     <group if="$(arg use_safezone)">
         <node name="safezone" pkg="safezone" type="safezone"/>
-        <node pkg="rqt_gui" type="rqt_gui" name="rqt"/>
     </group>
 
     <!-- TFs, odom used in all operation -->
@@ -46,35 +53,22 @@
     <group unless="$(arg simulate)">
         <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
         <include file="$(find tt_start)/launch/urg_lidar.launch"/>
-        <include file="$(find vectornav)/launch/vectornav.launch"/>
+        <include file="$(find tt_start)/launch/vectornav.launch"/>
         <!-- Camera -->
-        <include file="$(find video_stream_opencv)/launch/camera.launch">
-            <!-- Topic name -->
-            <arg name="camera_name" value="camera"/>
-            <!-- 0: /dev/video0 -->
-            <arg name="video_stream_provider" value="0"/>
-            <!-- set camera fps to -->
-            <arg name="set_camera_fps" value="30"/>
-            <!-- we want only the latest frame -->
-            <arg name="buffer_queue_size" value="1"/>
-            <!-- frames per second to query the camera for -->
-            <arg name="fps" value="30"/>
-            <!-- frame_id for the camera (/camera/image) -->
-            <arg name="frame_id" value="image"/>
-            <!-- By value, calibrations are stored to file://${ROS_HOME}/camera_info/${NAME}.yaml
-            To use your own fill this arg with the corresponding url, e.g.:
-            "file:///$(find your_camera_package)/config/your_camera.yaml" -->
-            <arg name="camera_info_url" value=""/> <!-- TODO may need to set this -->
-            <!-- flip the image horizontally (mirror it) -->
-            <arg name="flip_horizontal" value="false"/>
-            <!-- flip the image vertically -->
-            <arg name="flip_vertical" value="false"/>
-            <!-- force width and height, 0 means no forcing -->
-            <arg name="width" value="1920"/>
-            <arg name="height" value="1080"/>
-            <!-- if show a image_view window subscribed to the generated stream -->
-            <arg name="visualize" value="false"/>
-        </include>
+        <!-- <include file="$(find video_stream_opencv)/launch/camera.launch"> -->
+        <!--     <arg name="camera_name" value="camera"/> -->
+        <!--     <arg name="video_stream_provider" value="0"/> -->
+        <!--     <arg name="set_camera_fps" value="30"/> -->
+        <!--     <arg name="buffer_queue_size" value="1"/> -->
+        <!--     <arg name="fps" value="30"/> -->
+        <!--     <arg name="frame_id" value="image"/> -->
+        <!--     <arg name="camera_info_url" value=""/> -->
+        <!--     <arg name="flip_horizontal" value="false"/> -->
+        <!--     <arg name="flip_vertical" value="false"/> -->
+        <!--     <arg name="width" value="1920"/> -->
+        <!--     <arg name="height" value="1080"/> -->
+        <!--     <arg name="visualize" value="false"/> -->
+        <!-- </include> -->
         <!-- Arduinos -->
         <node pkg="rosdue" type="serial_due.py" name="due1" output="screen">
             <param name="port" value="/dev/ttyACM0"/>

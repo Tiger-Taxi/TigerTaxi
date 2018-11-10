@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- Define throttled update frequency for all message fields -->
+    <arg name="update_freq" default="1"/>
+
+    <!-- Subscribe to regular topic and output throttled mesages at chosen frequency -->
+    <node pkg="topic_tools" type="throttle" name="imu_throttle" args="messages vectornav/IMU $(arg update_freq) tt_gui/throttle/imu"/>
+    <node pkg="topic_tools" type="throttle" name="gps_throttle" args="messages vectornav/GPS $(arg update_freq) tt_gui/throttle/gps"/>
+
+</launch>

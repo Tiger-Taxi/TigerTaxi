@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <launch>
 
-    <!-- NOTE: TT_ROOT env variable must be set to TigerTaxi root directory -->
-    <!-- NOTE (building): catkin_make -DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone" -->
+    <!-- NOTE: TT_ROOT env varable must be set to TigerTaxi root directory -->
+    <!-- NOTE: (building): catkin_make -DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone" -->
 
     <arg name="simulate" default="true"/>
     <arg name="collect_map" default="true"/>
@@ -90,7 +90,7 @@
         </group>
         <group if="$(eval slam_pkg == 'loam')">
             <include file="$(find
-			   loam_velodyne)/launch/loam_velodyne.launch"/>
+			   tt_start)/launch/loam_velodyne.launch"/>
 	    <include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/>
             <include file="$(find tt_start)/launch/octomap.launch">
 	      <arg name="mapAddress" value="$(arg
@@ -133,7 +133,7 @@
                     <!-- TODO This is where we are currently putting
 			 things for LOAM [ACTIVE] -->
                     <include file="$(find
-				   loam_velodyne)/launch/loam_velodyne.launch"/>
+				   tt_start)/launch/loam_velodyne.launch"/>
 		    <include file="$(find
 				   odom_to_loam)/launch/odom_to_loam.launch"/>
                     <include file="$(find

@@ -12,16 +12,15 @@
     <arg name="use_safezone" default="false"/>
     <arg name="mapAddress" default="$(find tt_start)/maps/circle_jerk_map.bt"/>
     <arg name="rviz" default="true"/>
-    <arg name="rqt" default="true"/>
+    <arg name="rqt" default="false"/>
 
     <!-- Dependent on simulate (only true for simulation) -->
     <param name="/use_sim_time" value="$(arg simulate)"/>
 
-    <!--<remap from="/velodyne_points" to="/velodyne_points_raw"/> &lt;!&ndash; TODO test this for velodyne sensor (not bag)... &ndash;&gt;-->
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --start=25 --rate=1 /home/ben/Downloads/Post_callibration_driving_around.bag /velodyne_points:=/velodyne_points_raw"/>
+              args="--clock --start=0 --rate=1 $(env TT_ROOT)/IMU_Calibrated.bag /velodyne_points:=/velodyne_points_raw"/>
         <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
         <!--args="&#45;&#45;clock &#45;&#45;rate=1 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>
@@ -51,7 +50,11 @@
 
     <!-- Unless we are simulating, launch sensor nodes -->
     <group unless="$(arg simulate)">
-        <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
+        <group>
+            <!-- TODO: This has not been tested -->
+            <remap from="/velodyne_points" to="/velodyne_points_raw"/>
+            <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
+        </group>
         <include file="$(find tt_start)/launch/urg_lidar.launch"/>
         <include file="$(find tt_start)/launch/vectornav.launch"/>
         <!-- Camera -->

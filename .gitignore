@@ -2,7 +2,8 @@ tt_core/catkin_ws/build/
 tt_core/catkin_ws/devel/
 .DS_Store
 tt_core/catkin_ws/.catkin_tools/
-
+/frames
+/test
 gpu_testing/build/
 
 .vscode/

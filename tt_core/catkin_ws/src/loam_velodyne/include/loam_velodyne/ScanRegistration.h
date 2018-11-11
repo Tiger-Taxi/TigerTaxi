@@ -67,11 +67,6 @@ namespace loam
      */
     virtual bool setupROS(ros::NodeHandle& node, ros::NodeHandle& privateNode, RegistrationParams& config_out);
 
-    /** \brief Handler method for IMU messages.
-     *
-     * @param imuIn the new IMU message
-     */
-    virtual void handleIMUMessage(const sensor_msgs::Imu::ConstPtr& imuIn);
 
   protected:
     /** \brief Publish the current result via the respective topics. */

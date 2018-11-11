@@ -139,9 +139,6 @@ bool LaserMapping::setup(ros::NodeHandle &node, ros::NodeHandle &privateNode) {
     _subLaserCloudFullRes = node.subscribe<sensor_msgs::PointCloud2>
             ("/velodyne_cloud_3", 2, &LaserMapping::laserCloudFullResHandler, this);
 
-    // subscribe to IMU topic
-    _subImu = node.subscribe<sensor_msgs::Imu>("/imu/data", 50, &LaserMapping::imuHandler, this);
-
     return true;
 }
 
@@ -180,14 +177,6 @@ void LaserMapping::laserOdometryHandler(const nav_msgs::Odometry::ConstPtr &lase
                    laserOdometry->pose.pose.position.z);
 
     _newLaserOdometry = true;
-}
-
-void LaserMapping::imuHandler(const sensor_msgs::Imu::ConstPtr &imuIn) {
-    double roll, pitch, yaw;
-    tf::Quaternion orientation;
-    tf::quaternionMsgToTF(imuIn->orientation, orientation);
-    tf::Matrix3x3(orientation).getRPY(roll, pitch, yaw);
-    updateIMU({fromROSTime(imuIn->header.stamp), roll, pitch});
 }
 
 void LaserMapping::spin() {

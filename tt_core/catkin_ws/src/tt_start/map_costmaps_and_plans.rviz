@@ -12,7 +12,6 @@ Panels:
         - /integrated_to_odom1/Shape1
         - /integrated_to_baselink1/Shape1
         - /ekf/odom1/Shape1
-        - /Imu1
       Splitter Ratio: 0.586353958
     Tree Height: 765
   - Class: rviz/Selection
@@ -560,12 +559,12 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz_plugin_tutorials/Imu
       Color: 204; 51; 204
-      Enabled: true
+      Enabled: false
       History Length: 1
       Name: Imu
       Topic: /vectornav/IMU
       Unreliable: false
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -591,25 +590,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 18.3077621
+      Distance: 62.0313568
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 7.83798981
-        Y: 9.90103817
-        Z: -0.00889507215
+        X: 47.7459984
+        Y: -10.9150887
+        Z: 0.0493256748
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.764797091
+      Pitch: 1.56979632
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.61039758
+      Yaw: 3.18539906
     Saved: ~
 Window Geometry:
   Displays:
@@ -627,5 +626,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1916
-  X: 1920
+  X: 0
   Y: 18

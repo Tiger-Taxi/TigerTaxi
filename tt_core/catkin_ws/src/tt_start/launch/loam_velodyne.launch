@@ -18,7 +18,7 @@
 <arg name="deltaTAbortMapping" default="0.05"/>
 <arg name="deltaRAbortMapping" default="0.05"/>
 
-<remap from="/imu/data" to="/noimu"/> <!-- Remap the IMU to nothing. It's not in the correct coordinate system. -->
+<remap from="/imu/data" to="/vectornav/IMU"/> <!-- Remap the IMU to nothing. It's not in the correct coordinate system. -->
 
 <node pkg="loam_velodyne" type="multiScanRegistration" name="multiScanRegistration" output="screen">
   <!-- === PUBLISHED TOPICS === -->

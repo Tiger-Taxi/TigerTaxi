@@ -4,7 +4,7 @@
     <!--  ************** Global Parameters ***************  -->
     <param name="/use_sim_time" value="true"/>
 
-    <arg name="map" default="maze"/>
+    <arg name="map" default="empty/empty"/>
 
     <!--  ************** Stage Simulator ***************  -->
     <node pkg="stage_ros" type="stageros" name="stageros" args="$(find tt_start)/stage/maps/$(arg map).world">
@@ -35,19 +35,27 @@
         <param name="frame_id" value="/map"/>
     </node>
 
-    <group if="$(eval map == 'empty')">
+    <group if="$(eval map == 'empty/empty')">
         <node pkg="amcl" type="amcl" name="amcl" output="screen">
             <rosparam file="$(find tt_start)/stage/config/amcl_params.yaml" command="load" />
-            <param name="initial_pose_x" value="2"/>
-            <param name="initial_pose_y" value="2"/>
+            <param name="initial_pose_x" value="4"/>
+            <param name="initial_pose_y" value="4"/>
             <param name="initial_pose_a" value="3.14"/>
         </node>
     </group>
-    <group if="$(eval map == 'maze')">
+    <group if="$(eval map == 'maze/maze')">
         <node pkg="amcl" type="amcl" name="amcl" output="screen">
             <rosparam file="$(find tt_start)/stage/config/amcl_params.yaml" command="load" />
             <param name="initial_pose_x" value="2"/>
             <param name="initial_pose_y" value="2"/>
+            <param name="initial_pose_a" value="0"/>
+        </node>
+    </group>
+    <group if="$(eval map == 'pquad/pquad')">
+        <node pkg="amcl" type="amcl" name="amcl" output="screen">
+            <rosparam file="$(find tt_start)/stage/config/amcl_params.yaml" command="load" />
+            <param name="initial_pose_x" value="26"/>
+            <param name="initial_pose_y" value="46"/>
             <param name="initial_pose_a" value="0"/>
         </node>
     </group>

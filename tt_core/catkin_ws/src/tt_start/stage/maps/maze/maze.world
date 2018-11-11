@@ -1,4 +1,4 @@
-include "./../models/carlike_robot.inc"
+include "./../../models/carlike_robot.inc"
 
 define floorplan model
 (

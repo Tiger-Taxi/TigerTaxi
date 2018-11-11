@@ -1,5 +1,4 @@
-include "./../models/carlike_robot.inc"
-#include "./../models/obstacle.inc"
+include "./../../models/carlike_robot.inc"
 
 define floorplan model
 (
@@ -30,21 +29,15 @@ window
 
 floorplan
 (
-  name "empty"
-  bitmap "empty.png"
-  size [ 6.0 6.0 2.0 ]
-  pose [ 0.0 0.0 0.0 0.0 ]
+  name "pquad"
+  bitmap "pquad.pgm"
+  size [ 91.0 80.9 2.0 ]
+  pose [ 45.5 40.45 0.0 0.0 ]
 )
 
 # throw in a robot
 carlike_robot
 (
-  pose [ 2.0 2.0 0.0 180 ]
+  pose [ 26 46 0.0 0.0 ]
   name "robot"
 )
-
-#myobstacle
-#(
-#  pose [ 0.0 1.0 0.0 0.0 ]
-#  name "obstacle"
-#)

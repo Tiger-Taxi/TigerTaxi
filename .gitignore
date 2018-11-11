@@ -5,6 +5,7 @@ tt_core/catkin_ws/.catkin_tools/
 
 gpu_testing/build/
 
+.vscode/
 cmake-build-debug/
 
 *~

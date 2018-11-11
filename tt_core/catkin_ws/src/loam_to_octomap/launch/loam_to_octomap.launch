@@ -1,4 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-    <node pkg="loam_to_octomap" type="loam_to_octomap" name="loam_to_octomap" output="screen"/>
-</launch>

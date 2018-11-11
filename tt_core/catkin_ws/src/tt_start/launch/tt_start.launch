@@ -1,29 +1,26 @@
 <?xml version="1.0"?>
 <launch>
 
-    <!-- NOTE: TT_ROOT env variable must be set to TigerTaxi root directory -->
-    <!-- NOTE (building): catkin_make -DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone" -->
+    <!-- NOTE: TT_ROOT env varable must be set to TigerTaxi r-DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone"oot directory -->
+    <!-- NOTE: (building): catkin_make  -->
 
     <arg name="simulate" default="true"/>
     <arg name="collect_map" default="true"/>
-    <arg name="simulate" default="false"/>
-    <arg name="collect_map" default="false"/>
     <arg name="use_static_map" default="false"/>
     <arg name="slam_pkg" default="loam"/>
     <arg name="old_nav" default="false"/>
     <arg name="use_safezone" default="false"/>
     <arg name="mapAddress" default="$(find tt_start)/maps/circle_jerk_map.bt"/>
     <arg name="rviz" default="true"/>
-    <arg name="rqt" default="true"/>
+    <arg name="rqt" default="false"/>
 
     <!-- Dependent on simulate (only true for simulation) -->
     <param name="/use_sim_time" value="$(arg simulate)"/>
 
-    <!--<remap from="/velodyne_points" to="/velodyne_points_raw"/> &lt;!&ndash; TODO test this for velodyne sensor (not bag)... &ndash;&gt;-->
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --start=5 --rate=1 /home/ben/Downloads/IMU_Calibrated.bag /velodyne_points:=/velodyne_points_raw"/>
+              args="--clock --start=0 --rate=1 $(env TT_ROOT)/IMU_Calibrated.bag --pause /velodyne_points:=/velodyne_points_raw"/>
         <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
         <!--args="&#45;&#45;clock &#45;&#45;rate=1 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>
@@ -53,7 +50,11 @@
 
     <!-- Unless we are simulating, launch sensor nodes -->
     <group unless="$(arg simulate)">
-        <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
+        <group>
+            <!-- TODO: This has not been tested -->
+            <remap from="/velodyne_points" to="/velodyne_points_raw"/>
+            <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
+        </group>
         <include file="$(find tt_start)/launch/urg_lidar.launch"/>
         <include file="$(find tt_start)/launch/vectornav.launch"/>
         <!-- Camera -->
@@ -89,7 +90,7 @@
         </group>
         <group if="$(eval slam_pkg == 'loam')">
             <include file="$(find
-			   loam_velodyne)/launch/loam_velodyne.launch"/>
+			   tt_start)/launch/loam_velodyne.launch"/>
 	    <include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/>
             <include file="$(find tt_start)/launch/octomap.launch">
 	      <arg name="mapAddress" value="$(arg
@@ -132,7 +133,7 @@
                     <!-- TODO This is where we are currently putting
 			 things for LOAM [ACTIVE] -->
                     <include file="$(find
-				   loam_velodyne)/launch/loam_velodyne.launch"/>
+				   tt_start)/launch/loam_velodyne.launch"/>
 		    <include file="$(find
 				   odom_to_loam)/launch/odom_to_loam.launch"/>
                     <include file="$(find

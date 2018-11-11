@@ -12,6 +12,10 @@ Panels:
         - /integrated_to_odom1/Shape1
         - /integrated_to_baselink1/Shape1
         - /ekf/odom1/Shape1
+        - /TF2
+        - /TF2/Frames1
+        - /TF2/Frames1/base_link1
+        - /TF2/Frames1/base_link1/Position1
       Splitter Ratio: 0.586353958
     Tree Height: 765
   - Class: rviz/Selection
@@ -509,13 +513,13 @@ Visualization Manager:
       Unreliable: false
       Value: true
     - Class: rviz/MarkerArray
-      Enabled: false
+      Enabled: true
       Marker Topic: /occupied_cells_vis_array
       Name: /occupied_cell_vis_array MarkerArray
       Namespaces:
         {}
       Queue Size: 100
-      Value: false
+      Value: true
     - Alpha: 0.699999988
       Class: rviz/Map
       Color Scheme: map
@@ -565,6 +569,60 @@ Visualization Manager:
       Topic: /vectornav/IMU
       Unreliable: false
       Value: false
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        base_link:
+          Value: true
+        camera:
+          Value: true
+        heightmap:
+          Value: true
+        imu_link:
+          Value: true
+        laser:
+          Value: true
+        loam:
+          Value: true
+        loam_mapped:
+          Value: true
+        loam_odom:
+          Value: true
+        map:
+          Value: true
+        odom:
+          Value: true
+        velodyne:
+          Value: true
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        map:
+          odom:
+            base_link:
+              camera:
+                {}
+              heightmap:
+                {}
+              imu_link:
+                {}
+              laser:
+                {}
+              loam:
+                {}
+              loam_mapped:
+                {}
+              loam_odom:
+                {}
+              velodyne:
+                {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -590,25 +648,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 62.0313568
+      Distance: 101.672821
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 47.7459984
-        Y: -10.9150887
-        Z: 0.0493256748
+        X: 27.4466114
+        Y: -7.84018612
+        Z: 0.0308087971
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 1.56979632
+      Pitch: 1.35479629
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.18539906
+      Yaw: 3.17040157
     Saved: ~
 Window Geometry:
   Displays:
@@ -626,5 +684,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1916
-  X: 0
+  X: 1920
   Y: 18

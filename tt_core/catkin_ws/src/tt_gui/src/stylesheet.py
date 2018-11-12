@@ -40,7 +40,7 @@ LOGO_PATH           = os.environ['TT_ROOT'] + '/tt_core/catkin_ws/src/tt_gui/img
 GOAL_PATH           = os.environ['TT_ROOT'] + '/tt_core/catkin_ws/src/tt_gui/imgs/rit_dest.png'
 
 # Labels for status state and message toggle state
-STATUS_LABELS       = ['Degraded', 'Running', 'Disabled']
+STATUS_LABELS       = ['Degraded', 'Running', 'No Messages']
 TOGGLE_LABELS       = ['Live Feed', 'Pause']
 
 # Long/lat boundaries for the campus map
@@ -79,4 +79,4 @@ QUEUE_SIZE          = 5
 FREQ_UPDATE         = 1
 
 # Lowest frequency acceptable to consider a sensor running as opposed to degraded
-FREQ_CUTOFF         = 5
+FREQ_CUTOFF         = 10

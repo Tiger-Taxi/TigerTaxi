@@ -14,6 +14,8 @@ frame_id: imu_link
 
 # Data publication form, true for East North Up or false for North East Down <- false is default setting
 tf_ned_to_enu: false
+# Accel Data in sensor frame or Ned frame: default false
+accel_ned: false
 # If true tells vn-wrapper to calibrate the imu
 Calibratedev : true
 

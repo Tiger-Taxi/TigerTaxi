@@ -5,7 +5,7 @@ dataset: cityscapes
 dataset_dir: /home/ken/Documents/Dataset/
 epochs: 500
 height: 360
-ignore_unlabeled: True
+ignore_unlabeled: False
 imshow_batch: False
 learning_rate: 0.0005
 lr_decay: 0.1
@@ -20,8 +20,8 @@ train_encoder: False
 weighing: enet
 weight_decay: 0.0002
 width: 600
-workers: 4
+workers: 2
 
 BEST VALIDATION
-Epoch: 5
-Mean IoU: 0.17301715069359314
+Epoch: 45
+Mean IoU: 0.7701153417358948

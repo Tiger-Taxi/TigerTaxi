@@ -97,27 +97,27 @@ ipm::ipm()
   transformationMat = K * (T * (R * A1));
 }
 
-cv::Mat ipm::mapPerspective(cv::Mat source)
+cv::Mat ipm::mapPerspective(cv::Mat source)//2
 {
   // cv::Size previewImageSize = source.size();
   // double w = (double)previewImageSize.width, h = (double)previewImageSize.height;
 
   cv::Mat destination;
 
-  cv::warpPerspective(source, destination, transformationMat, previewImageSize, cv::INTER_CUBIC | cv::WARP_INVERSE_MAP);
+  cv::warpPerspective(source, destination, transformationMat, previewImageSize, cv::INTER_NEAREST | cv::WARP_INVERSE_MAP);//INTER_CUBIC
 
-  cv::resize(destination, destination,cv::Size(frameWidth, frameHeight));
+  // cv::resize(destination, destination,cv::Size(frameWidth, frameHeight));
 
   return destination;
 }
 
-cv::Mat ipm::removeDistortion(cv::Mat source)
+cv::Mat ipm::removeDistortion(cv::Mat source)//1
 {
   cv::Mat destination;
 
-  cv::resize(source, source, cv::Size(cameraWidth, cameraHeight));
-  cv::remap(source, destination, map1, map2, cv::INTER_LINEAR);
-  cv::resize(destination, destination, cv::Size(frameWidth, frameHeight));
+  // cv::resize(source, source, cv::Size(cameraWidth, cameraHeight));
+  cv::remap(source, destination, map1, map2, cv::INTER_NEAREST);//INTER_LINEAR
+  cv::resize(destination, destination, cv::Size(frameWidth, frameHeight),0,0,cv::INTER_NEAREST);
   return destination;
 }
     

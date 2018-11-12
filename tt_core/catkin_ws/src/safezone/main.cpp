@@ -30,7 +30,8 @@ void doItAll(const cv::Mat& image);
 
 ros::Publisher safe_pub;
 ros::Publisher unsafe_pub;
-
+ros::Publisher canny_pub;
+cv_bridge::CvImage out_msg;
 
 void predicitonCallback(const sensor_msgs::ImageConstPtr& msg) {
     try {
@@ -40,21 +41,22 @@ void predicitonCallback(const sensor_msgs::ImageConstPtr& msg) {
     } catch (cv_bridge::Exception &e) {
         ROS_ERROR("Unable to convert %s image to cv", msg->encoding.c_str());
     }
-    // doItAll( cv_bridge::toCvShare(msg, "mono8") );
 }
 
 //Convert Enet prediction to safe and unsafe point clouds
 void doItAll(const cv::Mat& image) {
     ipm mapper;
     cv::Mat upsized_prediction;
-    cv::resize(image, upsized_prediction, cv::Size(1920, 1080));
+    cv::resize(image, upsized_prediction, cv::Size(1920, 1080),0,0,cv::INTER_NEAREST);
     
     // Apply IPM
     upsized_prediction = mapper.removeDistortion(upsized_prediction);
     upsized_prediction = mapper.mapPerspective(upsized_prediction);
+    // std::cout << upsized_prediction.type();
+    
     // Edge Detection
     cv::Mat cloud_frame;
-    cv::resize(upsized_prediction, cloud_frame, cv::Size(pcwidth, pcheight));
+    cv::resize(upsized_prediction, cloud_frame, cv::Size(pcwidth, pcheight),0,0,cv::INTER_NEAREST);
     // Pad Bottom
 
     cv::Rect roi(0, 0, cloud_frame.cols, cloud_frame.rows);
@@ -64,13 +66,32 @@ void doItAll(const cv::Mat& image) {
     cv::split(cloud_frame, cloud_frame_spl);
     cv::Mat unsafe_mask;
     unsafe_mask = cloud_frame_spl[0].clone();//was 2
+    // unsafe_mask = cloud_frame.clone();
+    for(int i = 0; i < unsafe_mask.rows; i++){
+        for (int j = 0; j < unsafe_mask.cols; ++j) {
+            if (unsafe_mask.at<uchar>(i, j) != 1) {
+                unsafe_mask.at<uchar>(i, j) = 255;
+            }
+        }
+    }
 
     // cv::imwrite("/home/rosmaster/TigerTaxi/test/unsafemask.png", unsafe_mask);
     // cv::imwrite("/home/rosmaster/TigerTaxi/test/test.png", image);
-
+    out_msg.encoding = "mono8"; // Or whatever
+    out_msg.image    = unsafe_mask.clone(); // Your cv::Mat
+    canny_pub.publish(out_msg.toImageMsg()); 
     // Run edge detection
-    cv::Canny(unsafe_mask.clone(), unsafe_mask, 50, 150, 3);
-    unsafe_mask = unsafe_mask(roi); 
+    cv::Canny(unsafe_mask.clone(), unsafe_mask, 1, 3, 3);
+    // cv::imwrite("/home/rosmaster/TigerTaxi/test/b4roi.png", unsafe_mask);
+    unsafe_mask = unsafe_mask(roi);
+
+    
+
+    
+    // cv::imwrite("/home/rosmaster/TigerTaxi/test/afterroi.png", unsafe_mask);
+ 
+    
+    // cv::imwrite("/home/rosmaster/TigerTaxi/test/cannyout.png", unsafe_mask);
     // for(int i = 0; i < unsafe_mask.rows; i++)
     // {
     //     for (int j = 0; j < unsafe_mask.cols; ++j) {
@@ -88,7 +109,7 @@ void doItAll(const cv::Mat& image) {
 
     unsafe_cloud->header.frame_id = "/camera";
     unsafe_cloud->header.stamp = ros::Time::now().toNSec() / 1000;
-
+    //how for the camera sees from the cart
     float measured_height = 10.15;
     float measured_width = 19;
 
@@ -96,6 +117,7 @@ void doItAll(const cv::Mat& image) {
     for (int r = 0; r < pcheight; ++r) {
         for (int c = 0; c < pcwidth; ++c) {
             if (unsafe_mask.at<uchar>(r, c) != 0) {
+                // std::cout << "got an unsafe point!\n";
                 pcl::PointXYZRGB p;
                 //The coordinate of the point is taken from the depth map
                 //Y and Z  taken negative to immediately visualize the cloud in the right way
@@ -139,6 +161,7 @@ int main(int argc, char **argv) {
     ros::NodeHandle n;
     safe_pub = n.advertise<PointCloudT>("safezone_pc", 1);
     unsafe_pub = n.advertise<PointCloudT>("unsafezone_pc", 1);
+    canny_pub = n.advertise<sensor_msgs::Image>("cannyimg", 1);
 
     image_transport::ImageTransport it(n);
     image_transport::Subscriber it_sub = it.subscribe("/enet/image", 1, &predicitonCallback);

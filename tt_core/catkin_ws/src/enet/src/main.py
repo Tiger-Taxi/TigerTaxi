@@ -12,13 +12,12 @@ from cv_bridge import CvBridge
 model = None
 pub = rospy.Publisher('/enet/image', Image,queue_size=1)#publish prediction to /enet/image
 bridge = CvBridge() #bridge from sensormsg to cv2/pil
-
 def main():
     global model #get the global model and instantiate it
-    model_path = '/home/rosmaster/TigerTaxi/tt_core/catkin_ws/src/enet/src/save/ENet_City_only/ENet'
+    model_path = '/home/rosmaster/TigerTaxi/tt_core/catkin_ws/src/enet/src/save/ENet_Rit_only/ENet'
     checkpoint = torch.load(model_path)
     #This will change to reflect the number of classes we want to predict based on the model loaded
-    num_classes = 20
+    num_classes = 3
     #load the model
     model = ENet(num_classes)
     model = model.cuda()
@@ -33,6 +32,9 @@ def camera_callback(msg):
     global model, pub #get the globals to save time
     img =  bridge.imgmsg_to_cv2(msg, "rgb8") #rosmsg->cv2
     image = transforms.ToTensor()(img)
+    mean = torch.tensor([0.4890, 0.5027, 0.4827])#mean and std for rit
+    std = torch.tensor([0.1752, 0.1786, 0.1841])
+    image = transforms.Normalize(mean=mean,std=std)(image)
     image= image.unsqueeze(0)#reshape for the model to accept (1, 3, 360, 600))
     with torch.no_grad(): #tell pytorch to not compute gradients for speed.
         image = image.cuda()  #send image
@@ -41,7 +43,12 @@ def camera_callback(msg):
         predictions = predictions.cpu()#send image back to cpu
     predictions = (predictions.numpy()).astype(np.uint8)#convert to numpy
     predictions = np.squeeze(predictions)#resize to publish (360,600)
-    segmsg = bridge.cv2_to_imgmsg(predictions, "mono8") #publish as black and white image
+    predictions[predictions==1] = 127
+    predictions[predictions==2] = 255
+    predictions[predictions==0] = 1
+    predictions = np.stack((predictions,predictions,predictions),axis=2)
+    # print(predictions.shape)
+    segmsg = bridge.cv2_to_imgmsg(predictions,'bgr8') #publish 
     pub.publish(segmsg)#publish
     
 

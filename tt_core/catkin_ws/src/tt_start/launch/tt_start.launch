@@ -4,7 +4,7 @@
     <!-- NOTE: TT_ROOT env variable must be set to TigerTaxi root directory -->
     <!-- NOTE (building): catkin_make -DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone" -->
 
-    <arg name="simulate" default="true"/>
+    <arg name="simulate" default="false"/>
     <arg name="collect_map" default="false"/>
     <arg name="use_static_map" default="false"/>
     <arg name="slam_pkg" default="loam"/>
@@ -21,7 +21,7 @@
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --start=300 --rate=1 $(env TT_ROOT)/safezone.bag /velodyne_points:=/velodyne_points_raw"/>
+              args="--clock --start=300 --rate=1 /media/rosmaster/Elements/bagfiles/2018-10-04-09-51-35.orig.bag /velodyne_points:=/velodyne_points_raw"/>
         <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
         <!--args="&#45;&#45;clock &#45;&#45;rate=1 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>
@@ -148,14 +148,9 @@
     </group>
 
     <!-- TODO:  -->
-    <include file="$(find tt_start)/launch/robot_self_filter.launch"/>
+    <!-- <include file="$(find tt_start)/launch/robot_self_filter.launch"/> -->
     <include file="$(find tt_start)/launch/enet.launch"/>
-    <!-- <node name="rawshow" pkg="image_view" type="image_view" respawn="false" required="true" output="screen"  >
-        <remap from="image" to="/camera/image"/>
-   </node>
-   <node name="enetshow" pkg="image_view" type="image_view" respawn="false" required="true" output="screen"  >
-        <remap from="image" to="/enet/image"/>
-   </node> -->
+    <node name="camera_pub" pkg="camera_pub" type="camera_pub"/>
 
 
 </launch>

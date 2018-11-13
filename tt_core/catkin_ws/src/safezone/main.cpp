@@ -81,7 +81,7 @@ void doItAll(const cv::Mat& image) {
     out_msg.image    = unsafe_mask.clone(); // Your cv::Mat
     canny_pub.publish(out_msg.toImageMsg()); 
     // Run edge detection
-    cv::Canny(unsafe_mask.clone(), unsafe_mask, 1, 3, 3);
+    // cv::Canny(unsafe_mask.clone(), unsafe_mask, 1, 3, 3);
     // cv::imwrite("/home/rosmaster/TigerTaxi/test/b4roi.png", unsafe_mask);
     unsafe_mask = unsafe_mask(roi);
 
@@ -116,7 +116,7 @@ void doItAll(const cv::Mat& image) {
     // Construct pointcloud from perspective mapped image
     for (int r = 0; r < pcheight; ++r) {
         for (int c = 0; c < pcwidth; ++c) {
-            if (unsafe_mask.at<uchar>(r, c) != 0) {
+            if (unsafe_mask.at<uchar>(r, c) == 1) {
                 // std::cout << "got an unsafe point!\n";
                 pcl::PointXYZRGB p;
                 //The coordinate of the point is taken from the depth map

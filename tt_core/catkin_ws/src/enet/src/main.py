@@ -7,6 +7,8 @@ from enet import ENet
 import torchvision.transforms as transforms
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
+# import time
+
 
 #create globals so to not remake each callback
 model = None
@@ -30,6 +32,7 @@ def main():
 
 def camera_callback(msg):
     global model, pub #get the globals to save time
+    # start = time.time()
     img =  bridge.imgmsg_to_cv2(msg, "rgb8") #rosmsg->cv2
     image = transforms.ToTensor()(img)
     mean = torch.tensor([0.4890, 0.5027, 0.4827])#mean and std for rit
@@ -47,9 +50,10 @@ def camera_callback(msg):
     predictions[predictions==2] = 255
     predictions[predictions==0] = 1
     predictions = np.stack((predictions,predictions,predictions),axis=2)
-    # print(predictions.shape)
     segmsg = bridge.cv2_to_imgmsg(predictions,'bgr8') #publish 
     pub.publish(segmsg)#publish
+    # end = time.time()
+    # print(int(1/(end-start)),"fps")
     
 
 

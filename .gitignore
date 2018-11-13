@@ -129,5 +129,7 @@ ENV/
 # mypy
 .mypy_cache/
 
+/maps
+/tt_core/ENet
 # Now, whitelisting somethings I want
 !tt_core/catkin_ws/src/loam_velodyne/src/lib/

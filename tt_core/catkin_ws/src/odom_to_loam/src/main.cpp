@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 	ros::init(argc, argv, "odom_to_loam");
 	ros::NodeHandle n;
 
-    auto odomSub = n.subscribe<nav_msgs::Odometry>("/ekf/odom", 2, OdomCallback);
+    auto odomSub = n.subscribe<nav_msgs::Odometry>("/ekf/loam_odom", 2, OdomCallback);
     imuSub = n.subscribe<sensor_msgs::Imu>("/vectornav/IMU", 2, imuCallback);
 
     //auto poseSubTest = n.subscribe<geometry_msgs::PoseWithCovarianceStamped>("/laser_odom_map", 2, PoseCallback);

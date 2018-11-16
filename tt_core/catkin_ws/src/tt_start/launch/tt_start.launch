@@ -20,7 +20,7 @@
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --start=0 --rate=1 /home/ben/Downloads/IMU_Calibrated.bag --pause /velodyne_points:=/velodyne_points_raw"/>
+              args="--clock --start=10 --rate=1 --pause /home/ben/Downloads/accel_ned.bag /velodyne_points:=/velodyne_points_raw"/>
         <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
         <!--args="&#45;&#45;clock &#45;&#45;rate=1 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>

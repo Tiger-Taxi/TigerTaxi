@@ -117,7 +117,7 @@ bool LaserOdometry::setup(ros::NodeHandle &node, ros::NodeHandle &privateNode) {
     _pubLaserCloudFullRes = node.advertise<sensor_msgs::PointCloud2>("/velodyne_cloud_3", 2);
     _pubLaserOdometry = node.advertise<nav_msgs::Odometry>("/loam_odom_to_odom", 5);
     _pubLaserOdometry2 = node.advertise<nav_msgs::Odometry>("/loam_odom_to_baselink", 5);
-
+    _pubLaserOdometry3 = node.advertise<nav_msgs::Odometry>("/loam_odom_to_baselink_2", 5);
 
     // subscribe to scan registration topics
     _subCornerPointsSharp = node.subscribe<sensor_msgs::PointCloud2>
@@ -316,7 +316,14 @@ void LaserOdometry::publishResult() {
     _laserOdometryMsg.pose.pose.position = msgTransformTemp.pose.position;
     _laserOdometryMsg.pose.pose.orientation = msgTransformTemp.pose.orientation;
 
+    _laserOdometryMsg2.header.stamp = _timeSurfPointsLessFlat;
+    _laserOdometryMsg2.header.frame_id = "loam_gps";
+    _laserOdometryMsg2.child_frame_id = "loam_odom";
+    _laserOdometryMsg2.pose.pose.position = msgTransformTemp.pose.position;
+    _laserOdometryMsg2.pose.pose.orientation = msgTransformTemp.pose.orientation;
+
     _pubLaserOdometry2.publish(_laserOdometryMsg);
+    _pubLaserOdometry3.publish(_laserOdometryMsg2);
 
     // publish cloud results according to the input output ratio
     if (_ioRatio < 2 || frameCount() % _ioRatio == 1) {

@@ -147,6 +147,7 @@ class LaserOdometry : public BasicLaserOdometry {
         bool _newImuTrans;                ///< flag if a new IMU transformation information cloud has been received
 
         nav_msgs::Odometry _laserOdometryMsg;       ///< laser odometry message
+        nav_msgs::Odometry _laserOdometryMsg2;       ///< laser odometry message
 
         tf::Quaternion initialImu;
 
@@ -156,6 +157,7 @@ class LaserOdometry : public BasicLaserOdometry {
         ros::Publisher _pubLaserCloudFullRes;     ///< full resolution cloud message publisher
         ros::Publisher _pubLaserOdometry;         ///< laser odometry publisher
         ros::Publisher _pubLaserOdometry2;         ///< laser odometry publisher
+        ros::Publisher _pubLaserOdometry3;         ///< laser odometry publisher
 
         ros::Subscriber _subCornerPointsSharp;      ///< sharp corner cloud message subscriber
         ros::Subscriber _subCornerPointsLessSharp;  ///< less sharp corner cloud message subscriber

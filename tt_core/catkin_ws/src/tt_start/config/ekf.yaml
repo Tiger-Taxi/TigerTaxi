@@ -272,8 +272,8 @@ loam_navsat_transform:
   magnetic_declination_radians: 0 #0.19914207
   yaw_offset: 1.5707
   zero_altitude: true
-  broadcast_utm_transform: false
-  publish_filtered_gps: true
+  broadcast_utm_transform: true
+  publish_filtered_gps: false
   use_odometry_yaw: true # Check if odom message uses the magnetometer
   #May want to set this to true, since I can't trust the IMU's yaw
   wait_for_datum: true

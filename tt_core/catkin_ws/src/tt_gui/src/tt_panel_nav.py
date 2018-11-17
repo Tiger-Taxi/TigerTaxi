@@ -5,7 +5,7 @@ from PyQt5.QtGui import *
 
 from argparse import ArgumentParser
 
-from geometry_msgs.msg import PoseStamped
+from actionlib_msgs.msg import GoalID
 from sensor_msgs.msg import NavSatFix
 from std_msgs.msg import Float32
 from sensor_msgs.msg import Imu
@@ -116,7 +116,8 @@ class tt_panel_nav_ui(QWidget):
 
         self.subscriber_nav = rospy.Subscriber('tt_gui/nav/coords', String, self.nav_callback, queue_size = QUEUE_SIZE)
         self.publisher_nav = rospy.Publisher('tt_gui/nav/status', Float32, queue_size = QUEUE_SIZE)
-        self.publisher_gps = rospy.Publisher('gps_goal_pose', PoseStamped, queue_size = QUEUE_SIZE)
+        self.publisher_gps = rospy.Publisher('gps_goal_fix', NavSatFix, queue_size = QUEUE_SIZE)
+        self.publisher_cancel = rospy.Publisher('move_base/cancel', GoalID, queue_size = QUEUE_SIZE)
 
         # Not Set | Confirm | Following
         self.navstatus = 0
@@ -134,19 +135,13 @@ class tt_panel_nav_ui(QWidget):
     def button_pause_pressed(self):
         if self.navstatus == 2:
             self.navstatus = 1
-            lat = self.value_cur_lat.text()
-            lon = self.value_cur_long.text()
-            if lat != 'N/A' and lon != 'N/A':
-                self.sendGpsGoal(float(lat), float(lon))
+            self.publisher_cancel.publish(GoalID())
         self._update_button_state()
 
     def button_cancel_pressed(self):
         if self.navstatus == 1 or self.navstatus == 2:
             if self.navstatus == 2:
-                lat = self.value_cur_lat.text()
-                lon = self.value_cur_long.text()
-                if lat != 'N/A' and lon != 'N/A':
-                    self.sendGpsGoal(float(lat), float(lon))
+                self.publisher_cancel.publish(GoalID())
             self.navstatus = 0
             self.value_goal_long.setText('N/A')
             self.value_goal_lat.setText('N/A')
@@ -171,11 +166,9 @@ class tt_panel_nav_ui(QWidget):
         self.publisher_nav.publish(msg)
 
     def sendGpsGoal(self, lat, lon):
-        msg = PoseStamped()
-        msg.header.stamp = rospy.Time.now()
-        msg.header.frame_id = '/map'
-        msg.pose.position.x = lon
-        msg.pose.position.y = lat
+        msg = NavSatFix()
+        msg.longitude = lon
+        msg.latitude = lat
         self.publisher_gps.publish(msg)
 
     def gps_callback(self, data):

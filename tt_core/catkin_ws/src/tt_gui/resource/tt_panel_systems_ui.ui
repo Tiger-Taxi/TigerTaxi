@@ -13,7 +13,7 @@
 		        <property name="text"><string>Status:</string></property>
 		    </widget>
 		    <widget class="QLabel" name="imu_status_value">
-		        <property name="text"><string>Degraded</string></property>
+		        <property name="text"><string>No Messages</string></property>
 		    </widget>
 		</widget>
 		<widget class="QWidget" name="imu_rate_widget">
@@ -53,7 +53,7 @@
 		        <property name="text"><string>Status:</string></property>
 		    </widget>
 		    <widget class="QLabel" name="gps_status_value">
-		        <property name="text"><string>Degraded</string></property>
+		        <property name="text"><string>No Messages</string></property>
 		    </widget>
 		</widget>
 		<widget class="QWidget" name="gps_rate_widget">
@@ -101,7 +101,7 @@
 		        <property name="text"><string>Status:</string></property>
 		    </widget>
 		    <widget class="QLabel" name="cam_status_value">
-		        <property name="text"><string>Degraded</string></property>
+		        <property name="text"><string>No Messages</string></property>
 		    </widget>
 		</widget>
 		<widget class="QWidget" name="cam_rate_widget">
@@ -124,7 +124,7 @@
 		        <property name="text"><string>Status:</string></property>
 		    </widget>
 		    <widget class="QLabel" name="vel_status_value">
-		        <property name="text"><string>Degraded</string></property>
+		        <property name="text"><string>No Messages</string></property>
 		    </widget>
 		</widget>
 		<widget class="QWidget" name="vel_rate_widget">
@@ -147,7 +147,7 @@
 		        <property name="text"><string>Status:</string></property>
 		    </widget>
 		    <widget class="QLabel" name="hok_status_value">
-		        <property name="text"><string>Degraded</string></property>
+		        <property name="text"><string>No Messages</string></property>
 		    </widget>
 		</widget>
 		<widget class="QWidget" name="hok_rate_widget">

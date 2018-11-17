@@ -40,7 +40,7 @@ class HzThread(object):
                     self.systems_panel.imu_status = 0
             else:
                 self.systems_panel.imu_rate_value.setText('%3.5f' % 0)
-                self.systems_panel.imu_status = 0
+                self.systems_panel.imu_status = 2
             self.systems_panel.imu_update()
 
             rate = self.hz_topic.get_hz('/vectornav/GPS')
@@ -52,10 +52,10 @@ class HzThread(object):
                     self.systems_panel.gps_status = 0
             else:
                 self.systems_panel.gps_rate_value.setText('%3.5f' % 0)
-                self.systems_panel.gps_status = 0
+                self.systems_panel.gps_status = 2
             self.systems_panel.gps_update()
 
-            rate = self.hz_topic.get_hz('/camera/image')
+            rate = self.hz_topic.get_hz('/enet/image')
             if rate is not None:
                 self.systems_panel.cam_rate_value.setText('%3.5f' % rate[0])
                 if rate[0] > FREQ_CUTOFF:
@@ -64,7 +64,7 @@ class HzThread(object):
                     self.systems_panel.cam_status = 0
             else:
                 self.systems_panel.cam_rate_value.setText('%3.5f' % 0)
-                self.systems_panel.cam_status = 0
+                self.systems_panel.cam_status = 2
             self.systems_panel.cam_update()
 
             rate = self.hz_topic.get_hz('/velodyne_points')
@@ -76,7 +76,7 @@ class HzThread(object):
                     self.systems_panel.vel_status = 0
             else:
                 self.systems_panel.vel_rate_value.setText('%3.5f' % 0)
-                self.systems_panel.vel_status = 0
+                self.systems_panel.vel_status = 2
             self.systems_panel.vel_update()
 
             rate = self.hz_topic.get_hz('/scan')
@@ -88,7 +88,7 @@ class HzThread(object):
                     self.systems_panel.hok_status = 0
             else:
                 self.systems_panel.hok_rate_value.setText('%3.5f' % 0)
-                self.systems_panel.hok_status = 0
+                self.systems_panel.hok_status = 2
             self.systems_panel.hok_update()
 
             rospy.sleep(FREQ_UPDATE)
@@ -173,8 +173,8 @@ class tt_panel_systems_ui(QWidget):
 
         self.imu_message_button.clicked.connect(self.imu_toggle_pause)
 
-        # Degraded | Running | Disabled
-        self.imu_status = 0
+        # Degraded | Running | No Messages
+        self.imu_status = 2
         # Paused | Resumed
         self.imu_toggle = 1
 
@@ -239,8 +239,8 @@ class tt_panel_systems_ui(QWidget):
 
         self.gps_message_button.clicked.connect(self.gps_toggle_pause)
 
-        # Degraded | Running | Disabled
-        self.gps_status = 0
+        # Degraded | Running | No Messages
+        self.gps_status = 2
         # Paused | Resumed
         self.gps_toggle = 1
 
@@ -275,13 +275,13 @@ class tt_panel_systems_ui(QWidget):
         self.cam_rate_label.setStyleSheet(MES_L_STYLE)
         self.cam_rate_value.setStyleSheet(MES_L_STYLE)
 
-        # Degraded | Running | Disabled
-        self.cam_status = 0
+        # Degraded | Running | No Messages
+        self.cam_status = 2
 
         self.cam_update()
 
         if TRACK_SYSTEM_STATUS:
-            self.cam_hz = rospy.Subscriber('/camera/image', rospy.AnyMsg, self.hz.callback_hz, callback_args='/camera/image')
+            self.cam_hz = rospy.Subscriber('/enet/image', rospy.AnyMsg, self.hz.callback_hz, callback_args='/enet/image')
 
     def initVel(self):
         self.vel_frame.setStyleSheet(FRAME_STYLE)
@@ -308,8 +308,8 @@ class tt_panel_systems_ui(QWidget):
         self.vel_rate_label.setStyleSheet(MES_L_STYLE)
         self.vel_rate_value.setStyleSheet(MES_L_STYLE)
 
-        # Degraded | Running | Disabled
-        self.vel_status = 0
+        # Degraded | Running | No Messages
+        self.vel_status = 2
 
         self.vel_update()
 
@@ -341,8 +341,8 @@ class tt_panel_systems_ui(QWidget):
         self.hok_rate_label.setStyleSheet(MES_L_STYLE)
         self.hok_rate_value.setStyleSheet(MES_L_STYLE)
 
-        # Degraded | Running | Disabled
-        self.hok_status = 0
+        # Degraded | Running | No Messages
+        self.hok_status = 2
 
         self.hok_update()
 
@@ -357,7 +357,6 @@ class tt_panel_systems_ui(QWidget):
             self.imu_status_value.setText(STATUS_LABELS[1])
             self.imu_status_value.setStyleSheet(S_RUNNING)
         else:
-            # Should never reach this state
             self.imu_status_value.setText(STATUS_LABELS[2])
             self.imu_status_value.setStyleSheet(S_DISABLED)
 
@@ -395,7 +394,6 @@ class tt_panel_systems_ui(QWidget):
             self.gps_status_value.setText(STATUS_LABELS[1])
             self.gps_status_value.setStyleSheet(S_RUNNING)
         else:
-            # Should never reach this state
             self.gps_status_value.setText(STATUS_LABELS[2])
             self.gps_status_value.setStyleSheet(S_DISABLED)
 
@@ -426,7 +424,6 @@ class tt_panel_systems_ui(QWidget):
             self.cam_status_value.setText(STATUS_LABELS[1])
             self.cam_status_value.setStyleSheet(S_RUNNING)
         else:
-            # Should never reach this state
             self.cam_status_value.setText(STATUS_LABELS[2])
             self.cam_status_value.setStyleSheet(S_DISABLED)
 
@@ -438,7 +435,6 @@ class tt_panel_systems_ui(QWidget):
             self.vel_status_value.setText(STATUS_LABELS[1])
             self.vel_status_value.setStyleSheet(S_RUNNING)
         else:
-            # Should never reach this state
             self.vel_status_value.setText(STATUS_LABELS[2])
             self.vel_status_value.setStyleSheet(S_DISABLED)
 
@@ -450,6 +446,5 @@ class tt_panel_systems_ui(QWidget):
             self.hok_status_value.setText(STATUS_LABELS[1])
             self.hok_status_value.setStyleSheet(S_RUNNING)
         else:
-            # Should never reach this state
             self.hok_status_value.setText(STATUS_LABELS[2])
             self.hok_status_value.setStyleSheet(S_DISABLED)

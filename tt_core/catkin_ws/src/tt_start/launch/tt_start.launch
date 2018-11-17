@@ -30,6 +30,7 @@
     </group>
 
     <group if="$(arg rqt)">
+        <include file="$(find tt_start)/launch/gps_goal.launch"/>
         <include file="$(find tt_gui)/launch/tt_gui.launch"/>
         <node pkg="rqt_gui" type="rqt_gui" name="" args="--standalone tt_gui --lock-perspective --hide-title --clear-config"/>
     </group>

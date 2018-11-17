@@ -5,8 +5,8 @@
     <!-- NOTE (building): catkin_make -DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone" -->
 
     <arg name="simulate" default="false"/>
-    <arg name="collect_map" default="false"/>
-    <arg name="use_static_map" default="true"/>
+    <arg name="collect_map" default="true"/>
+    <arg name="use_static_map" default="false"/>
     <arg name="use_safezone" default="false"/>
     <arg name="mapAddress" default="$(find tt_start)/maps/circle_jerk_map.bt"/>
     <arg name="rviz" default="true"/>
@@ -61,18 +61,25 @@
         </group>
         <include file="$(find tt_start)/launch/urg_lidar.launch"/>
         <include file="$(find tt_start)/launch/vectornav.launch"/>
-        <!-- Arduinos -->
-         <node pkg="rosdue" type="serial_due.py" name="due1" output="screen">
-            <param name="port" value="/dev/ttyACM0"/>
-        </node>
+        <!-- Arduinos 
+        <node pkg="rosdue" type="serial_due.py" name="due1" output="screen">
+            <param name="serial_port" value="/dev/ttyACM0"/>
+        </node> -->
+        <node pkg="rosdue" type="serial_due.py" name="due1" output="screen" args="/dev/ttyACM0"/>
     </group>
 
     <!-- If we are collecting a map (manual driving) -->
-     <group if="$(arg collect_map)">
+    <group if="$(arg collect_map)">
         <include file="$(find tt_start)/launch/octomap.launch">
-           <arg name="mapAddress" value="$(arg mapAddress)"/>
-           <arg name="collectMap" value="$(arg collect_map)"/>
+            <arg name="mapAddress" value="$(arg mapAddress)"/>
+            <arg name="collectMap" value="$(arg collect_map)"/>
         </include>
+        <!-- TODO -->
+        <include file="$(find tt_start)/launch/move_base.launch">
+            <arg name="use_safezone" value="$(arg use_safezone)"/>
+        </include>
+        <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py" name="cmd_vel_converter" output="screen"/>
+        <!-- TODO -->
     </group>
 
     <!-- Unless we are collecting a map (any driving mode) -->

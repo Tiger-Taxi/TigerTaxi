@@ -25,6 +25,11 @@
         <rosparam unless="$(arg use_safezone)" file="$(find tt_start)/config/obstacle_layer_common_no_safezone.yaml"
                   command="load" ns="local_costmap"/>
 
+        <rosparam file="$(find tt_start)/config/costmap_common_params.yaml"
+                  command="load" ns="global_costmap"/>
+        <rosparam file="$(find tt_start)/config/costmap_common_params.yaml"
+                  command="load" ns="local_costmap"/>
+
         <rosparam file="$(find tt_start)/config/global_costmap_params.yaml" command="load"/>
         <rosparam file="$(find tt_start)/config/local_costmap_params.yaml" command="load"/>
         <!--<rosparam file="$(find tt_start)/config/base_local_planner_params.yaml" command="load"/>-->

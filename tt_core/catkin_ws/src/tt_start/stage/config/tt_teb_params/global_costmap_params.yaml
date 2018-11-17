@@ -17,10 +17,10 @@ global_costmap:
   # origin_y:   0.0
   # = OPTION 2: Live SLAM map  =TODO
 #  static_map: False
-#  width:      40.0
-#  height:     40.0
-#  origin_x:   -20.0
-#  origin_y:   -20.0
+  width:      40.0
+  height:     40.0
+  origin_x:   13.0
+  origin_y:   23.0
   static_map:        True
   rolling_window:    False
   footprint_padding: 0.05

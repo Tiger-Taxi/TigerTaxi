@@ -14,14 +14,14 @@ mode: train
 name: ENet
 print_step: False
 reset-optimizer: False
-resume: False
+resume: True
 save_dir: /home/ken/Documents/PyTorch-ENet/save/ENet_Rit_only
 train_encoder: False
 weighing: enet
 weight_decay: 0.0002
 width: 600
-workers: 2
+workers: 4
 
 BEST VALIDATION
-Epoch: 25
-Mean IoU: 0.7733399020158823
+Epoch: 75
+Mean IoU: 0.7756388615222792

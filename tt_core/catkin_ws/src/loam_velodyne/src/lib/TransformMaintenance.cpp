@@ -54,7 +54,7 @@ bool TransformMaintenance::setup(ros::NodeHandle &node, ros::NodeHandle &private
             ("/loam_mapped_to_odom", 5, &TransformMaintenance::odomAftMappedHandler, this);
 
     _subImu = node.subscribe<sensor_msgs::Imu>("/imu/data", 50, &TransformMaintenance::imuHandler, this);
-
+    _counter = 0;
 
     return true;
 }
@@ -70,6 +70,8 @@ void TransformMaintenance::imuHandler(const sensor_msgs::Imu::ConstPtr &imuMsg)
 }
 
 void TransformMaintenance::laserOdometryHandler(const nav_msgs::Odometry::ConstPtr &laserOdometry) {
+
+    if (_counter < 1) { return; }
     double roll, pitch, yaw;
     geometry_msgs::Quaternion geoQuat = laserOdometry->pose.pose.orientation;
     tf::Matrix3x3(tf::Quaternion(geoQuat.z, -geoQuat.x, -geoQuat.y, geoQuat.w)).getRPY(roll, pitch, yaw);
@@ -130,6 +132,8 @@ void TransformMaintenance::laserOdometryHandler(const nav_msgs::Odometry::ConstP
 
 void TransformMaintenance::odomAftMappedHandler(const nav_msgs::Odometry::ConstPtr &odomAftMapped) {
     double roll, pitch, yaw;
+
+    _counter++;
     geometry_msgs::Quaternion geoQuat = odomAftMapped->pose.pose.orientation;
     tf::Matrix3x3(tf::Quaternion(geoQuat.z, -geoQuat.x, -geoQuat.y, geoQuat.w)).getRPY(roll, pitch, yaw);
 

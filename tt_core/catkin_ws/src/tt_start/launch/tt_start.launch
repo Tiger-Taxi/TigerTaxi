@@ -5,12 +5,12 @@
     <!-- NOTE: (building): catkin_make  -->
 
     <arg name="simulate" default="true"/>
-    <arg name="collect_map" default="true"/>
+    <arg name="collect_map" default="false"/>
     <arg name="use_static_map" default="false"/>
     <arg name="slam_pkg" default="loam"/>
     <arg name="old_nav" default="false"/>
     <arg name="use_safezone" default="false"/>
-    <arg name="mapAddress" default="$(find tt_start)/maps/circle_jerk_map.bt"/>
+    <arg name="mapAddress" default="$(find tt_start)/maps/map.bt"/>
     <arg name="rviz" default="true"/>
     <arg name="rqt" default="false"/>
 
@@ -20,7 +20,7 @@
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --start=10 --rate=1 --pause /home/ben/Downloads/accel_ned.bag /velodyne_points:=/velodyne_points_raw"/>
+              args="--clock --start=45 --rate=1 /home/ben/Downloads/accel_ned.bag /velodyne_points:=/velodyne_points_raw"/>
         <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
         <!--args="&#45;&#45;clock &#45;&#45;rate=1 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>
@@ -142,7 +142,7 @@
 						    mapAddress)"/>
 		      <arg name="collectMap" value="$(arg collect_map)"/>
 		    </include>
-                    <include file="$(find tt_start)/launch/amcl.launch"/>
+                    <!-- <include file="$(find tt_start)/launch/amcl.launch"/> -->
                     <!--<include file="$(find loam_to_octomap)/launch/loam_to_octomap.launch"/>-->
                     <!--<include file="$(find odom_to_loam)/launch/odom_to_loam.launch"/> --><!-- TODO REMOVE ME -->
                 </group>

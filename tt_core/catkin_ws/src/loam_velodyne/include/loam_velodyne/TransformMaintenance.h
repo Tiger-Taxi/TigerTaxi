@@ -86,6 +86,7 @@ class TransformMaintenance : public BasicTransformMaintenance {
 
         ros::Publisher _pubLaserOdometry2;          ///< integrated laser odometry publisher (LOAM)
         ros::Publisher _pubLaserOdometry2BaseLink;  ///< integrated laser odometry publisher (NORMAL)
+        int _counter;
 
         tf::Quaternion initialImu;
 

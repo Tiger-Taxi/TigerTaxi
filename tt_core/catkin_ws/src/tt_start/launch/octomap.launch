@@ -30,8 +30,8 @@
         <param name="filter_ground" value="true"/>
         <param name="ground_filter/distance" value="0.965"/>
         <param name="ground_filter/plane_distance" value="0.2"/>
-        <param name="pointcloud_min_z" value="-10"/>
-        <param name="pointcloud_max_z" value="10"/>
+        <param name="pointcloud_min_z" value="-0"/>
+        <param name="pointcloud_max_z" value="0"/>
         <param name="occupancy_min_z" value="0"/>
         <param name="occupancy_max_z" value="2.5"/>
       </node>
@@ -44,6 +44,7 @@
               <!--<remap from="cloud_in" to="/velodyne_cloud_registered"/>-->
               <!--<remap from="cloud_in" to="/velodyne_cloud_registered_baselink"/>-->
               <remap from="cloud_in" to="/velodyne_points"/>
+	      <!-- <remap from="projected_map" to="/map"/> -->
 
 	      <param name="resolution" value="0.1"/>
               <!--<param name="frame_id" value="odom"/>-->
@@ -62,9 +63,10 @@
               <param name="filter_ground" value="true"/>
               <param name="ground_filter/distance" value="0.965"/>
               <param name="ground_filter/plane_distance" value="0.2"/>
+	      <param name="ground_filter/angle" value="1"/>
               <param name="pointcloud_min_z" value="-10"/>
               <param name="pointcloud_max_z" value="10"/>
-              <param name="occupancy_min_z" value="0"/>
+              <param name="occupancy_min_z" value="0.4"/>
               <param name="occupancy_max_z" value="2.5"/>
 	    </node>
       </group>

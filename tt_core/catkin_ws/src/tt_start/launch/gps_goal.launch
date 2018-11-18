@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+    <env name="ROSCONSOLE_FORMAT" value="[${severity}][${thread}][${node}/${function}:${line}]: ${message}"/>
+
+    <arg name="origin" default="auto"/>
+
+    <node pkg="gps_goal" type="gps_goal" name="gps_goal" output="screen">
+        <param name="frame_id" value="map"/>
+        <!-- INPUT TOPICS -->
+        <remap from="gps_goal_pose" to="gps_goal_pose" />
+        <remap from="gps_goal_fix" to="gps_goal_fix" />
+        <remap from="local_xy_origin" to="local_xy_origin" />
+    </node>
+
+    <node pkg="swri_transform_util" type="initialize_origin.py" name="initialize_origin" output="screen">
+        <param name="local_xy_frame" value="/world"/>
+        <param name="local_xy_origin" value="$(arg origin)"/> <!-- setting "auto" here will set the origin to the first GPS fix that it recieves -->
+        <remap from="gps" to="gps"/>
+        <!--<rosparam param="local_xy_origins"> [{ name: MDRS, latitude: 38.40630, longitude: -110.79201, altitude: 0.0, heading: 0.0}] </rosparam>-->
+    </node>
+
+</launch>

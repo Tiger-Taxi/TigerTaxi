@@ -4,9 +4,6 @@
 [submodule "tt_core/catkin_ws/src/vectornav"]
 	path = tt_core/catkin_ws/src/vectornav
 	url = https://kgcoe-git.rit.edu/ksa6262/vectornav.git
-[submodule "tt_core/ENet"]
-	path = tt_core/ENet
-	url = https://kgcoe-git.rit.edu/ksa6262/Enet_TigerTaxi.git
 [submodule "tt_core/catkin_ws/src/rosdue"]
 	path = tt_core/catkin_ws/src/rosdue
 	url = https://github.com/craymichael/ROSdue.git

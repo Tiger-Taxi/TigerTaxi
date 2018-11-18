@@ -44,11 +44,11 @@ STATUS_LABELS       = ['Degraded', 'Running', 'No Messages']
 TOGGLE_LABELS       = ['Live Feed', 'Pause']
 
 # Long/lat boundaries for the campus map
-LAT_OFFSET          = 0
-LON_OFFSET          = 0
-MIN_LAT             = LAT_OFFSET + 43.0776
-MAX_LAT             = LAT_OFFSET + 43.0898
-MIN_LON             = LON_OFFSET + (-77.6873)
+LAT_OFFSET          = 0.000045
+LON_OFFSET          = -0.000033
+MIN_LAT             = 43.0776
+MAX_LAT             = 43.089845
+MIN_LON             = -77.687333
 MAX_LON             = -77.6640
 
 # Pixel width and height of campus map

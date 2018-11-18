@@ -16,7 +16,7 @@
         <param name="local_xy_frame" value="/world"/>
         <param name="local_xy_origin" value="$(arg origin)"/> <!-- setting "auto" here will set the origin to the first GPS fix that it recieves -->
         <remap from="gps" to="gps"/>
-        <rosparam param="local_xy_origins"> [{ name: MDRS, latitude: 38.40630, longitude: -110.79201, altitude: 0.0, heading: 0.0}] </rosparam>
+        <!--<rosparam param="local_xy_origins"> [{ name: MDRS, latitude: 38.40630, longitude: -110.79201, altitude: 0.0, heading: 0.0}] </rosparam>-->
     </node>
 
 </launch>

@@ -4,13 +4,13 @@
     <!-- NOTE: TT_ROOT env variable must be set to TigerTaxi root directory -->
     <!-- NOTE (building): catkin_make -DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone" -->
 
-    <arg name="simulate" default="false"/>
+    <arg name="simulate" default="true"/>
     <arg name="collect_map" default="true"/>
     <arg name="use_static_map" default="false"/>
     <arg name="use_safezone" default="false"/>
     <arg name="mapAddress" default="$(find tt_start)/maps/circle_jerk_map.bt"/>
     <arg name="rviz" default="true"/>
-    <arg name="rqt" default="false"/>
+    <arg name="rqt" default="true"/>
 
     <!-- Dependent on simulate (only true for simulation) -->
     <param name="/use_sim_time" value="$(arg simulate)"/>
@@ -19,7 +19,7 @@
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --rate=0.05 $(env TT_ROOT)/IMU_Calibrated.bag /velodyne_points:=/velodyne_points_raw"/>
+              args="--clock --rate=1.0 $(env TT_ROOT)/IMU_Calibrated.bag /velodyne_points:=/velodyne_points_raw"/>
         <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
         <!--args="&#45;&#45;clock &#45;&#45;rate=1 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>

@@ -7,9 +7,6 @@
 [submodule "tt_core/ENet"]
 	path = tt_core/ENet
 	url = https://kgcoe-git.rit.edu/ksa6262/Enet_TigerTaxi.git
-[submodule "tt_core/catkin_ws/src/video_stream_opencv"]
-	path = tt_core/catkin_ws/src/video_stream_opencv
-	url = https://github.com/ros-drivers/video_stream_opencv.git
 [submodule "tt_core/catkin_ws/src/rosdue"]
 	path = tt_core/catkin_ws/src/rosdue
 	url = https://github.com/craymichael/ROSdue.git

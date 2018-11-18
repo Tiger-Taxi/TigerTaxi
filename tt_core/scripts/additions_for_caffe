@@ -1,3 +1,0 @@
-sudo apt install libopenblas-dev libatlas-base-dev
-
-# install instructions here: http://caffe.berkeleyvision.org/installation.html#compilation

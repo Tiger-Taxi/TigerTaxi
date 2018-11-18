@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.3)
 project(safezone)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -8,7 +8,6 @@ set(CMAKE_CXX_STANDARD 11)
 
 # External Packages
 find_package(OpenCV REQUIRED)
-find_package(Caffe REQUIRED)
 
 find_package(PCL 1.7 REQUIRED REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})
@@ -25,7 +24,6 @@ generate_messages(
   sensor_msgs
 )
 
-
 ###########
 ## Build ##
 ###########
@@ -37,7 +35,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(safezone src/main.cpp src/classifier.cpp src/ipm.cpp)
+add_executable(safezone main.cpp ipm.cpp include/ipm.hpp)
 
 ## Add cmake target dependencies of the executable
 add_dependencies(safezone ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
@@ -48,7 +46,6 @@ target_link_libraries(safezone
   ${PCL_LIBRARIES}
 )
 
-
-include_directories(${OpenCV_INCLUDE_DIRS} ${Caffe_INCLUDE_DIRS} /usr/local/cuda/include)
-target_link_libraries(safezone ${OpenCV_LIBS} ${Caffe_LIBRARIES})
+include_directories(${OpenCV_INCLUDE_DIRS} /usr/local/cuda/include)
+target_link_libraries(safezone ${OpenCV_LIBS})
 catkin_package()

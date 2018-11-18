@@ -37,6 +37,8 @@
 #include <ros/node_handle.h>
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
+#include <geometry_msgs/PoseWithCovariance.h>
+#include <sensor_msgs/Imu.h>
 #include <tf/transform_broadcaster.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2_ros/transform_listener.h>
@@ -73,14 +75,25 @@ class TransformMaintenance : public BasicTransformMaintenance {
          */
         void odomAftMappedHandler(const nav_msgs::Odometry::ConstPtr &odomAftMapped);
 
+        /** \brief Handler method for IMU messages, plan is to only read the first message to create a transform
+         *
+         * @param imuMsg the imu message
+         */
+        void imuHandler(const sensor_msgs::Imu::ConstPtr &imuMsg);
+
     private:
         nav_msgs::Odometry _laserOdometry2;         ///< latest integrated laser odometry message
 
         ros::Publisher _pubLaserOdometry2;          ///< integrated laser odometry publisher (LOAM)
         ros::Publisher _pubLaserOdometry2BaseLink;  ///< integrated laser odometry publisher (NORMAL)
+        int _counter;
+
+        tf::Quaternion initialImu;
 
         ros::Subscriber _subLaserOdometry;    ///< (high frequency) laser odometry subscriber
         ros::Subscriber _subOdomAftMapped;    ///< (low frequency) mapping odometry subscriber
+        ros::Subscriber _subImu;              ///< IMU message subscriber
+
 };
 
 } // end namespace loam

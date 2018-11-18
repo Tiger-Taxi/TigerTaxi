@@ -117,6 +117,7 @@ bool LaserOdometry::setup(ros::NodeHandle &node, ros::NodeHandle &privateNode) {
     _pubLaserCloudFullRes = node.advertise<sensor_msgs::PointCloud2>("/velodyne_cloud_3", 2);
     _pubLaserOdometry = node.advertise<nav_msgs::Odometry>("/loam_odom_to_odom", 5);
     _pubLaserOdometry2 = node.advertise<nav_msgs::Odometry>("/loam_odom_to_baselink", 5);
+    _pubLaserOdometry3 = node.advertise<nav_msgs::Odometry>("/loam_odom_to_baselink_2", 5);
 
     // subscribe to scan registration topics
     _subCornerPointsSharp = node.subscribe<sensor_msgs::PointCloud2>
@@ -136,6 +137,8 @@ bool LaserOdometry::setup(ros::NodeHandle &node, ros::NodeHandle &privateNode) {
 
     _subImuTrans = node.subscribe<sensor_msgs::PointCloud2>
             ("/imu_trans", 5, &LaserOdometry::imuTransHandler, this);
+
+    _subImu = node.subscribe<sensor_msgs::Imu>("/imu/data", 50, &LaserOdometry::imuHandler, this);
 
     return true;
 }
@@ -213,6 +216,15 @@ void LaserOdometry::imuTransHandler(const sensor_msgs::PointCloud2ConstPtr &imuT
     _newImuTrans = true;
 }
 
+void LaserOdometry::imuHandler(const sensor_msgs::Imu::ConstPtr &imuMsg)
+{
+    //printf("IMU Handler");
+    initialImu = tf::Quaternion(0, 0, -imuMsg->orientation.z, imuMsg->orientation.w);
+    ROS_INFO("IMU: %lf %lf %lf %lf", imuMsg->orientation.x, imuMsg->orientation.y, imuMsg->orientation.z, imuMsg->orientation.w);
+    _subImu.shutdown();
+
+}
+
 
 void LaserOdometry::spin() {
     ros::Rate rate(100);
@@ -258,15 +270,17 @@ void LaserOdometry::publishResult() {
                                                                                 -transformSum().rot_x.rad(),
                                                                                 -transformSum().rot_y.rad());
 
+    //ROS_INFO("IMU2: %lf %lf %lf %lf", initialImu.x(), initialImu.y(), initialImu.z(), initialImu.w());
+
     // LOAM FRAME
     _laserOdometryMsg.header.stamp = _timeSurfPointsLessFlat;
-    _laserOdometryMsg.pose.pose.orientation.x = -geoQuat.y;
-    _laserOdometryMsg.pose.pose.orientation.y = -geoQuat.z;
-    _laserOdometryMsg.pose.pose.orientation.z = geoQuat.x;
+    _laserOdometryMsg.pose.pose.orientation.x = geoQuat.x;
+    _laserOdometryMsg.pose.pose.orientation.y = -geoQuat.y;
+    _laserOdometryMsg.pose.pose.orientation.z = -geoQuat.z;
     _laserOdometryMsg.pose.pose.orientation.w = geoQuat.w;
-    _laserOdometryMsg.pose.pose.position.x = transformSum().pos.x();
-    _laserOdometryMsg.pose.pose.position.y = transformSum().pos.y();
-    _laserOdometryMsg.pose.pose.position.z = transformSum().pos.z();
+    _laserOdometryMsg.pose.pose.position.x = transformSum().pos.z();
+    _laserOdometryMsg.pose.pose.position.y = transformSum().pos.x();
+    _laserOdometryMsg.pose.pose.position.z = transformSum().pos.y();
     _pubLaserOdometry.publish(_laserOdometryMsg);
 
     // NORMAL FRAME
@@ -280,7 +294,36 @@ void LaserOdometry::publishResult() {
     _laserOdometryMsg.pose.pose.position.x = transformSum().pos.z();
     _laserOdometryMsg.pose.pose.position.y = transformSum().pos.x();
     _laserOdometryMsg.pose.pose.position.z = transformSum().pos.y();
+
+
+    geometry_msgs::PoseStamped msgTransformTemp; //Create a PoseStamped to transform
+    msgTransformTemp.header = _laserOdometryMsg.header;
+    msgTransformTemp.pose.orientation = _laserOdometryMsg.pose.pose.orientation;
+    msgTransformTemp.pose.position = _laserOdometryMsg.pose.pose.position;
+
+    geometry_msgs::TransformStamped quatRot;
+    quatRot.transform.translation.x = 0;
+    quatRot.transform.translation.y = 0;
+    quatRot.transform.translation.z = 0;
+    quatRot.transform.rotation.x = initialImu.x();
+    quatRot.transform.rotation.y = initialImu.y();
+    quatRot.transform.rotation.z = initialImu.z();
+    quatRot.transform.rotation.w = initialImu.w();
+
+    //Transform based on initial IMU
+    tf2::doTransform(msgTransformTemp, msgTransformTemp, quatRot);
+
+    _laserOdometryMsg.pose.pose.position = msgTransformTemp.pose.position;
+    _laserOdometryMsg.pose.pose.orientation = msgTransformTemp.pose.orientation;
+
+    _laserOdometryMsg2.header.stamp = _timeSurfPointsLessFlat;
+    _laserOdometryMsg2.header.frame_id = "loam_gps";
+    _laserOdometryMsg2.child_frame_id = "loam_odom";
+    _laserOdometryMsg2.pose.pose.position = msgTransformTemp.pose.position;
+    _laserOdometryMsg2.pose.pose.orientation = msgTransformTemp.pose.orientation;
+
     _pubLaserOdometry2.publish(_laserOdometryMsg);
+    _pubLaserOdometry3.publish(_laserOdometryMsg2);
 
     // publish cloud results according to the input output ratio
     if (_ioRatio < 2 || frameCount() % _ioRatio == 1) {

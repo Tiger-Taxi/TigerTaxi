@@ -53,11 +53,25 @@ bool TransformMaintenance::setup(ros::NodeHandle &node, ros::NodeHandle &private
     _subOdomAftMapped = node.subscribe<nav_msgs::Odometry>
             ("/loam_mapped_to_odom", 5, &TransformMaintenance::odomAftMappedHandler, this);
 
+    _subImu = node.subscribe<sensor_msgs::Imu>("/imu/data", 50, &TransformMaintenance::imuHandler, this);
+    _counter = 0;
+
     return true;
 }
 
+void TransformMaintenance::imuHandler(const sensor_msgs::Imu::ConstPtr &imuMsg)
+{
+    //printf("IMU Handler");
+    initialImu = tf::Quaternion(0, 0, -imuMsg->orientation.z, imuMsg->orientation.w);
+
+    ROS_INFO("IMU: %lf %lf %lf %lf", imuMsg->orientation.x, imuMsg->orientation.y, imuMsg->orientation.z, imuMsg->orientation.w);
+    _subImu.shutdown();
+
+}
 
 void TransformMaintenance::laserOdometryHandler(const nav_msgs::Odometry::ConstPtr &laserOdometry) {
+
+    if (_counter < 1) { return; }
     double roll, pitch, yaw;
     geometry_msgs::Quaternion geoQuat = laserOdometry->pose.pose.orientation;
     tf::Matrix3x3(tf::Quaternion(geoQuat.z, -geoQuat.x, -geoQuat.y, geoQuat.w)).getRPY(roll, pitch, yaw);
@@ -91,12 +105,35 @@ void TransformMaintenance::laserOdometryHandler(const nav_msgs::Odometry::ConstP
     _laserOdometry2.pose.pose.position.x = transformMapped()[5];
     _laserOdometry2.pose.pose.position.y = transformMapped()[3];
     _laserOdometry2.pose.pose.position.z = transformMapped()[4];
+
+    geometry_msgs::PoseStamped msgTransformTemp; //Create a PoseStamped to transform
+    msgTransformTemp.header = _laserOdometry2.header;
+    msgTransformTemp.pose.orientation = _laserOdometry2.pose.pose.orientation;
+    msgTransformTemp.pose.position = _laserOdometry2.pose.pose.position;
+
+    geometry_msgs::TransformStamped quatRot;
+    quatRot.transform.translation.x = 0;
+    quatRot.transform.translation.y = 0;
+    quatRot.transform.translation.z = 0;
+    quatRot.transform.rotation.x = initialImu.x();
+    quatRot.transform.rotation.y = initialImu.y();
+    quatRot.transform.rotation.z = initialImu.z();
+    quatRot.transform.rotation.w = initialImu.w();
+
+    //Transform based on initial IMU
+    tf2::doTransform(msgTransformTemp, msgTransformTemp, quatRot);
+
+    _laserOdometry2.pose.pose.position = msgTransformTemp.pose.position;
+    _laserOdometry2.pose.pose.orientation = msgTransformTemp.pose.orientation;
+
     _pubLaserOdometry2BaseLink.publish(_laserOdometry2);
 }
 
 
 void TransformMaintenance::odomAftMappedHandler(const nav_msgs::Odometry::ConstPtr &odomAftMapped) {
     double roll, pitch, yaw;
+
+    _counter++;
     geometry_msgs::Quaternion geoQuat = odomAftMapped->pose.pose.orientation;
     tf::Matrix3x3(tf::Quaternion(geoQuat.z, -geoQuat.x, -geoQuat.y, geoQuat.w)).getRPY(roll, pitch, yaw);
 

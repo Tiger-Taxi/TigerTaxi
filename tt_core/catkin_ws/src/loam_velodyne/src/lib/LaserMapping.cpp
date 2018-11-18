@@ -139,55 +139,59 @@ bool LaserMapping::setup(ros::NodeHandle &node, ros::NodeHandle &privateNode) {
     _subLaserCloudFullRes = node.subscribe<sensor_msgs::PointCloud2>
             ("/velodyne_cloud_3", 2, &LaserMapping::laserCloudFullResHandler, this);
 
-    // subscribe to IMU topic
-    _subImu = node.subscribe<sensor_msgs::Imu>("/imu/data", 50, &LaserMapping::imuHandler, this);
+    _counter = 0;
 
     return true;
 }
 
 
 void LaserMapping::laserCloudCornerLastHandler(const sensor_msgs::PointCloud2ConstPtr &cornerPointsLastMsg) {
-    _timeLaserCloudCornerLast = cornerPointsLastMsg->header.stamp;
-    laserCloudCornerLast().clear();
-    pcl::fromROSMsg(*cornerPointsLastMsg, laserCloudCornerLast());
-    _newLaserCloudCornerLast = true;
+    if (_counter > 25) {
+        _timeLaserCloudCornerLast = cornerPointsLastMsg->header.stamp;
+        laserCloudCornerLast().clear();
+        pcl::fromROSMsg(*cornerPointsLastMsg, laserCloudCornerLast());
+        _newLaserCloudCornerLast = true;
+    }
 }
 
 void LaserMapping::laserCloudSurfLastHandler(const sensor_msgs::PointCloud2ConstPtr &surfacePointsLastMsg) {
-    _timeLaserCloudSurfLast = surfacePointsLastMsg->header.stamp;
-    laserCloudSurfLast().clear();
-    pcl::fromROSMsg(*surfacePointsLastMsg, laserCloudSurfLast());
-    _newLaserCloudSurfLast = true;
+    if (_counter > 25) {
+        _timeLaserCloudSurfLast = surfacePointsLastMsg->header.stamp;
+        laserCloudSurfLast().clear();
+        pcl::fromROSMsg(*surfacePointsLastMsg, laserCloudSurfLast());
+        _newLaserCloudSurfLast = true;
+    }
 }
 
 void LaserMapping::laserCloudFullResHandler(const sensor_msgs::PointCloud2ConstPtr &laserCloudFullResMsg) {
-    _timeLaserCloudFullRes = laserCloudFullResMsg->header.stamp;
-    laserCloud().clear();
-    pcl::fromROSMsg(*laserCloudFullResMsg, laserCloud());
-    _newLaserCloudFullRes = true;
+    if (_counter > 25) {
+        _timeLaserCloudFullRes = laserCloudFullResMsg->header.stamp;
+        laserCloud().clear();
+        pcl::fromROSMsg(*laserCloudFullResMsg, laserCloud());
+        _newLaserCloudFullRes = true;
+    }
 }
 
 void LaserMapping::laserOdometryHandler(const nav_msgs::Odometry::ConstPtr &laserOdometry) {
-    _timeLaserOdometry = laserOdometry->header.stamp;
+    _counter++;
+    ROS_WARN("LaserOdom Waiting");
+    if (_counter > 25) {
+        ROS_WARN("LaserOdom Running");
+        _timeLaserOdometry = laserOdometry->header.stamp;
 
-    double roll, pitch, yaw;
-    geometry_msgs::Quaternion geoQuat = laserOdometry->pose.pose.orientation;
-    tf::Matrix3x3(tf::Quaternion(geoQuat.z, -geoQuat.x, -geoQuat.y, geoQuat.w)).getRPY(roll, pitch, yaw);
+        double roll, pitch, yaw;
+        geometry_msgs::Quaternion geoQuat = laserOdometry->pose.pose.orientation;
+        tf::Matrix3x3(tf::Quaternion(geoQuat.z, -geoQuat.x, -geoQuat.y, geoQuat.w)).getRPY(roll, pitch, yaw);
 
-    updateOdometry(-pitch, -yaw, roll,
-                   laserOdometry->pose.pose.position.x,
-                   laserOdometry->pose.pose.position.y,
-                   laserOdometry->pose.pose.position.z);
+        updateOdometry(-pitch, -yaw, roll,
+                       laserOdometry->pose.pose.position.x,
+                       laserOdometry->pose.pose.position.y,
+                       laserOdometry->pose.pose.position.z);
 
-    _newLaserOdometry = true;
-}
-
-void LaserMapping::imuHandler(const sensor_msgs::Imu::ConstPtr &imuIn) {
-    double roll, pitch, yaw;
-    tf::Quaternion orientation;
-    tf::quaternionMsgToTF(imuIn->orientation, orientation);
-    tf::Matrix3x3(orientation).getRPY(roll, pitch, yaw);
-    updateIMU({fromROSTime(imuIn->header.stamp), roll, pitch});
+        _newLaserOdometry = true;
+    } else {
+        _newLaserOdometry = false;
+    }
 }
 
 void LaserMapping::spin() {

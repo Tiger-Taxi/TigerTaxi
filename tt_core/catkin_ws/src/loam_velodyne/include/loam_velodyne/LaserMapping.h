@@ -120,6 +120,7 @@ private:
    bool _newLaserCloudSurfLast;    ///< flag if a new last surface cloud has been received
    bool _newLaserCloudFullRes;     ///< flag if a new full resolution cloud has been received
    bool _newLaserOdometry;         ///< flag if a new laser odometry has been received
+   int _counter;
 
 
    nav_msgs::Odometry _odomAftMapped;      ///< mapping odometry message

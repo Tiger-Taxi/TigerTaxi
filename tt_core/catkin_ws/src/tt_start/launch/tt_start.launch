@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <launch>
 
-    <!-- NOTE: TT_ROOT env variable must be set to TigerTaxi root directory -->
-    <!-- NOTE (building): catkin_make -DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone" -->
+    <!-- NOTE: TT_ROOT env varable must be set to TigerTaxi r-DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone"oot directory -->
+    <!-- NOTE: (building): catkin_make  -->
 
     <arg name="simulate" default="true"/>
     <arg name="collect_map" default="true"/>
@@ -17,7 +17,6 @@
     <!-- Dependent on simulate (only true for simulation) -->
     <param name="/use_sim_time" value="$(arg simulate)"/>
 
-    <!--<remap from="/velodyne_points" to="/velodyne_points_raw"/> &lt;!&ndash; TODO test this for velodyne sensor (not bag)... &ndash;&gt;-->
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"

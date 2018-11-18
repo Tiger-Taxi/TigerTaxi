@@ -39,11 +39,16 @@
 
 #include <ros/node_handle.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <sensor_msgs/Imu.h>
 #include <nav_msgs/Odometry.h>
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
+#include <geometry_msgs/PoseWithCovariance.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <tf/transform_datatypes.h>
 #include <tf/transform_broadcaster.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_ros/transform_listener.h>
 
 #include "BasicLaserOdometry.h"
 
@@ -100,6 +105,12 @@ class LaserOdometry : public BasicLaserOdometry {
          */
         void imuTransHandler(const sensor_msgs::PointCloud2ConstPtr &imuTransMsg);
 
+        /** \brief Handler method for IMU messages, plan is to only read the first message to create a transform
+         *
+         * @param imuMsg the imu message
+         */
+        void imuHandler(const sensor_msgs::Imu::ConstPtr &imuMsg);
+
 
         /** \brief Process incoming messages in a loop until shutdown (used in active mode). */
         void spin();
@@ -118,6 +129,7 @@ class LaserOdometry : public BasicLaserOdometry {
         void publishResult();
 
     private:
+
         uint16_t _ioRatio;       ///< ratio of input to output frames
 
         ros::Time _timeCornerPointsSharp;      ///< time of current sharp corner cloud
@@ -135,12 +147,17 @@ class LaserOdometry : public BasicLaserOdometry {
         bool _newImuTrans;                ///< flag if a new IMU transformation information cloud has been received
 
         nav_msgs::Odometry _laserOdometryMsg;       ///< laser odometry message
+        nav_msgs::Odometry _laserOdometryMsg2;       ///< laser odometry message
+
+        tf::Quaternion initialImu;
+
 
         ros::Publisher _pubLaserCloudCornerLast;  ///< last corner cloud message publisher
         ros::Publisher _pubLaserCloudSurfLast;    ///< last surface cloud message publisher
         ros::Publisher _pubLaserCloudFullRes;     ///< full resolution cloud message publisher
         ros::Publisher _pubLaserOdometry;         ///< laser odometry publisher
         ros::Publisher _pubLaserOdometry2;         ///< laser odometry publisher
+        ros::Publisher _pubLaserOdometry3;         ///< laser odometry publisher
 
         ros::Subscriber _subCornerPointsSharp;      ///< sharp corner cloud message subscriber
         ros::Subscriber _subCornerPointsLessSharp;  ///< less sharp corner cloud message subscriber
@@ -148,6 +165,8 @@ class LaserOdometry : public BasicLaserOdometry {
         ros::Subscriber _subSurfPointsLessFlat;     ///< less flat surface cloud message subscriber
         ros::Subscriber _subLaserCloudFullRes;      ///< full resolution cloud message subscriber
         ros::Subscriber _subImuTrans;               ///< IMU transformation information message subscriber
+        ros::Subscriber _subImu;                    ///< IMU message subscriber
+
 };
 
 } // end namespace loam

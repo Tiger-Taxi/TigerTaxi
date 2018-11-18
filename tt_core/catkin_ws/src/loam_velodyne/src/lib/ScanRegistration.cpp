@@ -145,9 +145,6 @@ bool ScanRegistration::setupROS(ros::NodeHandle& node, ros::NodeHandle& privateN
   if (!parseParams(privateNode, config_out))
     return false;
 
-  // subscribe to IMU topic
-  _subImu = node.subscribe<sensor_msgs::Imu>("/imu/data", 50, &ScanRegistration::handleIMUMessage, this);
-
   // advertise scan registration topics
   _pubLaserCloud            = node.advertise<sensor_msgs::PointCloud2>("/velodyne_cloud_2", 2);
   _pubCornerPointsSharp     = node.advertise<sensor_msgs::PointCloud2>("/laser_cloud_sharp", 2);
@@ -158,31 +155,6 @@ bool ScanRegistration::setupROS(ros::NodeHandle& node, ros::NodeHandle& privateN
 
   return true;
 }
-
-
-
-void ScanRegistration::handleIMUMessage(const sensor_msgs::Imu::ConstPtr& imuIn)
-{
-  tf::Quaternion orientation;
-  tf::quaternionMsgToTF(imuIn->orientation, orientation);
-  double roll, pitch, yaw;
-  tf::Matrix3x3(orientation).getRPY(roll, pitch, yaw);
-
-  Vector3 acc;
-  acc.x() = float(imuIn->linear_acceleration.y - sin(roll) * cos(pitch) * 9.81);
-  acc.y() = float(imuIn->linear_acceleration.z - cos(roll) * cos(pitch) * 9.81);
-  acc.z() = float(imuIn->linear_acceleration.x + sin(pitch)             * 9.81);
-
-  IMUState newState;
-  newState.stamp = fromROSTime( imuIn->header.stamp);
-  newState.roll = roll;
-  newState.pitch = pitch;
-  newState.yaw = yaw;
-  newState.acceleration = acc;
-
-  updateIMUData(acc, newState);
-}
-
 
 void ScanRegistration::publishResult()
 {

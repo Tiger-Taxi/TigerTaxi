@@ -174,9 +174,7 @@ void LaserMapping::laserCloudFullResHandler(const sensor_msgs::PointCloud2ConstP
 
 void LaserMapping::laserOdometryHandler(const nav_msgs::Odometry::ConstPtr &laserOdometry) {
     _counter++;
-    ROS_WARN("LaserOdom Waiting");
     if (_counter > 25) {
-        ROS_WARN("LaserOdom Running");
         _timeLaserOdometry = laserOdometry->header.stamp;
 
         double roll, pitch, yaw;

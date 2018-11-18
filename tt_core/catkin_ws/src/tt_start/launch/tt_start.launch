@@ -7,13 +7,9 @@
     <arg name="simulate" default="true"/>
     <arg name="collect_map" default="true"/>
     <arg name="use_static_map" default="false"/>
-<<<<<<< HEAD
     <arg name="slam_pkg" default="loam"/>
     <arg name="old_nav" default="false"/>
     <arg name="use_safezone" default="true"/>
-=======
-    <arg name="use_safezone" default="false"/>
->>>>>>> navigation
     <arg name="mapAddress" default="$(find tt_start)/maps/circle_jerk_map.bt"/>
     <arg name="rviz" default="true"/>
     <arg name="rqt" default="false"/>

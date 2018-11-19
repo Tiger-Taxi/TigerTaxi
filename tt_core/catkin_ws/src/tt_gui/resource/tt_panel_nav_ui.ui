@@ -71,7 +71,7 @@
 
 	<widget class="QWidget" name="nav_control_widget">
 		<widget class="QPushButton" name="button_follow">
-	        <property name="text"><string>Follow</string></property>
+	        <property name="text"><string>Go</string></property>
 	    </widget>
 		<widget class="QPushButton" name="button_pause">
 	        <property name="text"><string>Pause</string></property>

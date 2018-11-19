@@ -44,7 +44,7 @@
               <!--<remap from="cloud_in" to="/velodyne_cloud_registered"/>-->
               <!--<remap from="cloud_in" to="/velodyne_cloud_registered_baselink"/>-->
               <remap from="cloud_in" to="/velodyne_points"/>
-	      <!-- <remap from="projected_map" to="/map"/> -->
+	      <remap from="projected_map" to="/map"/>
 
 	      <param name="resolution" value="0.1"/>
               <!--<param name="frame_id" value="odom"/>-->

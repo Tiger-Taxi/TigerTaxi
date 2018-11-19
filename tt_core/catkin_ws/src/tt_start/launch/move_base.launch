@@ -2,7 +2,7 @@
 <launch>
 
     <arg name="cmd_vel_topic" default="cmd_vel"/>
-    <arg name="odom_topic" default="odom"/>
+    <arg name="odom_topic" default="ekf/odom"/>
     <arg name="global_frame" default="map"/>
     <arg name="odom_frame" default="odom"/>
     <arg name="base_frame" default="base_link"/>

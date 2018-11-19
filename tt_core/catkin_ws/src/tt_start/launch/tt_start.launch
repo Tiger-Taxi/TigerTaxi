@@ -6,10 +6,10 @@
 
     <arg name="simulate" default="true"/>
     <arg name="collect_map" default="true"/>
-    <arg name="use_static_map" default="false"/>
+    <arg name="use_static_map" default="true"/>
     <arg name="slam_pkg" default="loam"/>
     <arg name="old_nav" default="false"/>
-    <arg name="use_safezone" default="true"/>
+    <arg name="use_safezone" default="false"/>
     <arg name="mapAddress" default="$(find tt_start)/maps/circle_jerk_map.bt"/>
     <arg name="rviz" default="true"/>
     <arg name="rqt" default="false"/>
@@ -20,7 +20,7 @@
     <!-- Simulation: Use Bag Files -->
     <group if="$(arg simulate)">
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--clock --rate=1.0 $(env TT_ROOT)/accel_ned.bag /velodyne_points:=/velodyne_points_raw"/>
+              args="--clock --rate=1.0 /home/ben/Downloads/accel_ned.bag /velodyne_points:=/velodyne_points_raw"/>
         <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
         <!--args="&#45;&#45;clock &#45;&#45;rate=1 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
     </group>
@@ -80,7 +80,10 @@
         <include file="$(find tt_start)/launch/move_base.launch">
             <arg name="use_safezone" value="$(arg use_safezone)"/>
         </include>
-        <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py" name="cmd_vel_converter" output="screen"/>
+        <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py"
+	      name="cmd_vel_converter" output="screen"/>
+	<!-- <include file="$(find -->
+	<!-- 	       octomap_nav_server)/launch/octomap_nav_server.launch"/> -->
         <!-- TODO -->
     </group>
 

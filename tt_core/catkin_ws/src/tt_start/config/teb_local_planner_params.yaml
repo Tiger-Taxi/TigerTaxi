@@ -9,8 +9,9 @@ TebLocalPlannerROS:
   dt_hysteresis:                     0.1
   global_plan_overwrite_orientation: True
   allow_init_with_backwards_motion:  False
-  max_global_plan_lookahead_dist:    3.0
+  max_global_plan_lookahead_dist:    100.0
   feasibility_check_no_poses:        5
+  # inflation_dist: 1
     
   # Robot       
   max_vel_x:           5.0
@@ -39,11 +40,11 @@ TebLocalPlannerROS:
 
   # GoalTolerance
   xy_goal_tolerance:  0.2
-  yaw_goal_tolerance: 1.0  # Allowed final orientation error in radians
+  yaw_goal_tolerance: 6.28  # Allowed final orientation error in radians
   free_goal_vel:      False
     
   # Obstacles  
-  min_obstacle_dist:                   0.25
+  min_obstacle_dist:                   1.0
   include_costmap_obstacles:           True
   costmap_obstacles_behind_robot_dist: 1.0
   obstacle_poses_affected:             30
@@ -52,14 +53,14 @@ TebLocalPlannerROS:
 #  costmap_converter_plugin: "costmap_converter::CostmapToLinesDBSMCCH"
 #  costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSConcaveHull"
   costmap_converter_spin_thread:       True
-  costmap_converter_rate:              5
+  costmap_converter_rate:              20
 
   # Optimization  
   no_inner_iterations:              5
   no_outer_iterations:              4
   optimization_activate:            True
   optimization_verbose:             False
-  penalty_epsilon:                  0.1
+  penalty_epsilon:                  0.5
   weight_max_vel_x:                 2
   weight_max_vel_y:                 0
   weight_max_vel_theta:             1
@@ -76,7 +77,7 @@ TebLocalPlannerROS:
   selection_alternative_time_cost:  False 
 
   # Homotopy Class Planner
-  enable_homotopy_class_planning: True # Requires more CPU resources
+  enable_homotopy_class_planning: False # Requires more CPU resources
   enable_multithreading:          True
   simple_exploration:             False
   max_number_classes:             4

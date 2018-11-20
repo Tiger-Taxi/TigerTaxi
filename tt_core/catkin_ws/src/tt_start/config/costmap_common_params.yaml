@@ -20,13 +20,21 @@ transform_tolerance: 0.5
 plugins:
 - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
 - {name: obstacle_layer,  type: "costmap_2d::ObstacleLayer"}
-- {name: static_layer,  type: "costmap_2d::StaticLayer"}
+- {name: static_layer,    type: "costmap_2d::StaticLayer"}
 
-# TODO remove this?
+static_layer:
+  enabled:             True
+  map_topic:           /map
+  first_map_only:      False
+  track_unknown_space: True
+  # True:  NO_INFORMATION/FREE_SPACE/LETHAL_OBSTACLE
+  # False: full spectrum of intermediate values is possible
+  trinary_costmap:     True
+
 inflation_layer:
-  enabled:             False
-  cost_scaling_factor: 0.1    # exponential rate at which the obstacle cost drops off (default: 10)
-  inflation_radius:    0.5    # max. distance from an obstacle at which costs are incurred for planning paths.
+  enabled:             True
+  cost_scaling_factor: 12.0   # exponential rate at which the obstacle cost drops off (default: 10)
+  inflation_radius:    0.55   # max. distance from an obstacle at which costs are incurred for planning paths.
 
 # **NOTE: These have been moved to obstacle_layer_common_[no_]safezone.yaml with a switch in move_base.launch
 #obstacle_layer:

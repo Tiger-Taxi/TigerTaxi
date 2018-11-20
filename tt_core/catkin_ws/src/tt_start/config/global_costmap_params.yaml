@@ -22,6 +22,6 @@ global_costmap:
   origin_x:   -200.0
   origin_y:   -200.0
   static_map:        True
-  rolling_window:    false
+  rolling_window:    False
   footprint_padding: 0.05
   # ===========================TODO

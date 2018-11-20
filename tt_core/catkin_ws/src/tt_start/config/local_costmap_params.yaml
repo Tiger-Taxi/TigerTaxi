@@ -19,9 +19,8 @@ local_costmap:
   # NOTE: Changing resolution impacts safezone (search for the string "0.35" (or "35") in code)
   # resolution: 0.35
   resolution: 0.1
-  origin_x: 0.0
-  origin_y: 0.0
-  # TODO
+  origin_x:   0.0
+  origin_y:   0.0
 #  origin_x: -15.0
 #  origin_y: -10.0
 

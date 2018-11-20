@@ -17,7 +17,7 @@ tf_ned_to_enu: false
 # Accel Data in sensor frame or Ned frame: default false
 accel_ned: false
 # If true tells vn-wrapper to calibrate the imu
-Calibratedev : false
+Calibratedev : true
 
 # Make sure all covariances below are of type xx.xx , i.e. double so that the rpc is parsed correctly
 

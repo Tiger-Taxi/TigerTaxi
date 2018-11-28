@@ -19,7 +19,7 @@ def main():
     model_path = '/home/rosmaster/TigerTaxi/tt_core/catkin_ws/src/enet/src/save/ENet_Rit_only/ENet'
     checkpoint = torch.load(model_path)
     #This will change to reflect the number of classes we want to predict based on the model loaded
-    num_classes = 3
+    num_classes = 2
     #load the model
     model = ENet(num_classes)
     model = model.cuda()

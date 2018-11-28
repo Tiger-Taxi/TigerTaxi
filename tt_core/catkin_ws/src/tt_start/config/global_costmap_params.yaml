@@ -3,7 +3,7 @@ global_costmap:
   robot_base_frame: base_link
 
   update_frequency:  5.0
-  publish_frequency: 1.0
+  publish_frequency: 5.0
 
   # footprint_padding: 0.02
 
@@ -24,4 +24,5 @@ global_costmap:
   static_map:        True
   rolling_window:    False
   footprint_padding: 0.05
+  inflation_radius: 1.01
   # ===========================TODO

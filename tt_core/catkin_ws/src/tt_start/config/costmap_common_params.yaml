@@ -14,6 +14,8 @@ footprint: [[1.9384, -0.6096], [1.9384, 0.6096], [-0.5, 0.6096], [-0.5, -0.6096]
 
 transform_tolerance: 0.5
 
+# inflation_radius: 0.55
+
 ##The cost at which a cell is considered an obstacle when a map is read from the map_server
 #lethal_cost_threshold: 100
 
@@ -31,10 +33,10 @@ static_layer:
   # False: full spectrum of intermediate values is possible
   trinary_costmap:     True
 
-inflation_layer:
-  enabled:             True
-  cost_scaling_factor: 12.0   # exponential rate at which the obstacle cost drops off (default: 10)
-  inflation_radius:    0.55   # max. distance from an obstacle at which costs are incurred for planning paths.
+# inflation_layer:
+#   enabled:             True
+#   cost_scaling_factor: 10.0   # exponential rate at which the obstacle cost drops off (default: 10)
+#   inflation_radius:    0.55   # max. distance from an obstacle at which costs are incurred for planning paths.
 
 # **NOTE: These have been moved to obstacle_layer_common_[no_]safezone.yaml with a switch in move_base.launch
 #obstacle_layer:

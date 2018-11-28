@@ -5,8 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
-        - /Path2
         - /TF1/Frames1
         - /loam_odom_to_odom1/Shape1
         - /loam_mapped_to_odom1/Shape1
@@ -16,8 +14,6 @@ Panels:
         - /costmap_global1
         - /costmap_local1
         - /TF2/Frames1
-        - /LocalPolygon1
-        - /GlobalPolygon1
       Splitter Ratio: 0.586353958
     Tree Height: 694
   - Class: rviz/Selection
@@ -165,8 +161,6 @@ Visualization Manager:
           Value: true
         odom:
           Value: true
-        utm:
-          Value: true
         velodyne:
           Value: true
       Marker Scale: 1
@@ -195,8 +189,6 @@ Visualization Manager:
                   {}
                 velodyne:
                   {}
-            utm:
-              {}
       Update Interval: 0
       Value: true
     - Angle Tolerance: 0.100000001
@@ -511,7 +503,7 @@ Visualization Manager:
       Value: false
     - Alpha: 0.699999988
       Class: rviz/Map
-      Color Scheme: raw
+      Color Scheme: costmap
       Draw Behind: false
       Enabled: true
       Name: costmap_global
@@ -521,7 +513,7 @@ Visualization Manager:
       Value: true
     - Alpha: 0.699999988
       Class: rviz/Map
-      Color Scheme: map
+      Color Scheme: raw
       Draw Behind: false
       Enabled: true
       Name: costmap_local
@@ -595,8 +587,6 @@ Visualization Manager:
           Value: true
         odom:
           Value: true
-        utm:
-          Value: true
         velodyne:
           Value: true
       Marker Scale: 1
@@ -625,8 +615,6 @@ Visualization Manager:
                   {}
                 velodyne:
                   {}
-            utm:
-              {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -670,22 +658,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 32.4310989
+      Distance: 102.697685
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 15.1427708
-        Y: 2.06561637
-        Z: -0.540684879
+        X: -5.13452721
+        Y: 7.04756069
+        Z: -0.561336875
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 1.56979632
+      Pitch: 1.54979634
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
       Yaw: 3.04858685

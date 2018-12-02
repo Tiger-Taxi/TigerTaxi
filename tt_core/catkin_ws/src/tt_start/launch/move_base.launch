@@ -64,10 +64,14 @@
         <!-- Planners -->
         <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS"/>
         <param name="base_global_planner" type="string" value="navfn/NavfnROS"/>
-        <param name="lethal_cost" value="128"/>
         <param name="allow_unknown" value="False"/>
         <param name="default_tolerance" value="0.5"/>
-        <param name="cost_factor" value="10"/>
+
+	<!-- Global Params -->
+        <param name="cost_factor" value="0.55"/>
+	<param name="neutral_cost" value="66"/>
+	<param name="lethal_cost" value="253"/>
+
     </node>
 
 </launch>

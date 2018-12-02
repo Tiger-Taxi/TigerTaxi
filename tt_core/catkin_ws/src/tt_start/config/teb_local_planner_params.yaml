@@ -17,12 +17,13 @@ TebLocalPlannerROS:
   max_vel_x:           1.0
   max_vel_x_backwards: 0.11 # shut up warning about max_vel_x_backwards<=0 (high weight_kinematics_forward_drive effectively disables backwards driving anyway)
   max_vel_y:           0.0
+  acc_lim_y:           0.0
   max_vel_theta:       0.3 # the angular velocity is also bounded by min_turning_radius in case of a carlike robot (r = v / omega)
-  acc_lim_x:           0.5
+  acc_lim_x:           8.0
   acc_lim_theta:       0.5
 
   # ********************** Carlike robot parameters ********************
-  min_turning_radius:       2.0    # Min turning radius of the carlike robot (compute value using a model or adjust with rqt_reconfigure manually)
+  min_turning_radius:       5.0    # Min turning radius of the carlike robot (compute value using a model or adjust with rqt_reconfigure manually)
   wheelbase:                1.6256 # Wheelbase of our robot (64 inches)
   cmd_angle_instead_rotvel: False  # stage simulator takes the angle instead of the rotvel as input (twist message) (also set true in ackermann mode)
   # ********************************************************************
@@ -39,12 +40,12 @@ TebLocalPlannerROS:
 #    rear_radius:  0.2 # for type "two_circles"
 
   # GoalTolerance
-  xy_goal_tolerance:  0.2
+  xy_goal_tolerance:  0.5
   yaw_goal_tolerance: 6.28  # Allowed final orientation error in radians
   free_goal_vel:      False
     
   # Obstacles  
-  min_obstacle_dist:                   1.0
+  min_obstacle_dist:                   0.5
   include_costmap_obstacles:           True
   costmap_obstacles_behind_robot_dist: 1.0
   obstacle_poses_affected:             30
@@ -77,13 +78,15 @@ TebLocalPlannerROS:
   weight_kinematics_forward_drive:  50
   weight_kinematics_turning_radius: 1
   weight_optimaltime:               1
-  weight_obstacle:                  100
+  weight_obstacle:                  50
   weight_dynamic_obstacle:          10 # not in use yet
+  weight_inflation:                 0.1
+  weight_adapt_factor:              2.0
 #  weight_viapoint:                  1.0
   selection_alternative_time_cost:  False 
 
   # Homotopy Class Planner
-  enable_homotopy_class_planning: True # Requires more CPU resources
+  enable_homotopy_class_planning: False # Requires more CPU resources
   enable_multithreading:          True
   simple_exploration:             False
   max_number_classes:             4

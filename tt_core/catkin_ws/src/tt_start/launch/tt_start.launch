@@ -4,12 +4,12 @@
     <!-- NOTE: TT_ROOT env varable must be set to TigerTaxi r-DCMAKE_BUILD_TYPE=release -DCATKIN_BLACKLIST_PACKAGES="safezone"oot directory -->
     <!-- NOTE: (building): catkin_make  -->
 
-    <arg name="simulate" default="true"/>
+    <arg name="simulate" default="false"/>
     <arg name="collect_map" default="true"/>
-    <arg name="use_static_map" default="true"/>
+    <arg name="use_static_map" default="false"/>
     <arg name="slam_pkg" default="loam"/>
     <arg name="old_nav" default="false"/>
-    <arg name="use_safezone" default="true"/>
+    <arg name="use_safezone" default="false"/>
     <arg name="mapAddress" default="$(find tt_start)/maps/circle_jerk_map.bt"/>
     <arg name="rviz" default="true"/>
     <arg name="rqt" default="true"/>
@@ -21,9 +21,7 @@
     <group if="$(arg simulate)">
         <!-- $(env TT_ROOT)/accel_ned.bag -->
         <node pkg="rosbag" type="play" name="teabag" output="screen"
-              args="--start=265 --clock --rate=1.0 /media/rosmaster/Elements/bagfiles/2018-11-28-16-15-29.bag /velodyne_points:=/velodyne_points_raw"/>
-        <!--<node pkg="rosbag" type="play" name="teabag" output="screen"-->
-        <!--args="&#45;&#45;clock &#45;&#45;rate=1 $(env TT_ROOT)/2018-10-18-14-39-25.bag"/>-->
+        args="--clock --rate=1 --start=20 $(env TT_ROOT)/accel_ned.bag"/>
     </group>
 
     <!-- GUI/Visualization Nodes -->

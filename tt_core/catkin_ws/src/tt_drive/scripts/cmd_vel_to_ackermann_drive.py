@@ -2,6 +2,9 @@
 
 # Author: christoph.roesmann@tu-dortmund.de
 
+LUCY_THROT_OFFSET = 23
+EPSILON = 0.1
+
 import rospy, math
 from geometry_msgs.msg import Twist
 from ackermann_msgs.msg import AckermannDriveStamped
@@ -44,11 +47,15 @@ def cmd_callback(data):
     pub_steer.publish(msg_steer)
 
     msg_throttle = Float32()
-    if v < 0:
-        msg_throttle.data = 0
+    if v > (0 + EPSILON) and v < (LUCY_THROT_OFFSET / 37.3):
+        v = LUCY_THROT_OFFSET
+    elif v > (LUCY_THROT_OFFSET / 37.3):
+        v = v * 37.3
     else:
-        msg_throttle.data = v*37.3
+        v = 0
     
+    msg_throttle.data = v
+
     pub_throttle.publish(msg_throttle)
 
 

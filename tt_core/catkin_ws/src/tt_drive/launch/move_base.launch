@@ -16,25 +16,25 @@
         <remap from="odom" to="$(arg odom_topic)"/>
 
         <!-- MOVE_BASE YAML PARAMETERS -->
-        <rosparam if="$(arg use_safezone)" file="$(find tt_start)/config/obstacle_layer_common_safezone.yaml"
+        <rosparam if="$(arg use_safezone)" file="$(find tt_drive)/config/obstacle_layer_common_safezone.yaml"
                   command="load" ns="global_costmap"/>
-        <rosparam if="$(arg use_safezone)" file="$(find tt_start)/config/obstacle_layer_common_safezone.yaml"
+        <rosparam if="$(arg use_safezone)" file="$(find tt_drive)/config/obstacle_layer_common_safezone.yaml"
                   command="load" ns="local_costmap"/>
-        <rosparam unless="$(arg use_safezone)" file="$(find tt_start)/config/obstacle_layer_common_no_safezone.yaml"
+        <rosparam unless="$(arg use_safezone)" file="$(find tt_drive)/config/obstacle_layer_common_no_safezone.yaml"
                   command="load" ns="global_costmap"/>
-        <rosparam unless="$(arg use_safezone)" file="$(find tt_start)/config/obstacle_layer_common_no_safezone.yaml"
-                  command="load" ns="local_costmap"/>
-
-        <rosparam file="$(find tt_start)/config/costmap_common_params.yaml"
-                  command="load" ns="global_costmap"/>
-        <rosparam file="$(find tt_start)/config/costmap_common_params.yaml"
+        <rosparam unless="$(arg use_safezone)" file="$(find tt_drive)/config/obstacle_layer_common_no_safezone.yaml"
                   command="load" ns="local_costmap"/>
 
-        <rosparam file="$(find tt_start)/config/global_costmap_params.yaml" command="load"/>
-        <rosparam file="$(find tt_start)/config/local_costmap_params.yaml" command="load"/>
-        <!--<rosparam file="$(find tt_start)/config/base_local_planner_params.yaml" command="load"/>-->
-        <rosparam file="$(find tt_start)/config/teb_local_planner_params.yaml" command="load"/>
-        <!--<rosparam file="$(find tt_start)/config/costmap_converter_params.yaml" command="load"/>-->
+        <rosparam file="$(find tt_drive)/config/costmap_common_params.yaml"
+                  command="load" ns="global_costmap"/>
+        <rosparam file="$(find tt_drive)/config/costmap_common_params.yaml"
+                  command="load" ns="local_costmap"/>
+
+        <rosparam file="$(find tt_drive)/config/global_costmap_params.yaml" command="load"/>
+        <rosparam file="$(find tt_drive)/config/local_costmap_params.yaml" command="load"/>
+        <!--<rosparam file="$(find tt_drive)/config/base_local_planner_params.yaml" command="load"/>-->
+        <rosparam file="$(find tt_drive)/config/teb_local_planner_params.yaml" command="load"/>
+        <!--<rosparam file="$(find tt_drive)/config/costmap_converter_params.yaml" command="load"/>-->
 
         <!-- MOVE_BASE PARAMETERS -->
         <param name="footprint_padding" value="0.01"/> <!-- TODO ? -->

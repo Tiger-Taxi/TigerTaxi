@@ -77,7 +77,7 @@
             <arg name="collectMap" value="$(arg collect_map)"/>
         </include>
         <!-- TODO -->
-        <include file="$(find tt_start)/launch/move_base.launch">
+        <include file="$(find tt_drive)/launch/move_base.launch">
             <arg name="use_safezone" value="$(arg use_safezone)"/>
         </include>
         <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py"
@@ -89,7 +89,7 @@
 
     <!-- Unless we are collecting a map (any driving mode) -->
      <group unless="$(arg collect_map)">
-        <include file="$(find tt_start)/launch/move_base.launch">
+        <include file="$(find tt_drive)/launch/move_base.launch">
             <arg name="use_safezone" value="$(arg use_safezone)"/>
         </include>
         <node pkg="tt_drive" type="cmd_vel_to_ackermann_drive.py" name="cmd_vel_converter" output="screen"/>
